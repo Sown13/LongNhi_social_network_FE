@@ -1,0 +1,89 @@
+/* CSS for NewFeed component */
+.newFeedContainer {
+    margin: 0 auto;
+    max-width: 600px;
+    min-width: 600px;
+}
+
+.feedCard {
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+}
+
+.feedCardHeader {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+}
+
+.feedCardAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #dddfe2;
+    margin-right: 16px;
+}
+
+.feedCardHeaderInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.feedCardHeaderName {
+    width: 120px;
+    height: 16px;
+    background-color: #dddfe2;
+    margin-bottom: 8px;
+}
+
+.feedCardHeaderTimestamp {
+    width: 80px;
+    height: 12px;
+    background-color: #dddfe2;
+}
+
+.feedCardBody {
+    padding: 16px;
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 16px;
+    white-space: pre-wrap; /* Add the white-space property */
+}
+
+.feedCardBody p {
+    margin-bottom: 16px;
+}
+
+.feedCardBody img {
+    max-width: 100%;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.feedCardActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #fff;
+    border-bottom: 1px solid #dddfe2;
+}
+
+.feedCardActions button {
+    background-color: transparent;
+    border: none;
+    color: #1877f2;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 16px;
+}
+
+.feedCardActions button:hover {
+    text-decoration: underline;
+}

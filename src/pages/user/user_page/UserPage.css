@@ -1,0 +1,12 @@
+.user-page {
+    flex:2;
+    min-width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    background-color: #fff;
+    /*scroll-margin-left: 100px;*/
+    /*scroll-margin-right: 100px;*/
+    /*flex-shrink: 0;*/
+}

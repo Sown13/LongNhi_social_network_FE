@@ -1,5 +1,5 @@
 .sideBarLeft {
-    background-color: #ffffff;
+    background-color: #F1F1F1FF;
     border-right: 1px solid #dadde1;
     box-sizing: border-box;
     display: flex;
@@ -35,7 +35,7 @@
 }
 
 .sideBarLeft {
-    flex: 0 0 20%;
+    flex: 1;
     max-width: 20vw;
     top: 56px;
     position: sticky;

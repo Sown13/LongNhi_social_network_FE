@@ -35,12 +35,17 @@
 /*}*/
 
 .sideBarRight {
-    flex: 0 0 20%;
+    flex: 1;
     max-width: 20vw;
     top: 56px;
     position: sticky;
     align-self: flex-start;
 
+    background-color: #f1f1f1;
+    border-left: 1px solid #dadde1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .sideBarRight-content {
@@ -61,13 +66,13 @@
 /*    padding: 10px;*/
 /*}*/
 
-/*.friend {*/
+/*.friend_request {*/
 /*    display: flex;*/
 /*    align-items: center;*/
 /*    margin-bottom: 10px;*/
 /*}*/
 
-/*.friend-avatar img {*/
+/*.friend_request-avatar img {*/
 /*    width: 50px;*/
 /*    height: 50px;*/
 /*    border-radius: 50%;*/
@@ -83,7 +88,7 @@
     font-weight: 600;
 }
 
-/*.friend-status {*/
+/*.friend_request-status {*/
 /*    margin: 0;*/
 /*    color: gray;*/
 /*    font-size: 14px;*/
@@ -91,6 +96,9 @@
 
 .friend-list {
     display: flex;
+    overflow: hidden;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
 .friend-status {
@@ -101,4 +109,13 @@
 }
 .friend-avatar{
     flex: 1;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+}
+.friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }

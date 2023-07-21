@@ -1,0 +1,8 @@
+.mainPageContainer {
+    display: flex;
+    /*width: 100vw;*/
+    padding-top: 56px;
+    background-color: #f0f2f5; /* Set a warm tone background color */
+    position: relative;
+}
+

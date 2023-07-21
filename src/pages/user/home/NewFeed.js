@@ -4,522 +4,524 @@ import "./NewFeed.css"
 export default function NewFeed() {
     return (
         <>
-            <div className="newFeedContainer">
-                <br/>
-                <div>
-                    <img alt={"logo"}/>
-                    <h3> Chào [User Name], ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
-                </div>
-                <div>
-                    <div className={"feedCardAvatar"}>
-                        <img src={"#"} alt={"Avatar"}/>
-                        <input placeholder={"Sơn ơi, bạn đang nghĩ gì thế"}/>
-                        <button> Đăng</button>
+            <div className={"newFeed"}>
+                <div className="newFeedContainer">
+                    <br/>
+                    <div>
+                        <img alt={"logo"}/>
+                        <h3> Chào [User Name], ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
                     </div>
-                </div>
+                    <div>
+                        <div className={"feedCardAvatar"}>
+                            <img src={"#"} alt={"Avatar"}/>
+                            <input placeholder={"Sơn ơi, bạn đang nghĩ gì thế"}/>
+                            <button> Đăng</button>
+                        </div>
+                    </div>
 
-                <br/>
-                <hr/>
+                    <br/>
+                    <hr/>
 
-                <div className="feedCard">
-                    <div className="feedCardHeader">
-                        <div className="feedCardAvatar">
-                            <img src={"#"} alt={"Avatar"}/>
-                        </div>
-                        <div className="feedCardHeaderInfo">
-                            <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                    <div className="feedCard">
+                        <div className="feedCardHeader">
+                            <div className="feedCardAvatar">
+                                <img src={"#"} alt={"Avatar"}/>
                             </div>
-                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                            <div className="feedCardHeaderInfo">
+                                <div className="feedCardHeaderName">
+                                    <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                                </div>
+                                <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="feedCardBody">
-                        <p>
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                        </p>
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                    </div>
-                    <div className="feedCardActions">
-                        <div>
-                            <p> Số Like </p>
-                            <button>Thích</button>
+                        <div className="feedCardBody">
+                            <p>
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                            </p>
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
                         </div>
-                        <div>
-                            <button>Chia sẻ</button>
+                        <div className="feedCardActions">
+                            <div>
+                                <p> Số Like </p>
+                                <button>Thích</button>
+                            </div>
+                            <div>
+                                <button>Chia sẻ</button>
+                            </div>
                         </div>
-                    </div>
-                    <div className={"user-comment"}>
-                        <input placeholder={"Viết bình luận.."}/>
-                        <button>Bình Luận</button>
-                    </div>
-                    <ul>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                        <div className={"user-comment"}>
+                            <input placeholder={"Viết bình luận.."}/>
+                            <button>Bình Luận</button>
+                        </div>
+                        <ul>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
                                     </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
                                     </div>
-                                    <p> bình luận </p>
                                 </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
                                     </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div className="feedCard">
-                    <div className="feedCardHeader">
-                        <div className="feedCardAvatar">
-                            <img src={"#"} alt={"Avatar"}/>
-                        </div>
-                        <div className="feedCardHeaderInfo">
-                            <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
-                            </div>
-                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
-                        </div>
-                    </div>
-                    <div className="feedCardBody">
-                        <p>
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                        </p>
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                    </div>
-                    <div className="feedCardActions">
-                        <div>
-                            <p> Số Like </p>
-                            <button>Thích</button>
-                        </div>
-                        <div>
-                            <button>Chia sẻ</button>
-                        </div>
-                    </div>
-                    <div className={"user-comment"}>
-                        <input placeholder={"Viết bình luận.."}/>
-                        <button>Bình Luận</button>
-                    </div>
-                    <ul>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
                                     </div>
-                                    <p> bình luận </p>
                                 </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
                                     </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
                                     </div>
-                                    <p> bình luận </p>
                                 </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="feedCard">
+                        <div className="feedCardHeader">
+                            <div className="feedCardAvatar">
+                                <img src={"#"} alt={"Avatar"}/>
+                            </div>
+                            <div className="feedCardHeaderInfo">
+                                <div className="feedCardHeaderName">
+                                    <Link to={"/user/1"}><span> Tên người đăng </span></Link>
                                 </div>
+                                <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <div className="feedCard">
-                    <div className="feedCardHeader">
-                        <div className="feedCardAvatar">
-                            <img src={"#"} alt={"Avatar"}/>
                         </div>
-                        <div className="feedCardHeaderInfo">
-                            <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                        <div className="feedCardBody">
+                            <p>
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                            </p>
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                        </div>
+                        <div className="feedCardActions">
+                            <div>
+                                <p> Số Like </p>
+                                <button>Thích</button>
                             </div>
-                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                            <div>
+                                <button>Chia sẻ</button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="feedCardBody">
-                        <p>
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                        </p>
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                    </div>
-                    <div className="feedCardActions">
-                        <div>
-                            <p> Số Like </p>
-                            <button>Thích</button>
+                        <div className={"user-comment"}>
+                            <input placeholder={"Viết bình luận.."}/>
+                            <button>Bình Luận</button>
                         </div>
-                        <div>
-                            <button>Chia sẻ</button>
-                        </div>
-                    </div>
-                    <div className={"user-comment"}>
-                        <input placeholder={"Viết bình luận.."}/>
-                        <button>Bình Luận</button>
-                    </div>
-                    <ul>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                        <ul>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
                                     </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
                                     </div>
-                                    <p> bình luận </p>
                                 </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
                                     </div>
-                                    <p> bình luận </p>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div className="feedCard">
-                    <div className="feedCardHeader">
-                        <div className="feedCardAvatar">
-                            <img src={"#"} alt={"Avatar"}/>
-                        </div>
-                        <div className="feedCardHeaderInfo">
-                            <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
-                            </div>
-                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div className="feedCardBody">
-                        <p>
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                            <br/>
-                            Test nội dung, dài thật dài dài
-                        </p>
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                        <img
-                            src="https://picsum.photos/id/1012/600/400"
-                            alt="Random image"
-                        />
-                    </div>
-                    <div className="feedCardActions">
-                        <div>
-                            <p> Số Like </p>
-                            <button>Thích</button>
+                    <div className="feedCard">
+                        <div className="feedCardHeader">
+                            <div className="feedCardAvatar">
+                                <img src={"#"} alt={"Avatar"}/>
+                            </div>
+                            <div className="feedCardHeaderInfo">
+                                <div className="feedCardHeaderName">
+                                    <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                                </div>
+                                <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                            </div>
                         </div>
-                        <div>
-                            <button>Chia sẻ</button>
+                        <div className="feedCardBody">
+                            <p>
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                            </p>
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
                         </div>
+                        <div className="feedCardActions">
+                            <div>
+                                <p> Số Like </p>
+                                <button>Thích</button>
+                            </div>
+                            <div>
+                                <button>Chia sẻ</button>
+                            </div>
+                        </div>
+                        <div className={"user-comment"}>
+                            <input placeholder={"Viết bình luận.."}/>
+                            <button>Bình Luận</button>
+                        </div>
+                        <ul>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div className={"user-comment"}>
-                        <input placeholder={"Viết bình luận.."}/>
-                        <button>Bình Luận</button>
+                    <div className="feedCard">
+                        <div className="feedCardHeader">
+                            <div className="feedCardAvatar">
+                                <img src={"#"} alt={"Avatar"}/>
+                            </div>
+                            <div className="feedCardHeaderInfo">
+                                <div className="feedCardHeaderName">
+                                    <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                                </div>
+                                <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                            </div>
+                        </div>
+                        <div className="feedCardBody">
+                            <p>
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                                <br/>
+                                Test nội dung, dài thật dài dài
+                            </p>
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                            <img
+                                src="https://picsum.photos/id/1012/600/400"
+                                alt="Random image"
+                            />
+                        </div>
+                        <div className="feedCardActions">
+                            <div>
+                                <p> Số Like </p>
+                                <button>Thích</button>
+                            </div>
+                            <div>
+                                <button>Chia sẻ</button>
+                            </div>
+                        </div>
+                        <div className={"user-comment"}>
+                            <input placeholder={"Viết bình luận.."}/>
+                            <button>Bình Luận</button>
+                        </div>
+                        <ul>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div className={"comment-container"}>
+                                    <div>
+                                        <div className={"comment-container-avatar"}>
+                                            <img alt={"avt"}/>
+                                            <h2> name </h2>
+                                        </div>
+                                        <p> bình luận </p>
+                                    </div>
+                                    <div>
+                                        <span> số like </span>
+                                        <button> like</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
-                                    </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
-                                    </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className={"comment-container"}>
-                                <div>
-                                    <div className={"comment-container-avatar"}>
-                                        <img alt={"avt"}/>
-                                        <h2> name </h2>
-                                    </div>
-                                    <p> bình luận </p>
-                                </div>
-                                <div>
-                                    <span> số like </span>
-                                    <button> like</button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </>

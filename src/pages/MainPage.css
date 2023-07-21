@@ -1,0 +1,22 @@
+.mainPageContainer {
+    display: flex;
+    width: 100vw;
+    padding-top: 56px;
+    background-color: #f0f2f5; /* Set a warm tone background color */
+    position: relative;
+}
+
+.main {
+    flex: 0 0 60%;
+    max-width: 60vw;
+    min-width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    background-color: #fff;
+    scroll-margin-left: 100px;
+    scroll-margin-right: 100px;
+}
+
+

@@ -1,0 +1,103 @@
+.header {
+    display: flex;
+    align-items: center;
+    background-color: #ff8c00;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: 56px;
+    padding: 0 16px;
+    position: fixed; /* Set the position to fixed */
+    top: 0; /* Position the header at the top of the screen */
+    width: 100%; /* Set the width to 100% */
+    z-index: 999; /* Set a high z-index to ensure the header appears on top */
+}
+
+.header__left {
+    display: flex;
+    align-items: center;
+    flex: 20%;
+}
+
+.header__logo {
+    height: 24px;
+    margin-right: 16px;
+}
+
+.header__search {
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+}
+
+.header__search-input {
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    margin-left: 8px;
+    width: 200px;
+}
+
+.header__search-icon {
+    color: #65676b;
+    font-size: 16px;
+}
+
+.header__center {
+    display: flex;
+    flex: 60%;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__link {
+    color: #1c1e21;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 30px;
+    text-decoration: none;
+}
+
+.header__link:hover {
+    text-decoration: underline;
+}
+
+.header__link--active {
+    color: #1877f2;
+}
+
+.header__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 20%;
+}
+
+.header__avatar {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.header__avatar-img {
+    border-radius: 50%;
+    height: 32px;
+    margin-right: 8px;
+    width: 32px;
+}
+
+.header__avatar-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.header__icon {
+    color: #1c1e21;
+    font-size: 24px;
+    margin-right: 16px;
+}
+
+.header__icon:hover {
+    color: #1877f2;
+    cursor: pointer;
+}

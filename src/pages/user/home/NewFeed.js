@@ -1,9 +1,26 @@
 import {Link} from "react-router-dom";
+import "./NewFeed.css"
 
-export default function NewFeed(){
+export default function NewFeed() {
     return (
         <>
             <div className="newFeedContainer">
+                <br/>
+                <div>
+                    <img alt={"logo"}/>
+                    <h3> Chào [User Name], ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
+                </div>
+                <div>
+                    <div className={"feedCardAvatar"}>
+                        <img src={"#"} alt={"Avatar"}/>
+                        <input placeholder={"Sơn ơi, bạn đang nghĩ gì thế"}/>
+                        <button> Đăng</button>
+                    </div>
+                </div>
+
+                <br/>
+                <hr/>
+
                 <div className="feedCard">
                     <div className="feedCardHeader">
                         <div className="feedCardAvatar">
@@ -13,11 +30,40 @@ export default function NewFeed(){
                             <div className="feedCardHeaderName">
                                 <Link to={"/user/1"}><span> Tên người đăng </span></Link>
                             </div>
-                            <div className="feedCardHeaderTimestamp"></div>
+                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
                         </div>
                     </div>
                     <div className="feedCardBody">
                         <p>
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
                             <br/>
@@ -29,26 +75,80 @@ export default function NewFeed(){
                             src="https://picsum.photos/id/1012/600/400"
                             alt="Random image"
                         />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
                     </div>
                     <div className="feedCardActions">
                         <div>
-                            <p> Number of Likes</p>
+                            <p> Số Like </p>
+                            <button>Thích</button>
                         </div>
                         <div>
-                            <button>Thích</button>
-                            <button>Bình Luận</button>
                             <button>Chia sẻ</button>
                         </div>
-                        <div>
-                            <input placeholder={"Viết bình luận.."}/>
-                        </div>
-                        <div>
-                            <button>Gửi</button>
-                        </div>
                     </div>
+                    <div className={"user-comment"}>
+                        <input placeholder={"Viết bình luận.."}/>
+                        <button>Bình Luận</button>
+                    </div>
+                    <ul>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div className="newFeedContainer">
                 <div className="feedCard">
                     <div className="feedCardHeader">
                         <div className="feedCardAvatar">
@@ -58,7 +158,7 @@ export default function NewFeed(){
                             <div className="feedCardHeaderName">
                                 <Link to={"/user/1"}><span> Tên người đăng </span></Link>
                             </div>
-                            <div className="feedCardHeaderTimestamp"></div>
+                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
                         </div>
                     </div>
                     <div className="feedCardBody">
@@ -67,49 +167,46 @@ export default function NewFeed(){
                             Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
-                        </p>
-                        <p>
-                            Không có ảnh
-                        </p>
-                    </div>
-                    <div className="feedCardActions">
-                        <div>
-                            <p> Number of Likes</p>
-                        </div>
-                        <div>
-                            <button>Like</button>
-                            <button>Comment</button>
-                            <button>Share</button>
-                        </div>
-                        <div>
-                            <input/>
-                        </div>
-                        <div>
-                            <button>Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="newFeedContainer">
-                <div className="feedCard">
-                    <div className="feedCardHeader">
-                        <div className="feedCardAvatar">
-                            <img src={"#"} alt={"Avatar"}/>
-                        </div>
-                        <div className="feedCardHeaderInfo">
-                            <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
-                            </div>
-                            <div className="feedCardHeaderTimestamp"></div>
-                        </div>
-                    </div>
-                    <div className="feedCardBody">
-                        <p>
                             Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
                             Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            <br/>
+                            Test nội dung, dài thật dài dài
+                            <br/>
                             Test nội dung, dài thật dài dài
                         </p>
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
                         <img
                             src="https://picsum.photos/id/1012/600/400"
                             alt="Random image"
@@ -117,20 +214,312 @@ export default function NewFeed(){
                     </div>
                     <div className="feedCardActions">
                         <div>
-                            <p> Number of Likes</p>
+                            <p> Số Like </p>
+                            <button>Thích</button>
                         </div>
                         <div>
-                            <button>Like</button>
-                            <button>Comment</button>
-                            <button>Share</button>
-                        </div>
-                        <div>
-                            <input/>
-                        </div>
-                        <div>
-                            <button>Comment</button>
+                            <button>Chia sẻ</button>
                         </div>
                     </div>
+                    <div className={"user-comment"}>
+                        <input placeholder={"Viết bình luận.."}/>
+                        <button>Bình Luận</button>
+                    </div>
+                    <ul>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div className="feedCard">
+                    <div className="feedCardHeader">
+                        <div className="feedCardAvatar">
+                            <img src={"#"} alt={"Avatar"}/>
+                        </div>
+                        <div className="feedCardHeaderInfo">
+                            <div className="feedCardHeaderName">
+                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                            </div>
+                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                        </div>
+                    </div>
+                    <div className="feedCardBody">
+                        <p>
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            <br/>
+                            Test nội dung, dài thật dài dài
+                            <br/>
+                            Test nội dung, dài thật dài dài
+                        </p>
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                    </div>
+                    <div className="feedCardActions">
+                        <div>
+                            <p> Số Like </p>
+                            <button>Thích</button>
+                        </div>
+                        <div>
+                            <button>Chia sẻ</button>
+                        </div>
+                    </div>
+                    <div className={"user-comment"}>
+                        <input placeholder={"Viết bình luận.."}/>
+                        <button>Bình Luận</button>
+                    </div>
+                    <ul>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div className="feedCard">
+                    <div className="feedCardHeader">
+                        <div className="feedCardAvatar">
+                            <img src={"#"} alt={"Avatar"}/>
+                        </div>
+                        <div className="feedCardHeaderInfo">
+                            <div className="feedCardHeaderName">
+                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                            </div>
+                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                        </div>
+                    </div>
+                    <div className="feedCardBody">
+                        <p>
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            Test nội dung, dài thật dài dài
+                            <br/>
+                            Test nội dung, dài thật dài dài
+                            <br/>
+                            Test nội dung, dài thật dài dài
+                        </p>
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                        <img
+                            src="https://picsum.photos/id/1012/600/400"
+                            alt="Random image"
+                        />
+                    </div>
+                    <div className="feedCardActions">
+                        <div>
+                            <p> Số Like </p>
+                            <button>Thích</button>
+                        </div>
+                        <div>
+                            <button>Chia sẻ</button>
+                        </div>
+                    </div>
+                    <div className={"user-comment"}>
+                        <input placeholder={"Viết bình luận.."}/>
+                        <button>Bình Luận</button>
+                    </div>
+                    <ul>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className={"comment-container"}>
+                                <div>
+                                    <div className={"comment-container-avatar"}>
+                                        <img alt={"avt"}/>
+                                        <h2> name </h2>
+                                    </div>
+                                    <p> bình luận </p>
+                                </div>
+                                <div>
+                                    <span> số like </span>
+                                    <button> like</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </>

@@ -1,89 +1,380 @@
-/* CSS for NewFeed component */
-.newFeedContainer {
+.newFeedContainer , .feedCardComment{
+    width: 100%;
+    max-width: 800px;
     margin: 0 auto;
-    max-width: 600px;
-    min-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .feedCard {
     background-color: #fff;
-    border: 1px solid #dddfe2;
+    border: 1px solid #e6e6e6;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.feedCardHeader {
+.feedCardHeader, .feedCardCommentHeader {
     display: flex;
     align-items: center;
     padding: 16px;
 }
 
-.feedCardAvatar {
+.feedCardAvatar img , feedCardCommentAvatar img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #dddfe2;
     margin-right: 16px;
 }
 
-.feedCardHeaderInfo {
-    display: flex;
-    flex-direction: column;
+.feedCardHeaderName , feedCardCommentHeaderName{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 4px;
 }
 
-.feedCardHeaderName {
-    width: 120px;
-    height: 16px;
-    background-color: #dddfe2;
+.feedCardHeaderTimestamp , feedCardCommentHeaderTimestamp {
+    font-size: 12px;
+    color: #65676b;
+}
+
+.feedCardBody , .feedCardCommentBody {
+    padding: 16px;
+}
+
+.feedCardBody p , .feedCardCommentBody p{
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 16px;
+}
+
+.feedCardBody img , .feedCardCommentBody img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.feedCardActions , .feedCardCommentActions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-top: 1px solid #e6e6e6;
+}
+
+.feedCardActions p , .feedCardCommentActions p {
+    font-size: 14px;
+    line-height: 20px;
+    margin-right: 16px;
+}
+
+.feedCardActions button , .feedCardCommentActions button {
+    background-color: #fff;
+    border: none;
+    font-size: 14px;
+    color: #65676b;
+    cursor: pointer;
+}
+
+.feedCardActions input , .feedCardCommentActions input {
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 40px;
+    border: 1px solid #e6e6e6;
+    margin-right: 16px;
+}
+
+@media (max-width: 768px) {
+    .newFeedContainer {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .feedCard {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
+
+.user-comment {
+    display: flex;
+    /*flex-direction: column;*/
+    /*align-items: flex-start;*/
+}
+
+.user-comment input {
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 40px;
+    border: 1px solid #e6e6e6;
     margin-bottom: 8px;
 }
 
-.feedCardHeaderTimestamp {
-    width: 80px;
-    height: 12px;
-    background-color: #dddfe2;
+
+/*---*/
+
+
+/*.newFeedContainer {*/
+/*    max-width: 600px;*/
+/*    margin: 0 auto;*/
+/*    padding: 16px;*/
+/*}*/
+
+/*.feedCard {*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #dddfe2;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+/*    margin-bottom: 16px;*/
+/*}*/
+
+/*.feedCardAvatar {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    padding: 16px;*/
+/*}*/
+
+/*.feedCardAvatar img {*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    border-radius: 50%;*/
+/*    margin-right: 16px;*/
+/*}*/
+
+/*.feedCardAvatar input {*/
+/*    flex: 1;*/
+/*    border: none;*/
+/*    padding: 8px 16px;*/
+/*    border-radius: 20px;*/
+/*    margin-right: 16px;*/
+/*    font-size: 16px;*/
+/*    line-height: 20px;*/
+/*}*/
+
+/*.feedCardAvatar button {*/
+/*    background-color: #1877f2;*/
+/*    color: #fff;*/
+/*    border: none;*/
+/*    border-radius: 20px;*/
+/*    padding: 8px 16px;*/
+/*    font-size: 16px;*/
+/*    line-height: 20px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.feedCardHeader {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    padding: 16px;*/
+/*}*/
+
+/*.feedCardHeaderName {*/
+/*    font-size: 16px;*/
+/*    font-weight: 600;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.feedCardHeaderTimestamp {*/
+/*    font-size: 12px;*/
+/*    color: #65676b;*/
+/*}*/
+
+/*.feedCardBody {*/
+/*    padding: 0 16px;*/
+/*}*/
+
+/*.feedCardBody p {*/
+/*    font-size: 14px;*/
+/*    line-height: 20px;*/
+/*    margin: 16px 0;*/
+/*}*/
+
+/*.feedCardBody img {*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    margin-bottom: 16px;*/
+/*}*/
+
+/*.feedCardActions {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*    padding: 16px;*/
+/*    border-top: 1px solid #dddfe2;*/
+/*}*/
+
+/*.feedCardActions p {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.feedCardActions button {*/
+/*    background-color: transparent;*/
+/*    border: none;*/
+/*    color: #65676b;*/
+/*    cursor: pointer;*/
+/*    font-size: 14px;*/
+/*}*/
+
+/*.comment-container {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: flex-start;*/
+/*    margin-top: 16px;*/
+/*}*/
+
+/*.comment-container input {*/
+/*    width: 100%;*/
+/*    padding: 8px 16px;*/
+/*    border-radius: 20px;*/
+/*    border: 1px solid #dddfe2;*/
+/*    margin-bottom: 8px;*/
+/*    font-size: 14px;*/
+/*    line-height: 20px;*/
+/*}*/
+
+.user-comment button {
+    background-color: #e75003;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
 }
 
-.feedCardBody {
+/*.feedCardComment {*/
+/*    border-top: 1px solid #dddfe2;*/
+/*    padding: 16px;*/
+/*}*/
+
+/*.feedCardCommentHeader {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-bottom: 16px;*/
+/*}*/
+
+/*.feedCardCommentAvatar img {*/
+/*    width: 32px;*/
+/*    height: 32px;*/
+/*    border-radius: 50%;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.feedCardCommentHeaderName {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.feedCardCommentHeaderTimestamp {*/
+/*    font-size: 12px;*/
+/*    color: #65676b;*/
+/*}*/
+
+/*.feedCardCommentBody p {*/
+/*    font-size: 14px;*/
+/*    line-height: 20px;*/
+/*}*/
+
+/*.feedCardCommentActions {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.feedCardCommentActions p {*/
+/*    font-size: 14px;*/
+/*    font-weight: 600;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.feedCardCommentActions button {*/
+/*    background-color: transparent;*/
+/*    border: none;*/
+/*    color: #65676b;*/
+/*    cursor: pointer;*/
+/*    font-size: 14px;*/
+/*}*/
+
+.comment-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.comment-container li:last-child {
+    margin-bottom: 0;
+}
+
+.comment-container img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.comment-container h2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.comment-container p {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.comment-container span {
+    font-size: 12px;
+    color: #65676b;
+    margin-right: 8px;
+}
+
+.comment-container button {
+    background-color: transparent;
+    border: none;
+    color: #65676b;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.comment-container button:hover {
+    text-decoration: underline;
+}
+
+.comment-container {
     padding: 16px;
-    background-color: #fff;
-    border: 1px solid #dddfe2;
-    border-radius: 8px;
-    width: 100%;
-    margin-bottom: 16px;
-    white-space: pre-wrap; /* Add the white-space property */
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    min-width: 90%;
 }
-
-.feedCardBody p {
-    margin-bottom: 16px;
+.comment-container-avatar {
+    display: flex;
 }
 
 .feedCardBody img {
-    max-width: 100%;
-    display: block;
-    margin-bottom: 16px;
-}
-
-.feedCardActions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    background-color: #fff;
-    border-bottom: 1px solid #dddfe2;
-}
-
-.feedCardActions button {
-    background-color: transparent;
-    border: none;
-    color: #1877f2;
-    font-size: 14px;
-    font-weight: 600;
+    max-width: 30%;
+    height: auto;
     cursor: pointer;
-    margin-right: 16px;
 }
 
-.feedCardActions button:hover {
-    text-decoration: underline;
+.feedCardBody img.full-size {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9999;
 }

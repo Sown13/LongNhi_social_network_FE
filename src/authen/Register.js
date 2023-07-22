@@ -13,14 +13,14 @@ import toast from "bootstrap/js/src/toast";
 
 
 const validationSchema = Yup.object().shape({
-    accountName: Yup.string().required('Account Name is required!'),
-    password: Yup.string().required('Password is required!'),
+    accountName: Yup.string().required('Xin hãy nhập tên tài khoản'),
+    password: Yup.string().required('Bạn chưa nhập mật khẩu'),
     confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match!')
-        .required('Confirm Password is required!'),
-    email: Yup.string().email('Invalid email address').required('Email is required!'),
-    fullName: Yup.string().required('Full Name is required!'),
-    phone: Yup.string().required('Phone is required!'),
+        .oneOf([Yup.ref('password'), null], 'Mật khẩu phải trùng với mật khẩu xác nhận')
+        .required('Xin hãy xác nhận mật khẩu'),
+    email: Yup.string().email('Địa chỉ Email không hợp lệ').required('Bạn chưa nhập Email'),
+    fullName: Yup.string().required('Xin hãy nhập tên bạn'),
+    phone: Yup.string().required('Xin hãy nhập số điện thoại của bạn'),
 });
 
 export default function Register() {
@@ -159,14 +159,14 @@ export default function Register() {
                                         color="dark"
                                         type="submit"
                                         className="btn-block my-3 mx-0"
-                                        style={{backgroundColor: '#3b82f6'}}
+                                        style={{backgroundColor: '#12af00'}}
                                     >
-                                        Sign up
+                                        Đăng ký
                                     </CDBBtn>
                                 </Form>
                             )}
                         </Formik>
-                        <p className="text-center">or sign up with</p>
+                        <p className="text-center">hoặc đăng nhập với</p>
                         <div className="flex-row mb-3 d-flex justify-content-center">
                             {/* Facebook button */}
                             {/* <Button color="blue" className="m-0" style={{ backgroundColor: '#3b82f6' }}>
@@ -178,14 +178,14 @@ export default function Register() {
                             </CDBBtn>
                         </div>
                         <p className="text-center m-0">
-                            Already have an account?{' '}
-                            <Link to={"#"}>Sign In</Link>
+                            Bạn đã có tài khoản?{' '}
+                            <Link to={"/login"}>Đăng nhập</Link>
                         </p>
                         <hr/>
                         <p className="text-center">
-                            By clicking <em>Sign up</em> you agree to our{' '}
+                            Khi ấn nút <em style={{color:"#12AF00FF"}}>Đăng ký</em> cũng đồng nghĩa với việc bạn đã đồng ý với các {' '}
                             <CDBLink className="d-inline p-0" to="#">
-                                terms of service
+                                <em style={{color:"#12AF00FF"}}>điều khoản dịch vụ</em>
                             </CDBLink>
                         </p>
                     </CardBody>

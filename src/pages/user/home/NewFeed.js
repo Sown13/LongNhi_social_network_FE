@@ -1,8 +1,23 @@
 import {Link} from "react-router-dom";
 import "./NewFeed.css"
+import {useEffect, useState} from "react";
 
 export default function NewFeed() {
-    console.log(sessionStorage.getItem("user"));
+    const [user,setUser] = useState({
+        fullName: ""
+    });
+
+    useEffect(() => {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            console.log("login" + userData)
+            setUser(userData);
+
+        }
+    }, []);
+
+    console.log("local storage" + localStorage.getItem("user"));
+
     return (
         <>
             <div className={"newFeed"}>
@@ -15,7 +30,7 @@ export default function NewFeed() {
                     <div>
                         <div className={"feedCardAvatar"}>
                             <img src={"#"} alt={"Avatar"}/>
-                            <input placeholder={"Sơn ơi, bạn đang nghĩ gì thế"}/>
+                            <input placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế`}/>
                             <button> Đăng</button>
                         </div>
                     </div>

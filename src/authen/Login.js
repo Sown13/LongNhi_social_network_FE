@@ -1,7 +1,7 @@
-import {ErrorMessage, Field, Form, Formik, withFormik} from "formik";
-import {redirect, useNavigate} from "react-router-dom";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {Link, redirect, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 
@@ -12,16 +12,9 @@ import React from 'react';
 import {CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer} from 'cdbreact';
 import './Login.css'
 import 'mdbreact/dist/css/mdb.css';
-import {useDispatch} from "react-redux";
 
-export default function Login() {
-    const navigate = useNavigate();
+export default function Login(props) {
     const [error, setError] = useState(null); // State to store error messages
-
-    const [login] = useState({
-        accountName: "",
-        password: "",
-    });
 
     const handleLogin = (values, { setSubmitting }) => {
         validationSchema
@@ -38,12 +31,12 @@ export default function Login() {
                         })
                         setError(null);
                         setSubmitting(false);
-                        // Additional actions after successful login
-                        console.log("-----------");
-                        sessionStorage.setItem("user",JSON.stringify(response.data));
-                        console.log(sessionStorage.getItem("user"));
-                        // console.log(sessionStorage.getItem("accountName"));
-                        // console.log(sessionStorage.getItem("password"))
+                        props.setUser(response.data);
+                        props.setLoggedIn(true);
+
+                        localStorage.setItem("loggedIn",true);
+                        localStorage.setItem("user",JSON.stringify(response.data));
+                        console.log(localStorage.getItem("user"));
                     })
                     .catch((error) => {
                         // Error case
@@ -59,6 +52,7 @@ export default function Login() {
             .catch((errors) => {
                 setSubmitting(false);
             });
+
     };
 
 
@@ -99,7 +93,7 @@ export default function Login() {
                                                     <>
                                                         <CDBInput
                                                             material
-                                                            placeholder="Account Name"
+                                                            placeholder="Tên tài khoản"
                                                             name="accountName"
                                                             type="text"
                                                             {...field}
@@ -116,7 +110,7 @@ export default function Login() {
                                                     <>
                                                         <CDBInput
                                                             material
-                                                            placeholder="Password"
+                                                            placeholder="Mật khẩu"
                                                             name="password"
                                                             type="password"
                                                             {...field}
@@ -137,6 +131,18 @@ export default function Login() {
                                     >
                                         Đăng nhập
                                     </CDBBtn>
+                                    <Link to={"/register"}>
+                                    <CDBBtn
+                                        color="dark"
+                                        type={"button"}
+                                        className="btn-block my-3 mx-0"
+                                        style={{backgroundColor: "#12af00"}}
+                                    >
+                                        Đăng Ký
+                                    </CDBBtn>
+                                    </Link>
+                                </CDBCardBody>
+                                <div>
                                     <p className="text-center"> hoặc đăng nhập bằng</p>
 
                                     <div className="flex-row mb-3 d-flex justify-content-center">
@@ -150,9 +156,7 @@ export default function Login() {
                                             <CDBIcon fab icon="google-plus-g"/>
                                         </CDBBtn>
                                     </div>
-
-
-                                </CDBCardBody>
+                                </div>
                             </CDBCard>
                         </CDBContainer>
                     </div>

@@ -1,12 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
 import MainPage from "./pages/user/MainPage";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import NewFeed from "./pages/user/home/NewFeed";
-import SideBarLeft from "./components/sidebar/SideBarLeft";
-import SideBarRight from "./components/sidebar/SideBarRight";
 import Admin from "./pages/admin/Admin";
 import FriendRequestList from "./pages/user/friend_request/FriendRequestList";
 import Wall from "./pages/user/user_page/wall/Wall";
@@ -23,22 +18,90 @@ import Memory from "./pages/user/memory/Memory";
 import Login from "./authen/Login";
 import Register from "./authen/Register";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import Guest from "./pages/guest/Guest";
+import UnAuthorized from "./authen/UnAuthorized";
+
 
 function App() {
-   const dispatch = useDispatch();
+    const [loggedIn, setLoggedIn] = useState(
+        () => {
+            let loggedInData = localStorage.getItem("loggedIn");
+            if (loggedInData === null || loggedInData === "undefined") {
+                loggedInData = false;
+            } else {
+                loggedInData = JSON.parse(loggedInData);
+            }
+            return loggedInData;
+        }
+    );
+
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Guest",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
+
+    useEffect(() => {
+       console.log(user)
+    }, [user]);
+
+
+    useEffect(() => {
+        let userData = localStorage.getItem("user");
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+    }, [loggedIn]);
+
+    useEffect(() => {
+        const userData = localStorage.getItem("user");
+        console.log("userData from localStorage:", userData);
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
 
     return (
         <div>
             <Routes>
-                <Route path={"/"} element={<MainPage></MainPage>}>
-                    <Route path={"/"} element={<NewFeed></NewFeed>}></Route>
-                    <Route path={"/friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
-                    <Route path={"/community"} element={<Community></Community>}></Route>
-                    <Route path={"/groups"} element={<Group></Group>}></Route>
-                    <Route path={"/games"} element={<Game></Game>}></Route>
-                    <Route path={"/memory"} element={<Memory></Memory>}></Route>
-                    <Route path={"/users/:userId"} element={<UserPage></UserPage>}>
+                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                                                            user={user} setLoggedIn={setLoggedIn}
+                                                            setUser={setUser}></PrivateRoute>}>
+
+                </Route>
+                {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}
+                <Route path="/admin" element={<PrivateRoute element={<Admin/>} role="ADMIN" loggedIn={loggedIn}
+                                                            user={user} setLoggedIn={setLoggedIn}
+                                                            setUser={setUser}></PrivateRoute>}>
+
+                </Route>
+
+                <Route path="/" element={<PrivateRoute element={<MainPage/>} role="USER" loggedIn={loggedIn}
+                                                       user={user} setLoggedIn={setLoggedIn}
+                                                       setUser={setUser}></PrivateRoute>}>
+                    <Route path={""} element={<NewFeed></NewFeed>}></Route>
+                    <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
+                    <Route path={"community"} element={<Community></Community>}></Route>
+                    <Route path={"groups"} element={<Group></Group>}></Route>
+                    <Route path={"games"} element={<Game></Game>}></Route>
+                    <Route path={"memory"} element={<Memory></Memory>}></Route>
+                    <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
@@ -46,13 +109,35 @@ function App() {
                         <Route path={"videos"} element={<UserVideo/>}></Route>
                         <Route path={"checkin"} element={<UserCheckin/>}></Route>
                     </Route>
-                    <Route path={"/admin"} element={<Admin></Admin>}></Route>
                 </Route>
-                <Route path={"/login"} element={<Login></Login>}></Route>
-                <Route path={"/register"} element={<Register></Register>}></Route>
+                <Route path={"/un-authorized"} element={<UnAuthorized></UnAuthorized>}></Route>
+
+                <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
+                    <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
+                <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
             </Routes>
         </div>
     );
+}
+
+// localStorage.removeItem("loggedIn");
+// localStorage.removeItem("user");
+function PrivateRoute({element: Component, role, loggedIn, user, ...rest}) {
+    console.log("loggedIn: " + loggedIn);
+    console.log("user: " + JSON.stringify(user));
+    console.log("role: " + role);
+
+    if (!loggedIn) {
+        return <Navigate to="/login" replace/>;
+    }
+    if (role && user && user.role !== role && role === "GUEST") {
+        return <Navigate to="/" replace/>;
+    }
+    if (role && user && user.role !== role && user.role !== "ADMIN") {
+        return <Navigate to="/un-authorized" replace/>;
+    }
+
+    return <>{Component}</>;
 }
 
 export default App;

@@ -4,12 +4,17 @@ import SideBarRight from "../../components/sidebar/SideBarRight";
 import "./MainPage.css"
 import "../../components/sidebar/SideBarLeft.css"
 import Header from "../../components/header/Header";
+import {useEffect} from "react";
 
-export default function MainPage() {
-    console.log("MainPage rendered");
+export default function MainPage(props) {
+
+    useEffect(() => {
+        console.log("loggedin storage == " + localStorage.getItem("loggedIn"))
+    },[])
+
     return (
         <>
-            <Header></Header>
+            <Header setLoggedIn={props.setLoggedIn} setUser={props.setUser}></Header>
             <div className="mainPageContainer">
                 <SideBarLeft></SideBarLeft>
                 <div className="main">

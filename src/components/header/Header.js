@@ -1,8 +1,23 @@
 import "./Header.css"
 // import "./logo-longnhi.png"
-import {Link} from "react-router-dom";
+import {Link, redirect, useNavigate} from "react-router-dom";
 
-export default function Header(){
+export default function Header(props){
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        localStorage.removeItem("loggedIn");
+        localStorage.removeItem("user");
+        // props.setLoggedIn(false);
+        // props.setUser({
+        //     userId: 0,
+        //     accountName: "Guest",
+        //     fullName: "Guest",
+        //     role: "GUEST"
+        // });
+        window.location.reload();
+    }
+
     return (
         <header className="header">
             <div className="header__left">
@@ -24,7 +39,9 @@ export default function Header(){
                     <Link> <span> Icon Tin nhắn </span> </Link>
                 </div>
                 <div>
-                    <Link><span> Icon Thông báo </span> </Link>
+                    {/*<Link><span> Icon Thông báo </span> </Link>*/}
+                    {props.loggedIn ? <button onClick={handleLogout}> Logout </button> : <></> }
+                    <button onClick={handleLogout}>  Logout </button>
                 </div>
                 <div className="header__avatar">
                     <img src="avatar.jpg" alt="Avatar" className="header__avatar-img"/>

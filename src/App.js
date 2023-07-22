@@ -20,8 +20,14 @@ import Community from "./pages/user/community/Community";
 import Group from "./pages/user/groups/Group";
 import Game from "./pages/user/games/Game";
 import Memory from "./pages/user/memory/Memory";
+import Login from "./authen/Login";
+import Register from "./authen/Register";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
 
 function App() {
+   const dispatch = useDispatch();
+
     return (
         <div>
             <Routes>
@@ -42,6 +48,8 @@ function App() {
                     </Route>
                     <Route path={"/admin"} element={<Admin></Admin>}></Route>
                 </Route>
+                <Route path={"/login"} element={<Login></Login>}></Route>
+                <Route path={"/register"} element={<Register></Register>}></Route>
             </Routes>
         </div>
     );

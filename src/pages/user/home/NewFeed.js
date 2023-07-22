@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 import "./NewFeed.css"
 
 export default function NewFeed() {
+    console.log(sessionStorage.getItem("user"));
     return (
         <>
             <div className={"newFeed"}>

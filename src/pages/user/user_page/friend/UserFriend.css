@@ -1,0 +1,89 @@
+.userFriend {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f2f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.userFriend > div {
+    align-items: center;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+@media screen and (min-width: 768px) {
+    .userFriend > div {
+        width: calc(50% - 10px);
+        margin-right: 20px;
+    }
+
+    .userFriend > div:nth-child(2n) {
+        margin-right: 0;
+    }
+}
+.userFriend > h1 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.userFriend > input[type="text"] {
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.userFriend > button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ff7f50;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.userFriend > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.userFriend > div:hover {
+    background-color: #f0f2f5;
+}
+
+.userFriend h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.userFriend a {
+    text-decoration: none;
+}
+
+.userFriend a:hover {
+    text-decoration: underline;
+}

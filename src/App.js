@@ -20,6 +20,7 @@ import Register from "./authen/Register";
 import {useEffect, useState} from "react";
 import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
+import Favorite from "./pages/user/favorite/Favorite";
 
 
 function App() {
@@ -102,12 +103,14 @@ function App() {
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
+                    <Route path={"favorite"} element={<Favorite/>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>
                         <Route path={"checkin"} element={<UserCheckin/>}></Route>
+                        <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
                     </Route>
                 </Route>
                 <Route path={"/un-authorized"} element={<UnAuthorized></UnAuthorized>}></Route>

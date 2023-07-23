@@ -22,26 +22,33 @@ export default function NewFeed(props) {
         }
     )
 
-    const handleCreatePost = () => {};
+    const handleCreatePost = () => {
+    };
 
     return (
         <>
             <div className={"newFeed"}>
                 <div className="newFeedContainer">
                     <br/>
-                    <div>
+                    <div className={"newFeedWelcome"}>
                         <img src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
-                        <h3> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
+                        <h3> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
+                            nhé</h3>
                     </div>
-                    <div>
+
+
+                    <div className={"feedCarAvatarContainer"}>
                         <div className={"feedCardAvatar"}>
-                            <img src={user.avatar} alt={"Avatar"}/>
-
-                                <input name="postContent" placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế`}></input>
+                            <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                        </div>
+                        <div className={"feedCardTextarea"}>
+                            <textarea style={{width: "80%"}} name="postContent"
+                                      placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}></textarea>
                             <button> Đăng</button>
-
                         </div>
                     </div>
+
+
 
                     <br/>
                     <hr/>
@@ -49,7 +56,7 @@ export default function NewFeed(props) {
                     <div className="feedCard">
                         <div className="feedCardHeader">
                             <div className="feedCardAvatar">
-                                <img src={"#"} alt={"Avatar"}/>
+                                <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
                             </div>
                             <div className="feedCardHeaderInfo">
                                 <div className="feedCardHeaderName">
@@ -115,7 +122,7 @@ export default function NewFeed(props) {
                         </div>
                         <div className="feedCardActions">
                             <div>
-                                <p> Số Like </p>
+                                <p> 20 </p>
                                 <button>Thích</button>
                             </div>
                             <div>
@@ -131,7 +138,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -146,7 +153,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -161,7 +168,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -177,7 +184,7 @@ export default function NewFeed(props) {
                     <div className="feedCard">
                         <div className="feedCardHeader">
                             <div className="feedCardAvatar">
-                                <img src={"#"} alt={"Avatar"}/>
+                                <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
                             </div>
                             <div className="feedCardHeaderInfo">
                                 <div className="feedCardHeaderName">
@@ -255,7 +262,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -270,7 +277,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -285,7 +292,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -301,7 +308,7 @@ export default function NewFeed(props) {
                     <div className="feedCard">
                         <div className="feedCardHeader">
                             <div className="feedCardAvatar">
-                                <img src={"#"} alt={"Avatar"}/>
+                                <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
                             </div>
                             <div className="feedCardHeaderInfo">
                                 <div className="feedCardHeaderName">
@@ -379,7 +386,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -394,7 +401,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -409,7 +416,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -425,7 +432,7 @@ export default function NewFeed(props) {
                     <div className="feedCard">
                         <div className="feedCardHeader">
                             <div className="feedCardAvatar">
-                                <img src={"#"} alt={"Avatar"}/>
+                                <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
                             </div>
                             <div className="feedCardHeaderInfo">
                                 <div className="feedCardHeaderName">
@@ -503,7 +510,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -518,7 +525,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>
@@ -533,7 +540,7 @@ export default function NewFeed(props) {
                                 <div className={"comment-container"}>
                                     <div>
                                         <div className={"comment-container-avatar"}>
-                                            <img alt={"avt"}/>
+                                            <img src={"img/example-ava-2.png"} alt={"avt"}/>
                                             <h2> name </h2>
                                         </div>
                                         <p> bình luận </p>

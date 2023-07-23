@@ -1,3 +1,15 @@
+.newFeedWelcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.newFeedWelcome img {
+    max-width: 100%;
+    height: 350px;
+}
+
+
 .newFeed {
     flex: 0 0 60%;
     max-width: 60vw;
@@ -392,3 +404,53 @@
     object-fit: contain;
     z-index: 9999;
 }
+
+/*--------------- Chỉnh phần input đăng của user*/
+
+.feedCarAvatarContainer {
+    display: flex;
+    flex-direction: row;
+
+}
+.feedCardAvatar{
+    display: flex;
+    min-width: 7%;
+    max-width: 7%;
+}
+.feedCardTextarea{
+    display: flex;
+    flex-direction: column;
+    min-width: 93%;
+}
+
+.feedCardTextarea textarea{
+    min-width: 100%;
+
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.feedCardTextarea button:hover {
+    background-color: #ff6347;
+}
+
+.feedCardTextarea button {
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 25px;
+    background-color: #ff8c00;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+

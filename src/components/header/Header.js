@@ -55,8 +55,8 @@ export default function Header(props){
                     <div className="header__tooltip">Video</div>
                 </div>
                 <div className="header__item">
-                    <Link to={"/users/wall"} className="header__link"><i className="fa fa-user header__icon"></i></Link>
-                    <div className="header__tooltip">Tường</div>
+                    <Link to={"/favorite"} className="header__link"><i className="fa fa-user header__icon"></i></Link>
+                    <div className="header__tooltip">Ưa thích</div>
                 </div>
             </div>
             <div className="header__right">

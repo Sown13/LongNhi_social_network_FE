@@ -1,85 +1,130 @@
 .user-header {
-    background-color: #f0f2f5;
     position: relative;
-    width: 100%;
 }
 
 .user-background-img {
-    /*background-image: url('');*/
-    background-size: 10000px 500px;
-    background-position: center;
+    position: relative;
+    overflow: hidden;
+    min-width: 100%;
+    height: 250px; /* Chỉnh bg */
+}
+
+.user-background-img img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    filter: brightness(0.5);
 }
 
 .user-info {
+    position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    margin-top: -100px;
+}
+
+.user-avatar {
     position: absolute;
-    bottom: -50px;
-    left: 50px;
+    bottom: 110px; /* Chỉnh overlap với ảnh nền ở đây */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #fff;
 }
 
 .user-avatar img {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    margin-right: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-full-name {
+    margin-top: 20px;
+    text-align: center;
 }
 
 .user-full-name h2 {
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 10px;
     color: #333;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-}
-
-.user-misc {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #666;
 }
 
 .user-action {
+    margin-top: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
 }
 
 .user-action button {
-    background-color: #1877f2;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
     padding: 10px 20px;
-    margin-right: 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 25px;
+    background-color: #ff7f50;
+    color: #fff;
     cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
 }
 
 .user-action button:hover {
-    background-color: #3b5998;
+    background-color: #ff6347;
+}
+
+.user-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.user-header {
+    flex-shrink: 0;
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+.user-info {
+    margin-top: 50px;
+}
+
+.user-navbar {
+    margin-top: 20px;
+    border-bottom: 2px solid;
+    border-bottom-color: #e75003;
 }
 
 .user-navbar {
     display: flex;
-    justify-content: space-around;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    margin-top: 50px;
-    padding: 10px 0;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .user-navbar a {
-    font-size: 18px;
+    display: inline-block;
+    padding: 10px;
+    margin: 0 10px;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #333;
     text-decoration: none;
-    padding: 0 10px;
-    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease;
 }
 
 .user-navbar a:hover {
-    color: #1877f2;
+    background-color: #ff7f50;
+    color: #fff;
 }

@@ -73,6 +73,15 @@
     flex: 20%;
 }
 
+.header__right > div {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.header__right > i {
+    margin-right: 10px;
+}
+
 .header__avatar {
     display: flex;
     align-items: center;
@@ -101,37 +110,6 @@
     color: #1877f2;
     cursor: pointer;
 }
-
-/*---- make drop down*/
-
-/* Position the dropdown container relative to the icon */
-/*.dropdown {*/
-/*    position: relative;*/
-/*    display: inline-block;*/
-/*}*/
-
-/*!* Style the dropdown icon *!*/
-/*.header__icon {*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*!* Style the dropdown menu *!*/
-/*.dropdown-content {*/
-/*    display: none;*/
-/*    position: absolute;*/
-/*    z-index: 1;*/
-/*    right: 0;*/
-/*}*/
-
-/*.dropdown-content button {*/
-/*    display: block;*/
-/*    width: 100%;*/
-/*}*/
-
-/*!* Show the dropdown menu when the icon is clicked *!*/
-/*.dropdown:hover .dropdown-content {*/
-/*    display: block;*/
-/*}*/
 
 
 
@@ -186,4 +164,50 @@
 
 .dropdown-button:hover {
     background-color: #f2f2f2;
+}
+
+
+
+
+/*---------------- Tạo pop up header*/
+.header__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header__item {
+    position: relative;
+    margin: 0 20px;
+}
+
+.header__link {
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.header__icon {
+    margin-right: 5px;
+}
+
+.header__tooltip {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    white-space: nowrap;
+}
+
+.header__item:hover .header__tooltip {
+    display: block;
 }

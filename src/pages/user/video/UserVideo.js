@@ -1,6 +1,7 @@
+import "./UserVideo.css"
 export default function UserVideo(){
     return (
-        <div>
+        <div className={"userVideo"}>
             <h1>
                 user video
             </h1>

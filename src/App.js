@@ -10,7 +10,7 @@ import UserAbout from "./pages/user/user_page/about/UserAbout";
 import UserFriend from "./pages/user/user_page/friend/UserFriend";
 import UserPhoto from "./pages/user/user_page/photo/UserPhoto";
 import UserCheckin from "./pages/user/user_page/checkin/UserCheckin";
-import UserVideo from "./pages/user/user_page/video/UserVideo";
+import UserVideo from "./pages/user/video/UserVideo";
 import Community from "./pages/user/community/Community";
 import Group from "./pages/user/groups/Group";
 import Game from "./pages/user/games/Game";
@@ -99,14 +99,14 @@ function App() {
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}></Route>
-                    <Route path={"games"} element={<Game></Game>}></Route>
+                    <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
+                    <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>
-                        <Route path={"videos"} element={<UserVideo/>}></Route>
                         <Route path={"checkin"} element={<UserCheckin/>}></Route>
                     </Route>
                 </Route>

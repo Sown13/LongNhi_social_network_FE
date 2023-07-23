@@ -38,15 +38,30 @@ export default function Header(props){
                     </div>
             </div>
             <div className="header__center">
-                <Link to={"/"}  className="header__link header__link--active">Trang chủ</Link>
-                <Link to={"/community"}  className="header__link">Cộng đồng</Link>
-                <Link to={"/groups"}  className="header__link">Nhóm</Link>
-                <Link to={"/games"} className="header__link">Trò chơi</Link>
-                <Link to={"/users/wall"}  className="header__link">Tường Nhà</Link>
+                <div className="header__item">
+                    <Link to={"/"} className="header__link"><i className="fa fa-home header__icon"></i></Link>
+                    <div className="header__tooltip">Trang chủ</div>
+                </div>
+                <div className="header__item">
+                    <Link to={"/community"} className="header__link"><i className="fa fa-users header__icon"></i></Link>
+                    <div className="header__tooltip">Cộng đồng</div>
+                </div>
+                <div className="header__item">
+                    <Link to={"/groups"} className="header__link"><i className="fa fa-user-tag header__icon"></i></Link>
+                    <div className="header__tooltip">Nhóm</div>
+                </div>
+                <div className="header__item">
+                    <Link to={"/videos"} className="header__link"><i className="fa fa-video header__icon"></i></Link>
+                    <div className="header__tooltip">Video</div>
+                </div>
+                <div className="header__item">
+                    <Link to={"/users/wall"} className="header__link"><i className="fa fa-user header__icon"></i></Link>
+                    <div className="header__tooltip">Tường</div>
+                </div>
             </div>
             <div className="header__right">
                 <div>
-                    <Link> <i className="fa-solid fa-comments fa-2xs"></i> </Link>
+                    <Link> <i className="fa fa-comment header__icon"></i> </Link>
                 </div>
                 <i className="fas fa-bell header__icon"></i>
                 <div className="dropdown">

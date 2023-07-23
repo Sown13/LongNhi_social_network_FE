@@ -29,32 +29,32 @@ export default function UserHeader() {
         accepted: false,
         friendType: "",
     })
+    //
+    // useEffect(() => {
+    //     Promise.all([
+    //         axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`),
+    //         axios.get(`http://localhost:8080/users/${userId}`)
+    //     ])
+    //         .then(([relationshipResponse, targetUserResponse]) => {
+    //             setRelationShip(relationshipResponse.data);
+    //             setTargetUser(targetUserResponse.data);
+    //         }).catch()
+    // }, [userId]);
+
 
     useEffect(() => {
-        Promise.all([
-            axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`),
-            axios.get(`http://localhost:8080/users/${userId}`)
-        ])
-            .then(([relationshipResponse, targetUserResponse]) => {
-                setRelationShip(relationshipResponse.data);
-                setTargetUser(targetUserResponse.data);
-            }).catch()
-    }, [relationship,targetUser]);
+        axios.get("http://localhost:8080/user-friends/have-been-friend/" + user.userId + "/" + userId).then((response) => {
+            setRelationShip(response.data);
+            console.log("relation   " + relationship)
+        }).catch()
+    }, [userId])
 
-    //
-    // useEffect(() => {
-    //     axios.get("http://localhost:8080/user-friends/have-been-friend/" + user.userId + "/" + userId).then((response) => {
-    //         setRelationShip(response.data);
-    //         console.log("relation   " + relationship)
-    //     }).catch()
-    // }, [])
-    //
-    // useEffect(() => {
-    //     axios.get("http://localhost:8080/users/" + userId).then((response) => {
-    //         setTargetUser(response.data);
-    //         console.log("targetuser   " + targetUser)
-    //     }).catch()
-    // }, [])
+    useEffect(() => {
+        axios.get("http://localhost:8080/users/" + userId).then((response) => {
+            setTargetUser(response.data);
+            console.log("targetuser   " + targetUser)
+        }).catch()
+    }, [userId])
 
 
     useEffect(()=>{

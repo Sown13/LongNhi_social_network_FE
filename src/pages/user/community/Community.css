@@ -7,3 +7,60 @@
     /*justify-content: center;*/
     background-color: #fff;
 }
+
+.community {
+    border: 1px solid #ddd;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    width: 400px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.community h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.community input[name="search"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.community h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.community .communityItem {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.community .communityItem:last-child {
+    margin-bottom: 0;
+}
+
+.community .communityItem:hover {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.community .communityItem:hover h2 {
+    color: #1877f2;
+}
+
+.communityItem {
+    width: 100%;
+}

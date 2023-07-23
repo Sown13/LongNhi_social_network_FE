@@ -1,22 +1,28 @@
 import {Link} from "react-router-dom";
 import "./NewFeed.css"
 import {useEffect, useState} from "react";
+import {Field, Formik} from "formik";
 
-export default function NewFeed() {
-    const [user,setUser] = useState({
-        fullName: ""
-    });
-
-    useEffect(() => {
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            console.log("login" + userData)
-            setUser(userData);
-
+export default function NewFeed(props) {
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
         }
-    }, []);
+    )
 
-    console.log("local storage" + localStorage.getItem("user"));
+    const handleCreatePost = () => {};
 
     return (
         <>
@@ -24,14 +30,16 @@ export default function NewFeed() {
                 <div className="newFeedContainer">
                     <br/>
                     <div>
-                        <img alt={"logo"}/>
-                        <h3> Chào [User Name], ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
+                        <img src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
+                        <h3> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết nhé</h3>
                     </div>
                     <div>
                         <div className={"feedCardAvatar"}>
-                            <img src={"#"} alt={"Avatar"}/>
-                            <input placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế`}/>
+                            <img src={user.avatar} alt={"Avatar"}/>
+
+                                <input name="postContent" placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế`}></input>
                             <button> Đăng</button>
+
                         </div>
                     </div>
 

@@ -40,7 +40,7 @@ function App() {
             let loggedInUser = localStorage.getItem("user");
             if (loggedInUser === null || loggedInUser === "undefined") {
                 loggedInUser = {
-                    message: "Guest",
+                    message: "Login to access more features",
                     userId: 0,
                     accountName: "Guest",
                     fullName: "Guest",

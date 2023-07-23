@@ -1,20 +1,30 @@
 import "./Header.css"
 // import "./logo-longnhi.png"
-import {Link, redirect, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {useState} from "react";
 
 export default function Header(props){
-    const navigate = useNavigate();
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
 
     function handleLogout() {
         localStorage.removeItem("loggedIn");
         localStorage.removeItem("user");
-        // props.setLoggedIn(false);
-        // props.setUser({
-        //     userId: 0,
-        //     accountName: "Guest",
-        //     fullName: "Guest",
-        //     role: "GUEST"
-        // });
         window.location.reload();
     }
 
@@ -36,20 +46,23 @@ export default function Header(props){
             </div>
             <div className="header__right">
                 <div>
-                    <Link> <span> Icon Tin nhắn </span> </Link>
+                    <Link> <i className="fa-solid fa-comments fa-2xs"></i> </Link>
                 </div>
-                <div>
-                    {/*<Link><span> Icon Thông báo </span> </Link>*/}
-                    {props.loggedIn ? <button onClick={handleLogout}> Logout </button> : <></> }
-                    <button onClick={handleLogout}>  Logout </button>
-                </div>
-                <div className="header__avatar">
-                    <img src="avatar.jpg" alt="Avatar" className="header__avatar-img"/>
-                        <span className="header__avatar-name">Hải Sơn</span>
-                </div>
-                <i className="fas fa-plus header__icon"></i>
                 <i className="fas fa-bell header__icon"></i>
-                <i className="fas fa-caret-down header__icon"></i>
+                <div className="dropdown">
+                    <div className="avatar-container">
+                        <img src="img/example-ava.jpg" alt="ava" className="avatar-img"/>
+                        <div className="dropdown-content">
+                            <Link to={`users/${user.userId}`}>
+                                <button className="dropdown-button">{user.fullName}</button>
+                            </Link>
+                            <button className="dropdown-button">Cài đặt quyền riêng tư</button>
+                            <button className="dropdown-button">Hỗ trợ</button>
+                            <button className="dropdown-button" onClick={handleLogout}>Đăng xuất</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </header>
     )

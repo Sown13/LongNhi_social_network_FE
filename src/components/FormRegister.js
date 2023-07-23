@@ -9,6 +9,7 @@ import {CDBBtn, CDBIcon, CDBLink} from "cdbreact";
 import * as Yup from "yup";
 import axios from "axios";
 import Swal from 'sweetalert2';
+import toast from "bootstrap/js/src/toast";
 
 
 const validationSchema = Yup.object().shape({
@@ -31,16 +32,23 @@ export default function FormRegister() {
                 // You can perform any other actions here upon successful registration
                 // For example, you might want to redirect the user to a login page.
                 Swal.fire({
-                    position: 'top-end',
+                    position: 'center',
                     icon: 'success',
                     title: 'Your work has been saved',
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1500,
+
                 });
             })
             .catch((error) => {
                 console.error('Error registering user:', error.response.data);
-                // Handle the error and provide feedback to the user if needed
+                Swal.fire({
+                    icon: 'error',
+                    title: `${error.response.data}`, // Append the error data to the title
+                    text: 'Something went wrong!', // You can also append the error data here if needed
+
+                });
+                // Handle other errors and provide feedback to the user if needed
             })
             .finally(() => {
                 setSubmitting(false);

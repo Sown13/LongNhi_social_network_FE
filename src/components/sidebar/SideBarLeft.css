@@ -1,0 +1,49 @@
+.sideBarLeft {
+    background-color: #ffffff;
+    border-right: 1px solid #dadde1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 16px;
+    width: 300px;
+}
+
+.sideBarLeft h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.sideBarLeft ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sideBarLeft li {
+    margin-bottom: 8px;
+}
+
+.sideBarLeft a {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+.sideBarLeft a:hover {
+    text-decoration: underline;
+}
+
+.sideBarLeft {
+    flex: 0 0 20%;
+    max-width: 20vw;
+    top: 56px;
+    position: sticky;
+    align-self: flex-start;
+    max-height: 100vw;
+}
+.sideBarLeft-content {
+    position: relative;
+    padding: 10px;
+}
+

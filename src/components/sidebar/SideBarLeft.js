@@ -5,11 +5,11 @@ export default function SideBarLeft() {
     return (
         <div className="sideBarLeft">
             <div className="sideBarLeft-content">
-                <Link to={"/users/1"}><img src={"img/example-ava-2.png"}/> <h2> Demo </h2></Link>
+                <Link to={"/admin"}><img src={"img/example-ava-2.png"}/> <h2> Admin Demo </h2></Link>
                 <hr/>
                 <Link to={"/friend-request"}> <h2> Chờ kết bạn </h2> </Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Chờ phản hồi </h2> </Link>
+                <Link to={"/friend-request-pending"}> <h2> Chờ phản hồi </h2> </Link>
                 <hr/>
                 <Link to={"/memory"}> <h2> Kỷ niệm </h2> </Link>
                 <hr/>

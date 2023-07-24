@@ -47,6 +47,8 @@ export default function UserFriend(){
         })
     },[])
 
+
+
     const search = (e) => {
         let searchResult = friendList.filter(friend => friend.fullName.toLowerCase().includes(e.target.value));
         console.log(searchResult);

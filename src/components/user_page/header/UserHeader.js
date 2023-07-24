@@ -2,6 +2,7 @@ import {Link, useParams} from "react-router-dom";
 import "./UserHeader.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
+import data from "bootstrap/js/src/dom/data";
 
 export default function UserHeader() {
     const {userId} = useParams();
@@ -28,6 +29,12 @@ export default function UserHeader() {
     const [relationship, setRelationShip] = useState({
         accepted: false,
         friendType: "",
+        sourceUser: {
+            userId: 0
+        },
+        targetUser: {
+            userId: 0
+        }
     })
     //
     // useEffect(() => {
@@ -44,9 +51,11 @@ export default function UserHeader() {
 
     useEffect(() => {
         axios.get("http://localhost:8080/user-friends/have-been-friend/" + user.userId + "/" + userId).then((response) => {
-            setRelationShip(response.data);
+            if (response.data != null) {
+                setRelationShip(JSON.stringify(response.data));
+            }
             console.log("relation   " + relationship)
-        }).catch()
+        }).catch(null)
     }, [userId])
 
     useEffect(() => {
@@ -57,10 +66,44 @@ export default function UserHeader() {
     }, [userId])
 
 
-    useEffect(()=>{
-        console.log("relationship" + "logged user:" + user.userId + "target user: " + userId + relationship.accepted)
-    },[relationship])
+    useEffect(() => {
+        console.log("relationship" + relationship)
+    }, [relationship])
 
+
+    const sendFriendRequest = () => {
+        const friendRequest = {
+            sourceUser: {
+                userId: user.userId
+            },
+            targetUser: {
+                userId: userId
+            }
+        };
+        axios.post("http://localhost:8080/user-friends", friendRequest, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(axios.get("http://localhost:8080/users/" + userId).then((response) => {
+            setTargetUser(response.data);
+            console.log("targetuser   " + targetUser)
+        })).catch()
+    }
+
+    const acceptRequest = () => {
+
+    }
+
+    const rejectRequest = () => {
+
+    }
+
+    const deleteFriend = () => {
+        axios.delete("http://localhost:8080/user-friends" + relationship.userFriendId).then(axios.get("http://localhost:8080/users/" + userId).then((response) => {
+            setTargetUser(response.data);
+            console.log("targetuser   " + targetUser)
+        })).catch()
+    }
 
     return (
         <div className={"user-header"}>
@@ -77,17 +120,44 @@ export default function UserHeader() {
                 <div className={"user-misc"}></div>
                 <div className={"user-action"}>
                     {/*{console.log("user.userId= " + user.userId + "userId = " + userId + "relation" + relationship.accepted)}*/}
-                    { user.userId == userId ?
+                    {user.userId == userId ?
                         <button> Chỉnh sửa trang cá nhân </button>
                         : relationship.accepted ?
                             <div>
-                                <button> Xóa Bạn</button>
+                                <button onClick={deleteFriend}> Xóa Bạn</button>
                                 <button> Nhắn tin</button>
                             </div>
                             : <div>
-                                <button> Thêm bạn</button>
+                                <button onClick={sendFriendRequest}> Thêm bạn</button>
                                 <button> Nhắn tin</button>
                             </div>}
+
+
+                    {/*{ user.userId == userId ?*/}
+                    {/*    <button> Chỉnh sửa trang cá nhân </button>*/}
+                    {/*    : relationship.accepted ?*/}
+                    {/*        <div>*/}
+                    {/*            <button onClick={deleteFriend}> Xóa Bạn</button>*/}
+                    {/*            <button> Nhắn tin</button>*/}
+                    {/*        </div>*/}
+                    {/*        : user.userId == relationship.sourceUser.userId ?*/}
+                    {/*            <div>*/}
+                    {/*                <button onClick={cancelFriendRequest}> Hủy lời mời </button>*/}
+                    {/*                <button> Nhắn tin</button>*/}
+                    {/*            </div>*/}
+                    {/*            : user.userId == relationship.targetUser.userId ?*/}
+                    {/*                <div>*/}
+                    {/*                    <button onClick={acceptRequest}> Đồng ý </button>*/}
+                    {/*                    <button onClick={rejectRequest}> Từ chối </button>*/}
+                    {/*                    <button> Nhắn tin</button>*/}
+                    {/*                </div>*/}
+                    {/*                :     <div>*/}
+                    {/*                    <button onClick={sendFriendRequest }> Kết bạn </button>*/}
+                    {/*                    <button> Nhắn tin</button>*/}
+                    {/*                </div>*/}
+                    {/*}*/}
+
+
                 </div>
             </div>
             <div className={`user-navbar`}>

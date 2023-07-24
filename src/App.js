@@ -21,6 +21,7 @@ import {useEffect, useState} from "react";
 import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
+import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
 
 
 function App() {
@@ -98,6 +99,7 @@ function App() {
                                                        setUser={setUser}></PrivateRoute>}>
                     <Route path={""} element={<NewFeed></NewFeed>}></Route>
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
+                    <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}></Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>

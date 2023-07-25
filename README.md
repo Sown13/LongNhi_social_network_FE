@@ -75,6 +75,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 import { storage } từ firebase;
 import import { ref, getDownloadURL, uploadBytes,uploadBytesResumable } (chọn 1 trong 2 uploadBytes hoặc uploadBytesResumable đều được)
         const [imgUrl, setImgUrl] = useState(null);
+
+phương thức xử lý cho onSubmit của formik:
+up 1 ảnh và lấy url ảnh đó: 
+
         const handleSubmit = (e) => {
         e.preventDefault()
         const file = e.target[0]?.files[0]
@@ -89,4 +93,30 @@ import import { ref, getDownloadURL, uploadBytes,uploadBytesResumable } (chọn 
             }
         );
     }
-          
+
+up nhiều ảnh cùng lúc và lấy url các ảnh đó:
+
+    // upload nhiều ảnh cùng lúc
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     const files = e.target[0]?.files;
+    //
+    //     if (!files) return;
+    //
+    //     const promises = [];
+    //
+    //     for (let i = 0; i < files.length; i++) {
+    //         const file = files[i];
+    //         const storageRef = ref(storage, `files/${file.name}`);
+    //         const uploadTask = uploadBytesResumable(storageRef, file);
+    //         promises.push(getDownloadURL(uploadTask.snapshot.ref));
+    //     }
+    //
+    //     Promise.all(promises).then((downloadURLs) => {
+    //         // This will be called when all the promises are resolved
+    //         console.log(downloadURLs); // an array of download URLs
+    //         // Do whatever you want with the download URLs here
+    //     }).catch((error) => {
+    //         alert(error);
+    //     });
+    // };

@@ -68,3 +68,25 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### hướng dẫn dùng fire base
+
+import { storage } từ firebase;
+import import { ref, getDownloadURL, uploadBytes,uploadBytesResumable } (chọn 1 trong 2 uploadBytes hoặc uploadBytesResumable đều được)
+        const [imgUrl, setImgUrl] = useState(null);
+        const handleSubmit = (e) => {
+        e.preventDefault()
+        const file = e.target[0]?.files[0]
+        if (!file) return;
+        const storageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytes(storageRef, file);
+        uploadTask.on("state_changed",
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setImgUrl(downloadURL)
+                });
+            }
+        );
+    }
+          

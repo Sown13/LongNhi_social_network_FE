@@ -63,6 +63,15 @@ export default function NewFeed(props) {
     const handleCreatePost = () => {
     };
 
+    // const autoExpand = (field) => {
+    //     field.style.height = "auto";
+    //
+    //     // Set the height to the scroll height if it's greater than the minimum height
+    //     if (field.scrollHeight > parseFloat(field.style.minHeight)) {
+    //         field.style.height = `${field.scrollHeight}px`;
+    //     }
+    // }
+
     return (
         <>
             <div className={"newFeed"}>
@@ -82,7 +91,7 @@ export default function NewFeed(props) {
                         <div className={"feedCardTextarea"}>
                             <textarea style={{width: "80%"}} name="postContent"
                                       placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}></textarea>
-                            <button> Đăng</button>
+                            <button> Đăng </button>
                         </div>
                     </div>
 
@@ -101,14 +110,15 @@ export default function NewFeed(props) {
                                         <div className="feedCardHeaderName">
                                             <Link to={"/user/1"}><span> {item.user.fullName} </span></Link>
                                         </div>
-                                        <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
+                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">
                                     <div style={{paddingLeft: "15px",paddingRight: "15px"}}>
                                         <p>{item.textContent}</p>
+                                    </div>
+                                    <div className={"feedCardImage"}>
                                         {images.length > 0 && <ImageList images={images}/>}
-                                        {/*{imageList.length > 0 && <ImageList images={imageList} /> }*/}
                                     </div>
                                 </div>
                                 <div className="feedCardActions">

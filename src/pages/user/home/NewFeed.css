@@ -1,7 +1,7 @@
 .newFeedWelcome {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /*align-items: center;*/
 }
 
 .newFeedWelcome img {
@@ -18,7 +18,7 @@
     flex-direction: column;
     align-items: center;
     /*justify-content: center;*/
-    background-color: #fff;
+    /*background-color: #fff;*/
     scroll-margin-left: 100px;
     scroll-margin-right: 100px;
 }
@@ -36,11 +36,11 @@
 .feedCard {
     background-color: #fff;
     border: 1px solid #e6e6e6;
-    border-radius: 8px;
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     margin-bottom: 50px;
-    font-family: inherit;
+    font-family: sans-serif;
     text-align: start;
     margin-left: 20px;
     margin-right: 20px;
@@ -420,6 +420,7 @@ feedCardCommentActions{
 }
 .comment-container-avatar {
     display: flex;
+    align-items: center;
 }
 
 .feedCardBody img {
@@ -486,4 +487,10 @@ feedCardCommentActions{
     transition: all 0.3s ease;
 }
 
+
+.feedCardImage {
+    max-width: 100%;
+    max-height: 500px;
+    overflow: auto;
+}
 

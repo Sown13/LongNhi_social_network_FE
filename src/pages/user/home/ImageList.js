@@ -1,4 +1,4 @@
-const ImageList = ({ images }) => {
+const ImageList = ({images}) => {
     console.log("dữ liệu ảnh:", images);
 
     if (!images || images.length === 0) {
@@ -7,9 +7,15 @@ const ImageList = ({ images }) => {
     }
 
     return (
-        <div>
+        <div style={{borderTop: "1px solid #e6e6e6"}}>
             {images.map((image, index) => (
-                <p key={index}>{image.imgUrl}</p> //tạm thời hiển thị thẻ p để kiểm tra
+                <>
+                    {/*// <p key={index}>{image.imgUrl}</p> /*/}
+                    <img className={"img-thumbnail"}
+                         style={{maxWidth: "50%", maxHeight: "auto", minWidth: "33%", minHeight: "auto"}}
+                         src={image.imgUrl} alt={`ảnh ${index}`}/>
+                    <img className={"modal"}/>
+                </>
             ))}
         </div>
     );

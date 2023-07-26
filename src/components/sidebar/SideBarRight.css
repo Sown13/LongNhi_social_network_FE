@@ -37,11 +37,11 @@
 .sideBarRight {
     flex: 1;
     max-width: 20vw;
+    min-height: 50vw;
     top: 56px;
     position: sticky;
     align-self: flex-start;
-
-    background-color: #f1f1f1;
+    background-color: #fff;
     border-left: 1px solid #dadde1;
     box-sizing: border-box;
     display: flex;

@@ -95,55 +95,40 @@ export default function Wall() {
                 <div className="feedCard">
                     <div className="feedCardHeader">
                         <div className="feedCardAvatar">
-                            <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                            <img src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"} alt={"Avatar"}/>
                         </div>
                         <div className="feedCardHeaderInfo">
                             <div className="feedCardHeaderName">
-                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
+                                <Link to={"/user/1"}><span> Hải Sơn </span></Link>
                             </div>
                             <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
                         </div>
                     </div>
                     <div className="feedCardBody">
                         <p>
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
-                            Test nội dung, dài thật dài dài
+                            Ông Trăng tròn sáng quá
+                            <br/>
+                            Chị Hằng dịu hiền sao
+                            <br/>
+                            Ông và chị là một
+                            <br/>
+                            Nên gọi như thế nào?
+                            <br/>
+                            Biết ở trên trời cao
+                            <br/>
+                            Trong trăng còn Chú Cuội
+                            <br/>
+                            Chắc một mình buồn rượi
+                            <br/>
+                            Tự thêm người cho vui.
+
                             <br/>
                             Test nội dung, dài thật dài dài
                             <br/>
                             Test nội dung, dài thật dài dài
                         </p>
                         <img
-                            src="https://picsum.photos/id/1012/600/400"
+                            src="https://www.w3schools.com/css/paris.jpg"
                             alt="Random image"
                         />
                         <img
@@ -177,10 +162,10 @@ export default function Wall() {
                             <div className={"comment-container"}>
                                 <div>
                                     <div className={"comment-container-avatar"}>
-                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                        <h2> name </h2>
+                                        <img src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"} alt={"avt"}/>
+                                        <h2> A Dủa </h2>
                                     </div>
-                                    <p> bình luận </p>
+                                    <p> Văn em hay hơn nhiều </p>
                                 </div>
                                 <div>
                                     <span> số like </span>
@@ -192,10 +177,10 @@ export default function Wall() {
                             <div className={"comment-container"}>
                                 <div>
                                     <div className={"comment-container-avatar"}>
-                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                        <h2> name </h2>
+                                        <img src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"} alt={"avt"}/>
+                                        <h2> Hiếu còi </h2>
                                     </div>
-                                    <p> bình luận </p>
+                                    <p> Đi net ko a? </p>
                                 </div>
                                 <div>
                                     <span> số like </span>
@@ -207,10 +192,10 @@ export default function Wall() {
                             <div className={"comment-container"}>
                                 <div>
                                     <div className={"comment-container-avatar"}>
-                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                        <h2> name </h2>
+                                        <img src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"} alt={"avt"}/>
+                                        <h2> Hùng </h2>
                                     </div>
-                                    <p> bình luận </p>
+                                    <p> solo!!! </p>
                                 </div>
                                 <div>
                                     <span> số like </span>

@@ -6,8 +6,7 @@ import axios from "axios";
 import ImageList from "./ImageList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
-import "./likePostReaction.css";
-
+import "./like-button.css"
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -34,6 +33,7 @@ export default function NewFeed(props) {
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
+    const [likedPosts, setLikedPosts] = useState([]);
 
     const [accountName, setAccountName] = useState("");
 
@@ -89,7 +89,7 @@ export default function NewFeed(props) {
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
-            const apiUrl = `http://localhost:8080/post-reactions/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
 
             const postReaction = {
 
@@ -137,6 +137,17 @@ export default function NewFeed(props) {
         }
     };
 
+    const handleToggleLike = (postId) => {
+        if (likedPosts.includes(postId)) {
+            // Bài đăng đã được thích trước đó, nên ta muốn unlike nó
+            handleUnlike(postId);
+            setLikedPosts(likedPosts.filter((id) => id !== postId)); // Xóa postId khỏi mảng likedPosts
+        } else {
+            // Bài đăng chưa được thích, nên ta muốn like nó
+            toggleLike(postId);
+            setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
+        }
+    };
     const handleCreatePost = () => {
     };
 
@@ -197,24 +208,12 @@ export default function NewFeed(props) {
                                     </div>
                                     <div className="feedCardActions">
                                         <div>
-                                            <p>{isPostVisible ? accountName : ''}</p>
+                                            <p>{isPostVisible ? item.accountName : ''}</p>
                                             <button
-                                                className={isLiked ? "like-button like" : "unLike-button"}
-                                                onClick={() => {
-                                                    // Call the toggleLike function with the postId
-                                                    if (isPostLikedByUser) {
-                                                        handleUnlike(item.postId);
-                                                    } else {
-                                                        toggleLike(item.postId);
-                                                    }
-                                                    setVisiblePostIds((prevIds) =>
-                                                        isPostVisible
-                                                            ? prevIds.filter((id) => id !== item.postId)
-                                                            : [...prevIds, item.postId]
-                                                    );
-                                                }}
+                                                className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
+                                                onClick={() => handleToggleLike(item.postId)}
                                             >
-                                                <FontAwesomeIcon icon={faThumbsUp}/>
+                                                <FontAwesomeIcon icon={faThumbsUp} />
                                                 {isPostVisible ? '' : ''}
                                             </button>
                                         </div>

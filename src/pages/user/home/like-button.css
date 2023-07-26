@@ -1,0 +1,13 @@
+/* CSS */
+.like-button {
+    background-color: #ff8c00;
+    color: #ffffff; /* Màu chữ của nút */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.like-button.like {
+   color: #ff4500; /* Màu background của nút khi đã thích (like) */
+}

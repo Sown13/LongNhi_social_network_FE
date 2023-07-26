@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "./NewFeed.css"
 import {useEffect, useState} from "react";
 import {Field, Formik} from "formik";
@@ -30,18 +30,16 @@ export default function NewFeed(props) {
     const [listPosts, setListPosts] = useState([])
 
 
-
-
     useEffect(() => {
         axios.get("http://localhost:8080/posts/userSource/" + user.userId).then((response) => {
             setListPosts(response.data)
             console.log("du lieu tu server", JSON.stringify(response.data))
         })
-    },[])
+    }, [])
 
-    useEffect(()=>{
-        console.log("danh sach cac bai dang",listPosts)
-        console.log("Id cua user",user.userId)
+    useEffect(() => {
+        console.log("danh sach cac bai dang", listPosts)
+        console.log("Id cua user", user.userId)
         console.log("danh sách các ảnh của bài viết", postImages)
     }, [listPosts]);
 
@@ -50,8 +48,8 @@ export default function NewFeed(props) {
             try {
                 const response = await axios.get(`http://localhost:8080/posts/${postId}`);
                 const images = response.data;
-                console.log("Kiểm tra chỗ này nha",images)
-                setPostImages({ ...postImages, [postId]: images });
+                console.log("Kiểm tra chỗ này nha", images)
+                setPostImages({...postImages, [postId]: images});
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu ảnh cho bài đăng:", error);
             }
@@ -60,7 +58,6 @@ export default function NewFeed(props) {
             fetchImagesForPost(post.postId);
         });
     }, [listPosts]);
-
 
 
     const handleCreatePost = () => {
@@ -90,10 +87,9 @@ export default function NewFeed(props) {
                     </div>
 
 
-
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.map((item, index)=>{
+                    {listPosts.length > 0 && listPosts.map((item, index) => {
                         const images = postImages[item.postId] || []
                         return (
                             <div className="feedCard">
@@ -111,8 +107,9 @@ export default function NewFeed(props) {
                                 <div className="feedCardBody">
                                     <ul key={index}>
                                         <ul>
+
                                             <p>{item.textContent}</p>
-                                            {images.length > 0 && <ImageList images={images} />}
+                                            {images.length > 0 && <ImageList images={images}/>}
                                         </ul>
                                         {/*{imageList.length > 0 && <ImageList images={imageList} /> }*/}
                                     </ul>

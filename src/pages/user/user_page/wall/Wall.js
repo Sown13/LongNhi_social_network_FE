@@ -81,14 +81,11 @@ export default function Wall() {
                                         setImagePost(file);
                                     }}
                                 />
-                                {/*<Field name="authorizedView" />*/}
                                 <button type="submit">Đăng</button>
                             </Form>
                         </Formik>
                     </div>
                 </div>
-
-
                 <br/>
                 <hr/>
 

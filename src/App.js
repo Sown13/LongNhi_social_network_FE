@@ -22,6 +22,9 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
+import CreateAction from "redux-toolkit/lib/createAction";
+import CreateLikePost from "./components/like_button/LikeButton";
+import LikeButton from "./components/like_button/LikeButton";
 
 
 function App() {

@@ -27,7 +27,9 @@ export default function NewFeed(props) {
     )
     const [postImages, setPostImages] = useState({});
 
-    const [listPosts, setListPosts] = useState([])
+    const [listPosts, setListPosts] = useState([]);
+
+    const [reactionCount, setReactionCount] = useState([]);
 
 
     useEffect(() => {
@@ -43,21 +45,22 @@ export default function NewFeed(props) {
         console.log("danh sách các ảnh của bài viết", postImages)
     }, [listPosts]);
 
-    useEffect(() => {
-        const fetchImagesForPost = async (postId) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/posts/${postId}`);
-                const images = response.data;
-                console.log("Kiểm tra chỗ này nha", images)
-                setPostImages({...postImages, [postId]: images});
-            } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu ảnh cho bài đăng:", error);
-            }
-        };
-        listPosts.forEach((post) => {
-            fetchImagesForPost(post.postId);
-        });
-    }, [listPosts]);
+    // useEffect(() => {
+    //     const fetchImagesForPost = async (postId) => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8080/post-images/${postId}`);
+    //             const images = response.data;
+    //             console.log("Kiểm tra chỗ này nha", images)
+    //             setPostImages({...postImages, [postId]: images});
+    //         } catch (error) {
+    //             console.error("Lỗi khi lấy dữ liệu ảnh cho bài đăng:", error);
+    //         }
+    //     };
+    //     listPosts.forEach((post) => {
+    //         fetchImagesForPost(post.postId);
+    //     });
+    // }, [listPosts]);
+
 
 
     const handleCreatePost = () => {
@@ -96,10 +99,11 @@ export default function NewFeed(props) {
                     </div>
 
 
+
                     <br/>
                     <hr/>
                     {listPosts.length > 0 && listPosts.map((item, index) => {
-                        const images = postImages[item.postId] || []
+                        const images = item.postImageList || []
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">
@@ -108,7 +112,7 @@ export default function NewFeed(props) {
                                     </div>
                                     <div className="feedCardHeaderInfo">
                                         <div className="feedCardHeaderName">
-                                            <Link to={"/user/1"}><span> {item.user.fullName} </span></Link>
+                                            <Link to={`/users/${item.user.userId}`}><span> {item.user.fullName} </span></Link>
                                         </div>
                                         <div className="feedCardHeaderTimestamp"> {item.dateCreated}</div>
                                     </div>
@@ -118,7 +122,8 @@ export default function NewFeed(props) {
                                         <p>{item.textContent}</p>
                                     </div>
                                     <div className={"feedCardImage"}>
-                                        {images.length > 0 && <ImageList images={images}/>}
+                                        {console.log(item.postImageList)}
+                                        {images.length > 0 && <ImageList images={item.postImageList}/>}
                                     </div>
                                 </div>
                                 <div className="feedCardActions">

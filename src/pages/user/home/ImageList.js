@@ -10,6 +10,7 @@ const ImageList = ({images}) => {
         <div style={{borderTop: "1px solid #e6e6e6"}}>
             {images.map((image, index) => (
                 <>
+                    {console.log(image)}
                     {/*// <p key={index}>{image.imgUrl}</p> /*/}
                     <img className={"img-thumbnail"}
                          style={{maxWidth: "50%", maxHeight: "auto", minWidth: "33%", minHeight: "auto"}}

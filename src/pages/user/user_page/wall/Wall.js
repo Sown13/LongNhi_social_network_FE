@@ -4,16 +4,19 @@ import React, {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import {Dropdown, Menu} from "antd";
 
 import {storage} from '../../../../firebase';
 import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import ImageList from "../../../../components/image/ImageList";
 
 export default function Wall() {
 
 
     const [imgUrl, setImgUrl] = useState(null);
+    const [dropDown, setDropDown] = useState(false)
     const [userInformationWall, setUserInformationWall] = useState({})
     const {userId} = useParams();
     const [postList, setPostList] = useState([]);
@@ -24,8 +27,6 @@ export default function Wall() {
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [imagePost, setImagePost] = useState([]);
-
-    const [autoLoad, setAutoLoad] = useState(0)
 
 
     const [user, setUser] = useState(() => {
@@ -62,8 +63,8 @@ export default function Wall() {
                 });
             promises.push(promise);
         }
-            Promise.all(promises).then((downloadURLs) => {
-                setImgUrl(downloadURLs) ;
+        Promise.all(promises).then((downloadURLs) => {
+            setImgUrl(downloadURLs);
             // This will be called when all the promises are resolved
             // Do whatever you want with the download URLs here
         }).catch((error) => {
@@ -71,9 +72,9 @@ export default function Wall() {
         });
     };
 
+
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
-
 
         if (!imagePost || !imagePost.length) return [];
 
@@ -85,7 +86,7 @@ export default function Wall() {
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
                     console.log("File uploaded successfully");
-                    return getDownloadURL(snapshot.ref);
+                    // return getDownloadURL(snapshot.ref);
                 })
                 .catch((error) => {
                     console.error("Error uploading file:", error);
@@ -93,24 +94,29 @@ export default function Wall() {
             promises.push(promise);
         }
         Promise.all(promises).then((downloadURLs) => {
-            setImgUrl(downloadURLs) ;
+            setImgUrl(downloadURLs);
             const postData = {
-                        user: {
-                            userId: user.userId
-                        },
-                        textContent: values.textContent,
-
-                    };
-                axios.post("http://localhost:8080/posts", postData).then((res) => {
-                        const post = { postId: res.data.postId };
-
-                        alert(res.data.postId)
-
-                        const imageData = downloadURLs.map((imgUrl) => ({ imgUrl: imgUrl, post: post }));
-                        axios.post("http://localhost:8080/post-images/list", imageData);
-                        setAutoLoad(autoLoad + 1);
-                    }
-                );
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                    const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
+                    axios.post("http://localhost:8080/post-images/list", imageData);
+                }
+            ).then(
+                console.log("readyyy------------------------------"),
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                    console.log("test dang bai ---------------- " + response.data)
+                    Swal.fire({
+                        icon: 'success',
+                        timer: 2000
+                    })
+                }));
         }).catch((error) => {
             alert(error);
         });
@@ -118,15 +124,15 @@ export default function Wall() {
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-            console.log("is cua user", userId)
             setPostList(response.data);
             setPostListDisplay(response.data);
-            console.log("Dữ liệu từ server", JSON.stringify(response.data))
-            console.log("");
-            setAutoLoad(autoLoad + 1);
+            // console.log("Dữ liệu từ server", JSON.stringify(response.data))
         })
     }, [])
 
+    const handleShowDropDown = () => {
+        setDropDown(!dropDown); // Khi bấm vào thì đảo ngược trạng thái
+    };
 
     //Thông tin của 1 người
     useEffect(() => {
@@ -136,40 +142,40 @@ export default function Wall() {
     }, [userId])
 
     //Thông tin của vài thứ có trong trang này
-    useEffect(() => {
-        console.log("thong tin cua user sau khi chay", userInformationWall)
-        console.log("Ten cua user post", userInformationWall.fullName)
-        console.log("Thời gian của bài đăng đó", Date(postList.dateCreated))
-        console.log(" ID của user khi Login ", user.userId)
-        console.log("id của những use khi mình bấm vào ", userId)
-    })
+    // useEffect(() => {
+    //     console.log("thong tin cua user sau khi chay", userInformationWall)
+    //     console.log("Ten cua user post", userInformationWall.fullName)
+    //     console.log("Thời gian của bài đăng đó", Date(postList.dateCreated))
+    //     console.log(" ID của user khi Login ", user.userId)
+    //     console.log("id của những use khi mình bấm vào ", userId)
+    // })
 
     //Xoá 1 bài post của người đang đăng nhập
     const handleDeletePost = (postId) => {
-        console.log("id của bài biết khi chuẩn bị xoá", postId)
-            Swal.fire({
-                icon: 'question',
-                title: 'Bạn có chắc muốn xoá không',
-                showCancelButton: true,
-                confirmButtonText: "Có",
-                cancelButtonText: "Không",
-                allowOutsideClick: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete("http://localhost:8080/posts/" + postId).then((rp) => {
-                        console.log("trang thai cua Status", rp.status)
-                        if (rp.status === 200) {
-                            setPostListDisplay(postListDisplay.filter(post => post.postId !== postId));
-                            setPostList(postList.filter((s) => s.id !== postId));
-                            Swal.fire({
-                                icon: 'success',
-                                timer:1000
-                            })
-                        }
-                    })
-                }
+        // console.log("id của bài biết khi chuẩn bị xoá", postId)
+        Swal.fire({
+            icon: 'question',
+            title: 'Bạn có chắc muốn xoá không',
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: "Không",
+            allowOutsideClick: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete("http://localhost:8080/posts/" + postId).then((rp) => {
+                    // console.log("trang thai cua Status", rp.status)
+                    if (rp.status === 200) {
+                        setPostListDisplay(postListDisplay.filter(post => post.postId !== postId));
+                        setPostList(postList.filter((s) => s.id !== postId));
+                        Swal.fire({
+                            icon: 'success',
+                            timer: 1000
+                        })
+                    }
+                })
+            }
 
-            })
+        })
     }
 
     const toggleLike = async (postId) => {
@@ -237,7 +243,6 @@ export default function Wall() {
         <div className="newFeed">
             <div className="newFeedContainer">
                 <br/>
-
                 <div className="feedCarAvatarContainer">
                     <div className="feedCardAvatar">
                         <img src="img/example-ava.jpg" alt="Avatar"/>
@@ -246,7 +251,7 @@ export default function Wall() {
                         <Formik
                             initialValues={{
                                 textContent: "",
-                                authorizedView: "public",
+                                authorizedView: "PUBLIC",
                             }}
                             onSubmit={(values, {resetForm}) => {
                                 handleSubmit({
@@ -270,7 +275,7 @@ export default function Wall() {
                                     name="file"
                                     onChange={(event) => {
                                         const files = event.currentTarget.files;
-                                        console.log(files);
+                                        console.log("file  " + files);
                                         setImagePost(files);
                                     }}
                                     multiple
@@ -282,7 +287,8 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
-                {postListDisplay.length > 0 && postListDisplay.map((item, index) => {
+                {postListDisplay.length > 0 && postListDisplay.reverse().map((item, index) => {
+                    const images = item.postImageList || []
                     return (
                         <div className="feedCard">
                             <div className="feedCardHeader">
@@ -294,25 +300,53 @@ export default function Wall() {
                                 <div className="feedCardHeaderInfo">
                                     <div>
                                         <div className="feedCardHeaderName">
-                                            <Link to={"/user/1"}><span> {userInformationWall.fullName} </span></Link>
+                                            <Link
+                                                to={`/user/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                         </div>
-                                        {Number(user.userId) !== Number(userId) ? (
-                                            <div className="abcde">
-                                                <span> ••• </span>
-                                            </div>
-                                        ) : (
-                                            <div className="abcde">
-                                                <span onClick={() => handleDeletePost(item.postId)}> X </span>
-                                            </div>
-                                        )}
+                                        {
+                                            Number(user.userId) !== Number(userId) ? (
+                                                <Dropdown
+                                                    overlay={
+                                                        <Menu>
+                                                            <Menu.Item key="1">
+                                                                Ẩn bài viết
+                                                            </Menu.Item>
+                                                        </Menu>
+                                                    }
+                                                    trigger={["click"]}
+                                                >
+                                                    <span>•••</span>
+                                                </Dropdown>
+                                            ) : (
+                                                <Dropdown
+                                                    overlay={
+                                                        <Menu>
+                                                            <Menu.Item key="1"
+                                                                       onClick={() => handleDeletePost(item.postId)}>
+                                                                Xoá bài viết
+                                                            </Menu.Item>
+                                                        </Menu>
+                                                    }
+                                                    trigger={["click"]}
+                                                >
+                                                    <span>•••</span>
+                                                </Dropdown>
+                                            )
+
+                                        }
 
                                     </div>
 
-                                    <div className="feedCardHeaderTimestamp"> {Date(item.dateCreate)}</div>
+                                    <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>
                                 </div>
                             </div>
                             <div className="feedCardBody">
-                                <p>{item.textContent}</p>
+                                <div style={{paddingLeft: "15px",paddingRight: "15px"}}>
+                                    <p>{item.textContent}</p>
+                                </div>
+                                <div className={"feedCardImage"}>
+                                    {images.length > 0 && <ImageList images={item.postImageList}/>}
+                                </div>
                             </div>
                             <div className="feedCardActions">
                                 <div style={{}}>
@@ -323,7 +357,7 @@ export default function Wall() {
                                         className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
                                         onClick={() => handleToggleLike(item.postId)}
                                     >
-                                        <FontAwesomeIcon icon={faThumbsUp} size={"2x"} />
+                                        <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                     </button>
                                     <button>Chia sẻ</button>
                                 </div>
@@ -403,5 +437,6 @@ export default function Wall() {
 
             </div>
         </div>
+
     )
 }

@@ -3,7 +3,7 @@ import "./NewFeed.css"
 import React, {useEffect, useState} from "react";
 import {Field, Formik} from "formik";
 import axios from "axios";
-import ImageList from "./ImageList";
+import ImageList from "../../../components/image/ImageList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import "./like-button.css"
@@ -242,51 +242,70 @@ export default function NewFeed(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div className={"comment-container"}>
-                                            <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                    <h2> name </h2>
+                                    {item.commentList.map(comment => {
+                                        return (
+                                            <li>
+                                                <div className={"comment-container"}>
+                                                    <div>
+                                                        <div className={"comment-container-avatar"}>
+                                                            <img src={comment.user.avatar} alt={"avt"}/>
+                                                            <h2> {comment.user.fullName} </h2>
+                                                        </div>
+                                                        <p> {comment.textContent} </p>
+                                                    </div>
+                                                    <div>
+                                                        <span> 20 </span>
+                                                        <button> like</button>
+                                                    </div>
                                                 </div>
-                                                <p> bình luận </p>
-                                            </div>
-                                            <div>
-                                                <span> số like </span>
-                                                <button> like</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className={"comment-container"}>
-                                            <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                    <h2> name </h2>
-                                                </div>
-                                                <p> bình luận </p>
-                                            </div>
-                                            <div>
-                                                <span> số like </span>
-                                                <button> like</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className={"comment-container"}>
-                                            <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                    <h2> name </h2>
-                                                </div>
-                                                <p> bình luận </p>
-                                            </div>
-                                            <div>
-                                                <span> số like </span>
-                                                <button> like</button>
-                                            </div>
-                                        </div>
-                                    </li>
+                                            </li>
+                                        )
+                                    })}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
                                 </ul>
                             </div>
                         )

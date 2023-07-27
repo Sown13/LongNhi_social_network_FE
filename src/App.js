@@ -55,9 +55,9 @@ function App() {
         }
     )
 
-    useEffect(() => {
-       console.log(user)
-    }, [user]);
+    // useEffect(() => {
+    //    console.log(user)
+    // }, [user]);
 
 
     useEffect(() => {
@@ -73,7 +73,7 @@ function App() {
 
     useEffect(() => {
         const userData = localStorage.getItem("user");
-        console.log("userData from localStorage:", userData);
+        // console.log("userData from localStorage:", userData);
         if (userData) {
             setUser(JSON.parse(userData));
         }
@@ -128,9 +128,9 @@ function App() {
 // localStorage.removeItem("loggedIn");
 // localStorage.removeItem("user");
 function PrivateRoute({element: Component, role, loggedIn, user, ...rest}) {
-    console.log("loggedIn: " + loggedIn);
-    console.log("user: " + JSON.stringify(user));
-    console.log("role: " + role);
+    // console.log("loggedIn: " + loggedIn);
+    // console.log("user: " + JSON.stringify(user));
+    // console.log("role: " + role);
 
     if (!loggedIn) {
         return <Navigate to="/login" replace/>;

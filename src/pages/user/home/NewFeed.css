@@ -494,3 +494,40 @@ feedCardCommentActions{
     overflow: auto;
 }
 
+.feedCardImage {
+    overflow-y: scroll;
+}
+
+.feedCardImage::-webkit-scrollbar {
+    width: 8px;
+}
+
+.feedCardImage::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 4px;
+}
+
+.feedCardImage:hover::-webkit-scrollbar-thumb {
+    background: #ffffff;
+}
+
+.feedCardImage::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+.feedCardImage:hover::-webkit-scrollbar-thumb {
+    background: black;
+}
+
+.feedCardImage:hover::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+.feedCardImage:hover::-webkit-scrollbar-thumb:active {
+    background: #0c0c0c;
+}
+
+.feedCardImage:not(:hover)::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}

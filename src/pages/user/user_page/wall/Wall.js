@@ -1,12 +1,14 @@
 import "./Wall.css";
 import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 
 import {storage} from '../../../../firebase';
 import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 
 export default function Wall() {
 
@@ -17,8 +19,13 @@ export default function Wall() {
     const [postList, setPostList] = useState([]);
     const [postListDisplay, setPostListDisplay] = useState([]);
     const [postImages, setPostImages] = useState([]);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const [likedPosts, setLikedPosts] = useState([]);
 
     const [imagePost, setImagePost] = useState([]);
+
+    const [autoLoad, setAutoLoad] = useState(0)
 
 
     const [user, setUser] = useState(() => {
@@ -100,13 +107,10 @@ export default function Wall() {
                         alert(res.data.postId)
 
                         const imageData = downloadURLs.map((imgUrl) => ({ imgUrl: imgUrl, post: post }));
-                        axios.post("http://localhost:8080/post-images/list", imageData)
+                        axios.post("http://localhost:8080/post-images/list", imageData);
+                        setAutoLoad(autoLoad + 1);
                     }
                 );
-
-
-
-
         }).catch((error) => {
             alert(error);
         });
@@ -118,7 +122,8 @@ export default function Wall() {
             setPostList(response.data);
             setPostListDisplay(response.data);
             console.log("Dữ liệu từ server", JSON.stringify(response.data))
-            console.log("")
+            console.log("");
+            setAutoLoad(autoLoad + 1);
         })
     }, [])
 
@@ -166,6 +171,67 @@ export default function Wall() {
 
             })
     }
+
+    const toggleLike = async (postId) => {
+        try {
+            // Call the API to update the like status
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+
+            const postReaction = {
+
+                dateCreated: new Date().toISOString(),
+                postPostId: postId,
+                userUserId: user.userId,
+                reactionType: 'LIKE'
+
+            };
+            console.log(postReaction);
+
+            await axios.post(apiUrl, postReaction);
+
+            // Update the local state to reflect the new like status
+            setIsLiked((prevState) => !prevState);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    const handleUnlike = async (postId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+
+            const postReaction = {
+
+                dateCreated: new Date().toISOString(),
+                postPostId: postId,
+                userUserId: user.userId,
+                reactionType: 'LIKE'
+
+            };
+            console.log(postReaction);
+
+            await axios.post(apiUrl, postReaction);
+
+            // Update the local state to reflect the new like status
+            setIsLiked((prevState) => !prevState);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const handleToggleLike = (postId) => {
+        if (likedPosts.includes(postId)) {
+            // Bài đăng đã được thích trước đó, nên ta muốn unlike nó
+            handleUnlike(postId);
+            setLikedPosts(likedPosts.filter((id) => id !== postId)); // Xóa postId khỏi mảng likedPosts
+        } else {
+            // Bài đăng chưa được thích, nên ta muốn like nó
+            toggleLike(postId);
+            setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
+        }
+    };
 
     return (
         <div className="newFeed">
@@ -249,19 +315,36 @@ export default function Wall() {
                                 <p>{item.textContent}</p>
                             </div>
                             <div className="feedCardActions">
-                                <div>
-                                    <p> 20 </p>
-                                    <button>Thích</button>
+                                <div style={{}}>
+                                    <p> {item.postReactionList.length}</p>
                                 </div>
                                 <div>
+                                    <button
+                                        className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                        onClick={() => handleToggleLike(item.postId)}
+                                    >
+                                        <FontAwesomeIcon icon={faThumbsUp} size={"2x"} />
+                                    </button>
                                     <button>Chia sẻ</button>
                                 </div>
                             </div>
-                            <div className={"user-comment"}>
-                                <input placeholder={"Viết bình luận.."}/>
-                                <button>Bình Luận</button>
-                            </div>
-                            <ul>
+                            <ul style={{marginTop: "16px"}}>
+                                <li style={{minWidth: "90%"}}>
+                                    <div className={"comment-container"}>
+                                        <div>
+                                            <div className={"comment-container-avatar"}>
+                                                <img src={"img/example-ava-2.png"} alt={"avt"}/>
+                                                <h2> {user.fullName} </h2>
+                                            </div>
+                                            <div className={"comment-input"}>
+                                                <textarea placeholder={"Viết bình luận.."}/>
+                                            </div>
+                                            <div>
+                                                <button className={"comment-submit"}>Bình Luận</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                                 <li>
                                     <div className={"comment-container"}>
                                         <div>

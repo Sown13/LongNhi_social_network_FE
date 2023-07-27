@@ -35,13 +35,14 @@ export default function NewFeed(props) {
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
+
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [accountName, setAccountName] = useState("");
 
 
     useEffect(() => {
-        axios.get("http://localhost:8080/posts/userSource/" + user.userId).then((response) => {
+        axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
             setListPosts(response.data)
             console.log("du lieu tu server", JSON.stringify(response.data))
         })
@@ -203,21 +204,22 @@ export default function NewFeed(props) {
                                         <p>{item.textContent}</p>
                                     </div>
                                     <div className={"feedCardImage"}>
-                                        {console.log(item.postImageList)}
                                         {images.length > 0 && <ImageList images={item.postImageList}/>}
                                     </div>
                                 </div>
                                 <div className="feedCardActions">
                                     <div style={{}}>
-                                        <p> 20 </p>
+                                        <p> {item.postReactionList.length}</p>
                                     </div>
                                     <div>
                                         <button>{isPostVisible ? item.accountName : ''}</button>
+                                        {console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}
+                                        {/*{if(item.postReactionList.filter(postReaction => postReaction.user.userId =  )}*/}
                                         <button
-                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
+                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
-                                            <FontAwesomeIcon icon={faThumbsUp} />
+                                            <FontAwesomeIcon icon={faThumbsUp} size={"2x"} />
                                             {isPostVisible ? '' : ''}
                                         </button>
                                         <button>Chia sẻ</button>

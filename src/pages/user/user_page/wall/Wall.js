@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
+import {storage} from "../../../../firebase";
+import { ref, getDownloadURL, uploadBytes,uploadBytesResumable } from "firebase/storage"
 
 export default function Wall() {
     const [imagePost, setImagePost] = useState(null);
@@ -22,32 +24,89 @@ export default function Wall() {
         }
         return loggedInUser;
     });
+    const handleSubmit = async (values, { resetForm }, e) => {
+        if (!e || !e.preventDefault) {
+            console.error('Invalid event object!');
+            return;
+        }
 
-    const handleSubmit = async (values, { resetForm }) => {
+        e.preventDefault();
+        const files = e.target.files;
+
+        if (!files) return;
+
+        const promises = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const storageRef = ref(storage, `files/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            promises.push(getDownloadURL(uploadTask.snapshot.ref));
+        }
+
+        Promise.all(promises)
+            .then((downloadURLs) => {
+                // This will be called when all the promises are resolved
+                console.log(downloadURLs); // an array of download URLs
+                // Do whatever you want with the download URLs here
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
         try {
             const postData = {
                 user: {
-                    userId: user.userId
+                    userId: user.userId,
                 },
                 textContent: values.textContent,
-                imageUrls: []
+                imageUrls: [],
             };
 
             if (imagePost) {
                 const formData = new FormData();
-                formData.append("image", imagePost);
+                formData.append('image', imagePost);
 
-                const response = await axios.post("http://localhost:8080/post-images", formData);
+                const response = await axios.post(
+                    'http://localhost:8080/post-images',
+                    formData
+                );
                 const imageUrl = response.data.imageUrl;
                 postData.imageUrls.push(imageUrl);
             }
 
-            await axios.post("http://localhost:8080/posts", postData);
+            await axios.post('http://localhost:8080/posts', postData);
             resetForm();
         } catch (error) {
-            console.error("Error creating post:", error);
+            console.error('Error creating post:', error);
         }
     };
+    // upload nhiều ảnh cùng lúc
+// const handleSubmited = (e) => {
+//     e.preventDefault();
+//     const files = e.target?.files;
+//
+//     if (!files) return;
+//
+//     const promises = [];
+//
+//     for (let i = 0; i < files.length; i++) {
+//         const file = files[i];
+//         const storageRef = ref(storage, `files/${file.name}`);
+//         const uploadTask = uploadBytesResumable(storageRef, file);
+//         promises.push(getDownloadURL(uploadTask.snapshot.ref));
+//     }
+//
+//     Promise.all(promises).then((downloadURLs) => {
+//         // This will be called when all the promises are resolved
+//         console.log(downloadURLs); // an array of download URLs
+//         // Do whatever you want with the download URLs here
+//     }).catch((error) => {
+//         alert(error);
+//     });
+//
+//
+// };
 
     return (
         <div className="newFeed">
@@ -73,8 +132,9 @@ export default function Wall() {
                                     placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}
                                     style={{ width: "80%" }}
                                 />
-                                <input
+                                <Field
                                     type="file"
+                                    multiple
                                     name="file"
                                     onChange={(event) => {
                                         const file = event.currentTarget.files[0];
@@ -84,6 +144,10 @@ export default function Wall() {
                                 <button type="submit">Đăng</button>
                             </Form>
                         </Formik>
+                        {/*<form>*/}
+                        {/*    <input multiple={"true"} type={"file"}/>*/}
+                        {/*    <button type={"button"} onClick={handleSubmited}>up</button>*/}
+                        {/*</form>*/}
                     </div>
                 </div>
                 <br/>

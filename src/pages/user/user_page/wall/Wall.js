@@ -1,10 +1,12 @@
 import "./Wall.css";
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
+import {Field, Form, Formik} from "formik";
+import axios from "axios";
 
 export default function Wall() {
+    const [imagePost, setImagePost] = useState(null);
     const [userInformationWall, setUserInformationWall] = useState({})
     const {userId} = useParams();
     const [postList, setPostList] = useState([]);
@@ -26,7 +28,31 @@ export default function Wall() {
         return loggedInUser;
     })
 
+    const handleSubmit = async (values, { resetForm }) => {
+        try {
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+                imageUrls: []
+            };
 
+            if (imagePost) {
+                const formData = new FormData();
+                formData.append("image", imagePost);
+
+                const response = await axios.post("http://localhost:8080/post-images", formData);
+                const imageUrl = response.data.imageUrl;
+                postData.imageUrls.push(imageUrl);
+            }
+
+            await axios.post("http://localhost:8080/posts", postData);
+            resetForm();
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
@@ -58,17 +84,6 @@ export default function Wall() {
     //Xoá 1 bài post của người đang đăng nhập
     const handleDeletePost = (postId) => {
         console.log("id của bài biết khi chuẩn bị xoá", postId)
-        // if (Number(user.userId) !== Number(userId)) {
-        //     console.log("user.userID", user.userId)
-        //     console.log("userID", userId)
-            // Swal.fire({
-            //     icon: 'error',
-            //     title: 'Bạn không có quyền xoá bài viết này',
-            //     showConfirmButton: false,
-            //     timer:1000,
-            //     allowOutsideClick: true
-            // })
-        // } else {
             Swal.fire({
                 icon: 'question',
                 title: 'Bạn có chắc muốn xoá không',
@@ -92,30 +107,45 @@ export default function Wall() {
                 }
 
             })
-
-        // }
-
-
     }
 
-
     return (
-        <div className={"newFeed"}>
+        <div className="newFeed">
             <div className="newFeedContainer">
-                <br/>
+                <br />
 
-                <div className={"feedCarAvatarContainer"}>
-                    <div className={"feedCardAvatar"}>
-                        <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                <div className="feedCarAvatarContainer">
+                    <div className="feedCardAvatar">
+                        <img src="img/example-ava.jpg" alt="Avatar" />
                     </div>
-                    <div className={"feedCardTextarea"}>
-                            <textarea style={{width: "80%"}} name="postContent"
-                                      placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}></textarea>
-                        <button> Đăng</button>
+                    <div className="feedCardTextarea">
+                        <Formik
+                            initialValues={{
+                                textContent: "",
+                                authorizedView: ""
+                            }}
+                            onSubmit={handleSubmit}
+                        >
+                            <Form>
+                                <Field
+                                    name="textContent"
+                                    as="textarea"
+                                    placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}
+                                    style={{ width: "80%" }}
+                                />
+                                <input
+                                    type="file"
+                                    name="file"
+                                    onChange={(event) => {
+                                        const file = event.currentTarget.files[0];
+                                        setImagePost(file);
+                                    }}
+                                />
+                                <button type="submit">Đăng</button>
+                            </Form>
+                        </Formik>
                     </div>
                 </div>
-
-
                 <br/>
                 <hr/>
                 {postListDisplay.length > 0 && postListDisplay.map((item, index) => {

@@ -5,13 +5,22 @@ import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
 import axios from "axios";
 
+import {storage} from '../../../../firebase';
+import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
+
 export default function Wall() {
-    const [imagePost, setImagePost] = useState(null);
+
+
+    const [imgUrl, setImgUrl] = useState(null);
     const [userInformationWall, setUserInformationWall] = useState({})
     const {userId} = useParams();
     const [postList, setPostList] = useState([]);
     const [postListDisplay, setPostListDisplay] = useState([]);
     const [postImages, setPostImages] = useState([]);
+
+    const [imagePost, setImagePost] = useState([]);
+
+
     const [user, setUser] = useState(() => {
         let loggedInUser = localStorage.getItem("user");
         if (loggedInUser === null || loggedInUser === "undefined") {
@@ -28,30 +37,79 @@ export default function Wall() {
         return loggedInUser;
     })
 
-    const handleSubmit = async (values, { resetForm }) => {
-        try {
-            const postData = {
-                user: {
-                    userId: user.userId
-                },
-                textContent: values.textContent,
-                imageUrls: []
-            };
+    const uploadImages = async (images) => {
+        if (!images || !images.length) return [];
 
-            if (imagePost) {
-                const formData = new FormData();
-                formData.append("image", imagePost);
+        const promises = [];
 
-                const response = await axios.post("http://localhost:8080/post-images", formData);
-                const imageUrl = response.data.imageUrl;
-                postData.imageUrls.push(imageUrl);
-            }
-
-            await axios.post("http://localhost:8080/posts", postData);
-            resetForm();
-        } catch (error) {
-            console.error("Error creating post:", error);
+        for (let i = 0; i < images.length; i++) {
+            const file = images[i];
+            const storageRef = ref(storage, `files/${file.name}`);
+            const promise = uploadBytes(storageRef, file)
+                .then((snapshot) => {
+                    console.log("File uploaded successfully");
+                    return getDownloadURL(snapshot.ref);
+                })
+                .catch((error) => {
+                    console.error("Error uploading file:", error);
+                });
+            promises.push(promise);
         }
+            Promise.all(promises).then((downloadURLs) => {
+                setImgUrl(downloadURLs) ;
+            // This will be called when all the promises are resolved
+            // Do whatever you want with the download URLs here
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+
+    const handleSubmit = async (values,) => {
+        window.event.preventDefault();
+
+
+        if (!imagePost || !imagePost.length) return [];
+
+        const promises = [];
+
+        for (let i = 0; i < imagePost.length; i++) {
+            const file = imagePost[i];
+            const storageRef = ref(storage, `files/${file.name}`);
+            const promise = uploadBytes(storageRef, file)
+                .then((snapshot) => {
+                    console.log("File uploaded successfully");
+                    return getDownloadURL(snapshot.ref);
+                })
+                .catch((error) => {
+                    console.error("Error uploading file:", error);
+                });
+            promises.push(promise);
+        }
+        Promise.all(promises).then((downloadURLs) => {
+            setImgUrl(downloadURLs) ;
+            const postData = {
+                        user: {
+                            userId: user.userId
+                        },
+                        textContent: values.textContent,
+
+                    };
+                axios.post("http://localhost:8080/posts", postData).then((res) => {
+                        const post = { postId: res.data.postId };
+
+                        alert(res.data.postId)
+
+                        const imageData = downloadURLs.map((imgUrl) => ({ imgUrl: imgUrl, post: post }));
+                        axios.post("http://localhost:8080/post-images/list", imageData)
+                    }
+                );
+
+
+
+
+        }).catch((error) => {
+            alert(error);
+        });
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
@@ -112,34 +170,44 @@ export default function Wall() {
     return (
         <div className="newFeed">
             <div className="newFeedContainer">
-                <br />
+                <br/>
 
                 <div className="feedCarAvatarContainer">
                     <div className="feedCardAvatar">
-                        <img src="img/example-ava.jpg" alt="Avatar" />
+                        <img src="img/example-ava.jpg" alt="Avatar"/>
                     </div>
                     <div className="feedCardTextarea">
                         <Formik
                             initialValues={{
                                 textContent: "",
-                                authorizedView: ""
+                                authorizedView: "public",
                             }}
-                            onSubmit={handleSubmit}
+                            onSubmit={(values, {resetForm}) => {
+                                handleSubmit({
+                                        textContent: values.textContent,
+                                        price: values.authorizedView,
+                                    }
+                                );
+                                resetForm();
+                            }
+                            }
                         >
                             <Form>
                                 <Field
                                     name="textContent"
                                     as="textarea"
                                     placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}
-                                    style={{ width: "80%" }}
+                                    style={{width: "80%"}}
                                 />
                                 <input
                                     type="file"
                                     name="file"
                                     onChange={(event) => {
-                                        const file = event.currentTarget.files[0];
-                                        setImagePost(file);
+                                        const files = event.currentTarget.files;
+                                        console.log(files);
+                                        setImagePost(files);
                                     }}
+                                    multiple
                                 />
                                 <button type="submit">Đăng</button>
                             </Form>
@@ -252,6 +320,5 @@ export default function Wall() {
 
             </div>
         </div>
-
     )
 }

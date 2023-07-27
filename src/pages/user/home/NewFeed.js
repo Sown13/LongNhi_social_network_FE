@@ -33,7 +33,7 @@ export default function NewFeed(props) {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8080/posts/userSource/" + user.userId).then((response) => {
+        axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
             setListPosts(response.data)
             console.log("du lieu tu server", JSON.stringify(response.data))
         })

@@ -40,7 +40,7 @@ export default function FriendRequestPending(){
     return (
         <div className={"friendRequestList"}>
             <h1> Friend request list </h1>
-            {displayFriendRequestList.map((friend,index) =>{
+            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((friend,index) =>{
                 return (
                     <div>
                         <div>
@@ -48,7 +48,7 @@ export default function FriendRequestPending(){
                         </div>
                     </div>
                 )
-            })}
+            }) : <h2>Bạn chưa gửi lời mời nào</h2>}
         </div>
     )
 }

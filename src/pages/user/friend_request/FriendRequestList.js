@@ -38,8 +38,8 @@ export default function FriendRequestList(){
 
     return (
         <div className={"friendRequestList"}>
-            <h1> Friend request list </h1>
-            {displayFriendRequestList.map((friend,index) =>{
+            <h1> Lời mời kết bạn bạn đã gửi </h1>
+            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((friend,index) =>{
                 return (
                     <div>
                         <div>
@@ -49,7 +49,7 @@ export default function FriendRequestList(){
                         <button>Từ chối</button>
                     </div>
                 )
-            })}
+            }) : <h2> Không có lời mời nào </h2> }
         </div>
     )
 }

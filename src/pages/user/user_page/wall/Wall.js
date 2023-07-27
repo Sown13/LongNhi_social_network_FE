@@ -98,6 +98,7 @@ export default function Wall() {
                             <div className="feedCardHeaderName">
                                 <Link to={"/user/1"}><span> Hải Sơn </span></Link>
                             </div>
+
                             <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
                         </div>
                     </div>

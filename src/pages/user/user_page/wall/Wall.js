@@ -159,7 +159,7 @@ export default function Wall() {
             setPostListDisplay(response.data);
             // console.log("Dữ liệu từ server", JSON.stringify(response.data))
         })
-    }, [])
+    }, [userId])
 
     const handleShowDropDown = () => {
         setDropDown(!dropDown); // Khi bấm vào thì đảo ngược trạng thái
@@ -295,7 +295,7 @@ export default function Wall() {
                                 <Field
                                     name="textContent"
                                     as="textarea"
-                                    placeholder={`     ${user.fullName} ơi, bạn đang nghĩ gì thế?`}
+                                    placeholder={userId==user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
                                     style={{width: "80%"}}
                                 />
                                 <div className={"input-action"}>
@@ -410,57 +410,25 @@ export default function Wall() {
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div className={"comment-container"}>
-                                        <div>
-                                            <div className={"comment-container-avatar"}>
-                                                <img
-                                                    src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"}
-                                                    alt={"avt"}/>
-                                                <h2> A Dủa </h2>
+                                {item.commentList.map(comment => {
+                                    return (
+                                        <li>
+                                            <div className={"comment-container"}>
+                                                <div>
+                                                    <div className={"comment-container-avatar"}>
+                                                        <img src={comment.user.avatar} alt={"avt"}/>
+                                                        <h2> {comment.user.fullName} </h2>
+                                                    </div>
+                                                    <p> {comment.textContent} </p>
+                                                </div>
+                                                <div>
+                                                    <span> 20 </span>
+                                                    <button> like</button>
+                                                </div>
                                             </div>
-                                            <p> Văn em hay hơn nhiều </p>
-                                        </div>
-                                        <div>
-                                            <span> số like </span>
-                                            <button> like</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className={"comment-container"}>
-                                        <div>
-                                            <div className={"comment-container-avatar"}>
-                                                <img
-                                                    src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"}
-                                                    alt={"avt"}/>
-                                                <h2> Hiếu còi </h2>
-                                            </div>
-                                            <p> Đi net ko a? </p>
-                                        </div>
-                                        <div>
-                                            <span> số like </span>
-                                            <button> like</button>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className={"comment-container"}>
-                                        <div>
-                                            <div className={"comment-container-avatar"}>
-                                                <img
-                                                    src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"}
-                                                    alt={"avt"}/>
-                                                <h2> Hùng </h2>
-                                            </div>
-                                            <p> solo!!! </p>
-                                        </div>
-                                        <div>
-                                            <span> số like </span>
-                                            <button> like</button>
-                                        </div>
-                                    </div>
-                                </li>
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </div>
                     )

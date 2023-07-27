@@ -56,7 +56,7 @@ export default function SideBarRight() {
                         <div className={"friend-details"}>
                             <Link to={`/users/${friend.userId}`}><h2> {friend.fullName} </h2></Link>
                         </div>
-                        <div className={"friend-status"}> online </div>
+                        <div className={"friend-status-online"}> on</div>
                     </div>
                 ))}
             </div>

@@ -1,11 +1,12 @@
 import {Link} from "react-router-dom";
 import "./NewFeed.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Field, Formik} from "formik";
 import axios from "axios";
 import ImageList from "./ImageList";
-// import ImageList from "../../../tuong_show_list_post/ImageList";
-
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import "./like-button.css"
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -30,6 +31,13 @@ export default function NewFeed(props) {
     const [listPosts, setListPosts] = useState([]);
 
     const [reactionCount, setReactionCount] = useState([]);
+
+    const [visiblePostIds, setVisiblePostIds] = useState([]);
+
+    const [isLiked, setIsLiked] = useState(false);
+    const [likedPosts, setLikedPosts] = useState([]);
+
+    const [accountName, setAccountName] = useState("");
 
 
     useEffect(() => {
@@ -63,17 +71,88 @@ export default function NewFeed(props) {
 
 
 
-    const handleCreatePost = () => {
+    useEffect(() => {
+        // Call the API to get user information based on userId
+        const apiUrl = `http://localhost:8080/users/` + user.userId; // Replace with the actual API endpoint to get user information
+        axios
+            .get(apiUrl)
+            .then((response) => {
+                setAccountName(response.data.accountName);
+            })
+            .catch((error) => {
+                console.error("Error fetching user information:", error);
+            });
+    }, [user.userId]);
+
+
+    const isPostLikedByUser = (postId) => {
+        return isLiked.includes(postId);
     };
 
-    // const autoExpand = (field) => {
-    //     field.style.height = "auto";
-    //
-    //     // Set the height to the scroll height if it's greater than the minimum height
-    //     if (field.scrollHeight > parseFloat(field.style.minHeight)) {
-    //         field.style.height = `${field.scrollHeight}px`;
-    //     }
-    // }
+    const toggleLike = async (postId) => {
+        try {
+            // Call the API to update the like status
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+
+            const postReaction = {
+
+                dateCreated: new Date().toISOString(),
+                postPostId: postId,
+                userUserId: user.userId,
+                accountName: accountName,
+                reactionType: 'like'
+
+            };
+            console.log(postReaction);
+
+            await axios.post(apiUrl, postReaction);
+
+            // Update the local state to reflect the new like status
+            setIsLiked((prevState) => !prevState);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    const handleUnlike = async (postId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+
+            const postReaction = {
+
+                dateCreated: new Date().toISOString(),
+                postPostId: postId,
+                userUserId: user.userId,
+                accountName: accountName,
+                reactionType: 'like'
+
+            };
+            console.log(postReaction);
+
+            await axios.post(apiUrl, postReaction);
+
+            // Update the local state to reflect the new like status
+            setIsLiked((prevState) => !prevState);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const handleToggleLike = (postId) => {
+        if (likedPosts.includes(postId)) {
+            // Bài đăng đã được thích trước đó, nên ta muốn unlike nó
+            handleUnlike(postId);
+            setLikedPosts(likedPosts.filter((id) => id !== postId)); // Xóa postId khỏi mảng likedPosts
+        } else {
+            // Bài đăng chưa được thích, nên ta muốn like nó
+            toggleLike(postId);
+            setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
+        }
+    };
+    const handleCreatePost = () => {
+    };
 
     return (
         <>
@@ -104,6 +183,8 @@ export default function NewFeed(props) {
                     <hr/>
                     {listPosts.length > 0 && listPosts.map((item, index) => {
                         const images = item.postImageList || []
+                        const isPostVisible = visiblePostIds.includes(item.postId);
+
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">
@@ -131,7 +212,14 @@ export default function NewFeed(props) {
                                         <p> 20 </p>
                                     </div>
                                     <div>
-                                        <button>Thích</button>
+                                        <button>{isPostVisible ? item.accountName : ''}</button>
+                                        <button
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
+                                            onClick={() => handleToggleLike(item.postId)}
+                                        >
+                                            <FontAwesomeIcon icon={faThumbsUp} />
+                                            {isPostVisible ? '' : ''}
+                                        </button>
                                         <button>Chia sẻ</button>
                                     </div>
                                 </div>

@@ -22,7 +22,6 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import TestUploadFile from "./pages/user/user_page/wall/TestUploadFile";
 
 
 function App() {
@@ -121,7 +120,6 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
-                <Route path={"/test-upload"} element={<TestUploadFile/>}/>
             </Routes>
         </div>
     );

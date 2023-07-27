@@ -16,12 +16,19 @@ export default function Wall() {
 
 
     const [imgUrl, setImgUrl] = useState(null);
+
     const [dropDown, setDropDown] = useState(false)
+
     const [userInformationWall, setUserInformationWall] = useState({})
+
     const {userId} = useParams();
+
     const [postList, setPostList] = useState([]);
+
     const [postListDisplay, setPostListDisplay] = useState([]);
+
     const [postImages, setPostImages] = useState([]);
+
     const [isLiked, setIsLiked] = useState(false);
 
     const [likedPosts, setLikedPosts] = useState([]);
@@ -45,38 +52,61 @@ export default function Wall() {
         return loggedInUser;
     })
 
-    const uploadImages = async (images) => {
-        if (!images || !images.length) return [];
-
-        const promises = [];
-
-        for (let i = 0; i < images.length; i++) {
-            const file = images[i];
-            const storageRef = ref(storage, `files/${file.name}`);
-            const promise = uploadBytes(storageRef, file)
-                .then((snapshot) => {
-                    console.log("File uploaded successfully");
-                    return getDownloadURL(snapshot.ref);
-                })
-                .catch((error) => {
-                    console.error("Error uploading file:", error);
-                });
-            promises.push(promise);
-        }
-        Promise.all(promises).then((downloadURLs) => {
-            setImgUrl(downloadURLs);
-            // This will be called when all the promises are resolved
-            // Do whatever you want with the download URLs here
-        }).catch((error) => {
-            alert(error);
-        });
-    };
+    // const uploadImages = async (images) => {
+    //     if (!images || !images.length) return [];
+    //
+    //     const promises = [];
+    //
+    //     for (let i = 0; i < images.length; i++) {
+    //         const file = images[i];
+    //         const storageRef = ref(storage, `files/${file.name}`);
+    //         const promise = uploadBytes(storageRef, file)
+    //             .then((snapshot) => {
+    //                 console.log("File uploaded successfully");
+    //                 return getDownloadURL(snapshot.ref);
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error uploading file:", error);
+    //             });
+    //         promises.push(promise);
+    //     }
+    //     Promise.all(promises).then((downloadURLs) => {
+    //         setImgUrl(downloadURLs);
+    //         // This will be called when all the promises are resolved
+    //         // Do whatever you want with the download URLs here
+    //     }).catch((error) => {
+    //         alert(error);
+    //     });
+    // };
 
 
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
 
-        if (!imagePost || !imagePost.length) return [];
+        if (!imagePost || !imagePost.length) {
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                }
+            ).then(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                    console.log("test dang bai ---------------- " + response.data)
+                    Swal.fire({
+                        icon: 'success',
+                        timer: 2000
+                    })
+                })
+            });
+            return []
+        }
+
 
         const promises = [];
 
@@ -86,7 +116,7 @@ export default function Wall() {
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
                     console.log("File uploaded successfully");
-                    // return getDownloadURL(snapshot.ref);
+                    return getDownloadURL(snapshot.ref);
                 })
                 .catch((error) => {
                     console.error("Error uploading file:", error);
@@ -106,17 +136,18 @@ export default function Wall() {
                     const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
                     axios.post("http://localhost:8080/post-images/list", imageData);
                 }
-            ).then(
-                console.log("readyyy------------------------------"),
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    setPostList(response.data);
-                    setPostListDisplay(response.data);
-                    console.log("test dang bai ---------------- " + response.data)
-                    Swal.fire({
-                        icon: 'success',
-                        timer: 2000
+            ).then(() => {
+                    axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                        setPostList(response.data);
+                        setPostListDisplay(response.data);
+                        console.log("test dang bai ---------------- " + response.data)
+                        Swal.fire({
+                            icon: 'success',
+                            timer: 2000
+                        })
                     })
-                }));
+                }
+            );
         }).catch((error) => {
             alert(error);
         });
@@ -244,10 +275,7 @@ export default function Wall() {
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
-                    <div className="feedCardAvatar">
-                        <img src="img/example-ava.jpg" alt="Avatar"/>
-                    </div>
-                    <div className="feedCardTextarea">
+                    <div className="input-wall">
                         <Formik
                             initialValues={{
                                 textContent: "",
@@ -263,24 +291,27 @@ export default function Wall() {
                             }
                             }
                         >
-                            <Form>
+                            <Form className="feedCardTextarea-wall">
                                 <Field
                                     name="textContent"
                                     as="textarea"
-                                    placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}
+                                    placeholder={`     ${user.fullName} ơi, bạn đang nghĩ gì thế?`}
                                     style={{width: "80%"}}
                                 />
-                                <input
-                                    type="file"
-                                    name="file"
-                                    onChange={(event) => {
-                                        const files = event.currentTarget.files;
-                                        console.log("file  " + files);
-                                        setImagePost(files);
-                                    }}
-                                    multiple
-                                />
-                                <button type="submit">Đăng</button>
+                                <div className={"input-action"}>
+                                    <input
+                                        className={"input-file-button"}
+                                        type="file"
+                                        name="file"
+                                        onChange={(event) => {
+                                            const files = event.currentTarget.files;
+                                            console.log("file  " + JSON.stringify(files));
+                                            setImagePost(files);
+                                        }}
+                                        multiple
+                                    />
+                                    <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                </div>
                             </Form>
                         </Formik>
                     </div>
@@ -341,7 +372,7 @@ export default function Wall() {
                                 </div>
                             </div>
                             <div className="feedCardBody">
-                                <div style={{paddingLeft: "15px",paddingRight: "15px"}}>
+                                <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
                                     <p>{item.textContent}</p>
                                 </div>
                                 <div className={"feedCardImage"}>

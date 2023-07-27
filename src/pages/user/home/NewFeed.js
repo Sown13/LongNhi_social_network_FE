@@ -1,12 +1,15 @@
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import "./NewFeed.css"
 import React, {useEffect, useState} from "react";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import ImageList from "../../../components/image/ImageList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import "./like-button.css"
+import Swal from "sweetalert2";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "../../../firebase";
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -26,6 +29,9 @@ export default function NewFeed(props) {
             return loggedInUser;
         }
     )
+
+    const {userId} = useParams();
+
     const [postImages, setPostImages] = useState({});
 
     const [listPosts, setListPosts] = useState([]);
@@ -39,6 +45,12 @@ export default function NewFeed(props) {
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [accountName, setAccountName] = useState("");
+
+    const [imagePost, setImagePost] = useState([]);
+
+    const [imgUrl, setImgUrl] = useState(null);
+
+    const [postList, setPostList] = useState([]);
 
 
     useEffect(() => {
@@ -69,7 +81,6 @@ export default function NewFeed(props) {
     //         fetchImagesForPost(post.postId);
     //     });
     // }, [listPosts]);
-
 
 
     useEffect(() => {
@@ -152,7 +163,75 @@ export default function NewFeed(props) {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
-    const handleCreatePost = () => {
+    const handleSubmit = async (values,) => {
+        window.event.preventDefault();
+
+        if (!imagePost || !imagePost.length) {
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                }
+            ).then(() => {
+                axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
+                    setPostList(response.data);
+                    console.log("test dang bai ---------------- " + response.data)
+                    Swal.fire({
+                        icon: 'success',
+                        timer: 2000
+                    })
+                })
+            });
+            return []
+        }
+
+
+        const promises = [];
+
+        for (let i = 0; i < imagePost.length; i++) {
+            const file = imagePost[i];
+            const storageRef = ref(storage, `files/${file.name}`);
+            const promise = uploadBytes(storageRef, file)
+                .then((snapshot) => {
+                    console.log("File uploaded successfully");
+                    return getDownloadURL(snapshot.ref);
+                })
+                .catch((error) => {
+                    console.error("Error uploading file:", error);
+                });
+            promises.push(promise);
+        }
+        Promise.all(promises).then((downloadURLs) => {
+            setImgUrl(downloadURLs);
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                    const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
+                    axios.post("http://localhost:8080/post-images/list", imageData);
+                }
+            ).then(() => {
+                    axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
+                        setPostList(response.data);
+                        console.log("test dang bai ---------------- " + response.data)
+                        Swal.fire({
+                            icon: 'success',
+                            timer: 2000
+                        })
+                    })
+                }
+            );
+        }).catch((error) => {
+            alert(error);
+        });
     };
 
     return (
@@ -161,23 +240,56 @@ export default function NewFeed(props) {
                 <div className="newFeedContainer">
                     <br/>
                     <div className={"newFeedWelcome"}>
-                        <img src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
-                        <h3> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
-                            nhé</h3>
+                        <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
+                        <h2 style={{margin:"30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
+                            nhé :) </h2>
                     </div>
 
 
-                    <div className={"feedCarAvatarContainer"}>
-                        <div className={"feedCardAvatar"}>
-                            <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                    <div className="feedCarAvatarContainer">
+                        <div className="feedCardAvatar-head">
+                            <img className={"avatar-head"} src="img/example-ava.jpg" alt="Avatar"/>
                         </div>
-                        <div className={"feedCardTextarea"}>
-                            <textarea style={{width: "80%"}} name="postContent"
-                                      placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}></textarea>
-                            <button> Đăng </button>
+                        <div className={"input-head"}>
+                                <Formik
+                                    initialValues={{
+                                        textContent: "",
+                                        authorizedView: "PUBLIC",
+                                    }}
+                                    onSubmit={(values, {resetForm}) => {
+                                        handleSubmit({
+                                                textContent: values.textContent,
+                                                price: values.authorizedView,
+                                            }
+                                        );
+                                        resetForm();
+                                    }
+                                    }
+                                >
+                                    <Form className="feedCardTextarea-head">
+                                        <Field
+                                            name="textContent"
+                                            as="textarea"
+                                            placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                                        />
+                                        <div className={"input-action"}>
+                                            <input
+                                                className={"input-file-button"}
+                                                type="file"
+                                                name="file"
+                                                onChange={(event) => {
+                                                    const files = event.currentTarget.files;
+                                                    console.log("file  " + JSON.stringify(files));
+                                                    setImagePost(files);
+                                                }}
+                                                multiple
+                                            />
+                                            <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                        </div>
+                                    </Form>
+                                </Formik>
                         </div>
                     </div>
-
 
 
                     <br/>
@@ -200,7 +312,7 @@ export default function NewFeed(props) {
                                     </div>
                                 </div>
                                 <div className="feedCardBody">
-                                    <div style={{paddingLeft: "15px",paddingRight: "15px"}}>
+                                    <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
                                         <p>{item.textContent}</p>
                                     </div>
                                     <div className={"feedCardImage"}>
@@ -219,7 +331,7 @@ export default function NewFeed(props) {
                                             className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
-                                            <FontAwesomeIcon icon={faThumbsUp} size={"2x"} />
+                                            <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                             {isPostVisible ? '' : ''}
                                         </button>
                                         <button>Chia sẻ</button>

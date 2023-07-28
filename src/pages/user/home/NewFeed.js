@@ -33,13 +33,15 @@ export default function NewFeed(props) {
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
+
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [accountName, setAccountName] = useState("");
 
 
+
     useEffect(() => {
-        axios.get("http://localhost:8080/posts/userSource/" + user.userId).then((response) => {
+        axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
             setListPosts(response.data)
             console.log("du lieu tu server", JSON.stringify(response.data))
         })
@@ -86,26 +88,38 @@ export default function NewFeed(props) {
         return isLiked.includes(postId);
     };
 
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
-            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
-
                 dateCreated: new Date().toISOString(),
                 postPostId: postId,
                 userUserId: user.userId,
                 accountName: accountName,
                 reactionType: 'like'
-
             };
             console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(true);
+
+
+            // Update the likedPosts state and store it in local storage
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -114,24 +128,28 @@ export default function NewFeed(props) {
 
     const handleUnlike = async (postId) => {
         try {
-
-            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            // Call the API to update the like status
+            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
-
                 dateCreated: new Date().toISOString(),
                 postPostId: postId,
                 userUserId: user.userId,
                 accountName: accountName,
                 reactionType: 'like'
-
             };
             console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(false);
+
+            // Update the likedPosts state and store it in local storage
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -181,6 +199,8 @@ export default function NewFeed(props) {
                         listPosts.map((item, index) => {
                             const images = postImages[item.postId] || [];
                             const isPostVisible = visiblePostIds.includes(item.postId);
+                            console.log(item.postId)
+
 
                             return (
                                 <div className="feedCard">
@@ -207,16 +227,16 @@ export default function NewFeed(props) {
 
                                     </div>
                                     <div className="feedCardActions">
+
                                         <div>
-                                            <p>{isPostVisible ? item.accountName : ''}</p>
                                             <button
                                                 className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                                 onClick={() => handleToggleLike(item.postId)}
                                             >
-                                                <FontAwesomeIcon icon={faThumbsUp} />
-                                                {isPostVisible ? '' : ''}
+                                                <FontAwesomeIcon icon={faThumbsUp}/>
                                             </button>
                                         </div>
+
                                         <div>
                                             <button>Chia sẻ</button>
                                         </div>

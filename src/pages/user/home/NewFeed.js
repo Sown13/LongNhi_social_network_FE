@@ -380,7 +380,7 @@ export default function NewFeed(props) {
                                                     <div>
                                                         <div className={"comment-container-avatar"}>
                                                             <img src={comment.user.avatar} alt={"avt"}/>
-                                                            <h2> {comment.user.fullName} </h2>
+                                                           <Link to={`/users/${comment.user.userId}`}> <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
                                                     </div>

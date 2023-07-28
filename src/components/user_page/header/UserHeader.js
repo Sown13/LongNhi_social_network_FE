@@ -108,7 +108,8 @@ export default function UserHeader() {
     return (
         <div className={"user-header"}>
             <div className={"user-background-img"}>
-                <img src={"https://www.jquery-az.com/html/images/banana.jpg"} alt={"back ground"}/>
+                {console.log(targetUser.background)}
+                <img src={targetUser.avatar} alt={"back ground"}/>
             </div>
             <div className={"user-info"}>
                 <div className={"user-avatar"}>

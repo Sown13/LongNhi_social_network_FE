@@ -107,7 +107,6 @@ export default function Wall() {
             return []
         }
 
-
         const promises = [];
 
         for (let i = 0; i < imagePost.length; i++) {
@@ -134,6 +133,7 @@ export default function Wall() {
             axios.post("http://localhost:8080/posts", postData).then((res) => {
                     const post = {postId: res.data.postId};
                     const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
+                    console.log(imageData);
                     axios.post("http://localhost:8080/post-images/list", imageData);
                 }
             ).then(() => {
@@ -298,7 +298,7 @@ export default function Wall() {
                                     placeholder={userId==user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
                                     style={{width: "80%"}}
                                 />
-                                <div className={"input-action"}>
+                                <div className={"input-action-wall"}>
                                     <input
                                         className={"input-file-button"}
                                         type="file"
@@ -310,7 +310,7 @@ export default function Wall() {
                                         }}
                                         multiple
                                     />
-                                    <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                    <button className={"input-file-button-submit-wall"} type="submit">Đăng</button>
                                 </div>
                             </Form>
                         </Formik>
@@ -325,7 +325,7 @@ export default function Wall() {
                             <div className="feedCardHeader">
                                 <div className="feedCardAvatar">
                                     <img
-                                        src={"https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/article_images/2015/01/10/452704.jpg?itok=K4296Qgn"}
+                                        src={item.user.avatar}
                                         alt={"Avatar"}/>
                                 </div>
                                 <div className="feedCardHeaderInfo">
@@ -398,7 +398,7 @@ export default function Wall() {
                                     <div className={"comment-container"}>
                                         <div>
                                             <div className={"comment-container-avatar"}>
-                                                <img src={"img/example-ava-2.png"} alt={"avt"}/>
+                                                <img src={user.avatar} alt={"avt"}/>
                                                 <h2> {user.fullName} </h2>
                                             </div>
                                             <div className={"comment-input"}>

@@ -51,7 +51,7 @@ export default function SideBarRight() {
                 {friendList.map((friend, index) => (
                     <div className={"friend-list"}>
                         <div className={"friend-avatar"}>
-                            <img src={"img/example-ava-2.png"} alt={"icon"}/>
+                            <img src={friend.avatar} alt={"icon"}/>
                         </div>
                         <div className={"friend-details"}>
                             <Link to={`/users/${friend.userId}`}><h2> {friend.fullName} </h2></Link>

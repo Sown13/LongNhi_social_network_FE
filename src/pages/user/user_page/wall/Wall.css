@@ -634,12 +634,12 @@ li {
     border-radius: 20px;
 }
 
-.input-action {
+.input-action-wall {
     display: flex;
     width: 100%;
     justify-content: right;
 }
-.input-file-button-submit {
+.input-file-button-submit-wall {
     border-radius: 12px;
     margin-bottom: 2px;
     margin-right: 40px;

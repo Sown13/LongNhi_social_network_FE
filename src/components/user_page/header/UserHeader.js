@@ -112,7 +112,7 @@ export default function UserHeader() {
             </div>
             <div className={"user-info"}>
                 <div className={"user-avatar"}>
-                    <img src={"https://www.jquery-az.com/html/images/banana.jpg"} alt={"avatar"}/>
+                    <img src={targetUser.avatar} alt={"avatar"}/>
                 </div>
                 <div className={"user-full-name"}>
                     <h2>  {targetUser.fullName} </h2>

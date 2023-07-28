@@ -248,7 +248,7 @@ export default function NewFeed(props) {
 
                     <div className="feedCarAvatarContainer">
                         <div className="feedCardAvatar-head">
-                            <img className={"avatar-head"} src="img/example-ava.jpg" alt="Avatar"/>
+                            <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
                         </div>
                         <div className={"input-head"}>
                                 <Formik
@@ -294,7 +294,7 @@ export default function NewFeed(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.map((item, index) => {
+                    {listPosts.length > 0 && listPosts.reverse().map((item, index) => {
                         const images = item.postImageList || []
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -302,7 +302,7 @@ export default function NewFeed(props) {
                             <div className="feedCard">
                                 <div className="feedCardHeader">
                                     <div className="feedCardAvatar">
-                                        <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                                        <img src={item.user.avatar} alt={"Avatar"}/>
                                     </div>
                                     <div className="feedCardHeaderInfo">
                                         <div className="feedCardHeaderName">
@@ -328,7 +328,8 @@ export default function NewFeed(props) {
                                         {console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}
                                         {/*{if(item.postReactionList.filter(postReaction => postReaction.user.userId =  )}*/}
                                         <button
-                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            // className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>

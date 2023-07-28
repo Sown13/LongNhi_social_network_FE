@@ -35,6 +35,8 @@ export default function Wall() {
 
     const [imagePost, setImagePost] = useState([]);
 
+    const [relation, setRelation] = useState(false);
+
 
     const [user, setUser] = useState(() => {
         let loggedInUser = localStorage.getItem("user");
@@ -52,32 +54,17 @@ export default function Wall() {
         return loggedInUser;
     })
 
-    // const uploadImages = async (images) => {
-    //     if (!images || !images.length) return [];
-    //
-    //     const promises = [];
-    //
-    //     for (let i = 0; i < images.length; i++) {
-    //         const file = images[i];
-    //         const storageRef = ref(storage, `files/${file.name}`);
-    //         const promise = uploadBytes(storageRef, file)
-    //             .then((snapshot) => {
-    //                 console.log("File uploaded successfully");
-    //                 return getDownloadURL(snapshot.ref);
-    //             })
-    //             .catch((error) => {
-    //                 console.error("Error uploading file:", error);
-    //             });
-    //         promises.push(promise);
-    //     }
-    //     Promise.all(promises).then((downloadURLs) => {
-    //         setImgUrl(downloadURLs);
-    //         // This will be called when all the promises are resolved
-    //         // Do whatever you want with the download URLs here
-    //     }).catch((error) => {
-    //         alert(error);
-    //     });
-    // };
+    useEffect(() => {
+        if (user.userId !== userId) {
+            axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`).then((res) => {
+                if (res.data !== null && res.data.accepted === true) {
+                    setRelation(true)
+                }
+                else {setRelation(false)}
+                console.log(res.data.accepted)
+            })
+        }
+    }, [userId]);
 
 
     const handleSubmit = async (values,) => {
@@ -295,7 +282,7 @@ export default function Wall() {
                                 <Field
                                     name="textContent"
                                     as="textarea"
-                                    placeholder={userId==user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
+                                    placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
                                     style={{width: "80%"}}
                                 />
                                 <div className={"input-action-wall"}>
@@ -318,121 +305,124 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
-                {postListDisplay.length > 0 && postListDisplay.reverse().map((item, index) => {
-                    const images = item.postImageList || []
-                    return (
-                        <div className="feedCard">
-                            <div className="feedCardHeader">
-                                <div className="feedCardAvatar">
-                                    <img
-                                        src={item.user.avatar}
-                                        alt={"Avatar"}/>
-                                </div>
-                                <div className="feedCardHeaderInfo">
-                                    <div>
-                                        <div className="feedCardHeaderName">
-                                            <Link
-                                                to={`/user/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
-                                        </div>
-                                        {
-                                            Number(user.userId) !== Number(userId) ? (
-                                                <Dropdown
-                                                    overlay={
-                                                        <Menu>
-                                                            <Menu.Item key="1">
-                                                                Ẩn bài viết
-                                                            </Menu.Item>
-                                                        </Menu>
-                                                    }
-                                                    trigger={["click"]}
-                                                >
-                                                    <span>•••</span>
-                                                </Dropdown>
-                                            ) : (
-                                                <Dropdown
-                                                    overlay={
-                                                        <Menu>
-                                                            <Menu.Item key="1"
-                                                                       onClick={() => handleDeletePost(item.postId)}>
-                                                                Xoá bài viết
-                                                            </Menu.Item>
-                                                        </Menu>
-                                                    }
-                                                    trigger={["click"]}
-                                                >
-                                                    <span>•••</span>
-                                                </Dropdown>
-                                            )
-
-                                        }
-
+                {postListDisplay.length > 0 && postListDisplay
+                    .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || ( relation === true && post.authorizedView === "friend"))
+                    .reverse()
+                    .map((item, index) => {
+                        const images = item.postImageList || []
+                        return (
+                            <div className="feedCard">
+                                <div className="feedCardHeader">
+                                    <div className="feedCardAvatar">
+                                        <img
+                                            src={item.user.avatar}
+                                            alt={"Avatar"}/>
                                     </div>
-
-                                    <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>
-                                </div>
-                            </div>
-                            <div className="feedCardBody">
-                                <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
-                                    <p>{item.textContent}</p>
-                                </div>
-                                <div className={"feedCardImage"}>
-                                    {images.length > 0 && <ImageList images={item.postImageList}/>}
-                                </div>
-                            </div>
-                            <div className="feedCardActions">
-                                <div style={{}}>
-                                    <p> {item.postReactionList.length}</p>
-                                </div>
-                                <div>
-                                    <button
-                                        className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
-                                        onClick={() => handleToggleLike(item.postId)}
-                                    >
-                                        <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
-                                    </button>
-                                    <button>Chia sẻ</button>
-                                </div>
-                            </div>
-                            <ul style={{marginTop: "16px"}}>
-                                <li style={{minWidth: "90%"}}>
-                                    <div className={"comment-container"}>
+                                    <div className="feedCardHeaderInfo">
                                         <div>
-                                            <div className={"comment-container-avatar"}>
-                                                <img src={user.avatar} alt={"avt"}/>
-                                                <h2> {user.fullName} </h2>
+                                            <div className="feedCardHeaderName">
+                                                <Link
+                                                    to={`/user/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
-                                            <div className={"comment-input"}>
-                                                <textarea placeholder={"Viết bình luận.."}/>
-                                            </div>
+                                            {
+                                                Number(user.userId) !== Number(userId) ? (
+                                                    <Dropdown
+                                                        overlay={
+                                                            <Menu>
+                                                                <Menu.Item key="1">
+                                                                    Ẩn bài viết
+                                                                </Menu.Item>
+                                                            </Menu>
+                                                        }
+                                                        trigger={["click"]}
+                                                    >
+                                                        <span>•••</span>
+                                                    </Dropdown>
+                                                ) : (
+                                                    <Dropdown
+                                                        overlay={
+                                                            <Menu>
+                                                                <Menu.Item key="1"
+                                                                           onClick={() => handleDeletePost(item.postId)}>
+                                                                    Xoá bài viết
+                                                                </Menu.Item>
+                                                            </Menu>
+                                                        }
+                                                        trigger={["click"]}
+                                                    >
+                                                        <span>•••</span>
+                                                    </Dropdown>
+                                                )
+
+                                            }
+
+                                        </div>
+
+                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>
+                                    </div>
+                                </div>
+                                <div className="feedCardBody">
+                                    <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
+                                        <p>{item.textContent}</p>
+                                    </div>
+                                    <div className={"feedCardImage"}>
+                                        {images.length > 0 && <ImageList images={item.postImageList}/>}
+                                    </div>
+                                </div>
+                                <div className="feedCardActions">
+                                    <div style={{}}>
+                                        <p> {item.postReactionList.length}</p>
+                                    </div>
+                                    <div>
+                                        <button
+                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            onClick={() => handleToggleLike(item.postId)}
+                                        >
+                                            <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
+                                        </button>
+                                        <button>Chia sẻ</button>
+                                    </div>
+                                </div>
+                                <ul style={{marginTop: "16px"}}>
+                                    <li style={{minWidth: "90%"}}>
+                                        <div className={"comment-container"}>
                                             <div>
-                                                <button className={"comment-submit"}>Bình Luận</button>
+                                                <div className={"comment-container-avatar"}>
+                                                    <img src={user.avatar} alt={"avt"}/>
+                                                    <h2> {user.fullName} </h2>
+                                                </div>
+                                                <div className={"comment-input"}>
+                                                    <textarea placeholder={"Viết bình luận.."}/>
+                                                </div>
+                                                <div>
+                                                    <button className={"comment-submit"}>Bình Luận</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                {item.commentList.map(comment => {
-                                    return (
-                                        <li>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={comment.user.avatar} alt={"avt"}/>
-                                                        <h2> {comment.user.fullName} </h2>
+                                    </li>
+                                    {item.commentList.map(comment => {
+                                        return (
+                                            <li>
+                                                <div className={"comment-container"}>
+                                                    <div>
+                                                        <div className={"comment-container-avatar"}>
+                                                            <img src={comment.user.avatar} alt={"avt"}/>
+                                                            <h2> {comment.user.fullName} </h2>
+                                                        </div>
+                                                        <p> {comment.textContent} </p>
                                                     </div>
-                                                    <p> {comment.textContent} </p>
+                                                    <div>
+                                                        <span> 20 </span>
+                                                        <button> like</button>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <span> 20 </span>
-                                                    <button> like</button>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    )
-                })}
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        )
+                    })}
 
             </div>
         </div>

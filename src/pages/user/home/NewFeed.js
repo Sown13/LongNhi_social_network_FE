@@ -294,7 +294,7 @@ export default function NewFeed(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.reverse().map((item, index) => {
+                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
                         const images = item.postImageList || []
                         const isPostVisible = visiblePostIds.includes(item.postId);
 

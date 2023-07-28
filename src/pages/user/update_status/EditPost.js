@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
+import "./EditPost.css";
 
 const EditPost = () => {
     const { postId } = useParams();
     const [post, setPost] = useState({ textContent: "" });
     const [images, setImages] = useState([]);
+    const navigate = useNavigate();
     const [user] = useState(() => {
         let loggedInUser = localStorage.getItem("user");
         if (loggedInUser === null || loggedInUser === "undefined") {
@@ -25,18 +27,20 @@ const EditPost = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/posts/post/${postId}`)
+            .get(`http://localhost:8080/posts/${postId}`)
             .then((res) => {
                 setPost(res.data);
+                console.log("noi dung bai post dang sua" + res.data)
             })
             .catch((err) => {
                 console.error("Error fetching post:", err);
             });
 
         axios
-            .get(`http://localhost:8080/post-images/${postId}`)
+            .get(`http://localhost:8080/post-images/post/${postId}`)
             .then((res) => {
                 setImages(res.data);
+                console.log(res.data)
             })
             .catch((err) => {
                 console.error("Error fetching images:", err);
@@ -77,15 +81,17 @@ const EditPost = () => {
 
             await axios.put(`http://localhost:8080/posts/${postId}`, postData);
             alert("Cập nhật bài viết thành công!");
+            navigate(`/users/${user.userId}`)
         } catch (err) {
             console.error("Error submitting form:", err);
         }
     };
 
     const handleDeleteImage = async (imageId) => {
+        console.log(imageId)
         try {
             await axios.delete(`http://localhost:8080/post-images/${imageId}`);
-            setImages(images.filter((image) => image.id !== imageId));
+            setImages(images.filter((image) => image.postImageId !== imageId));
             alert("Xóa ảnh thành công!");
         } catch (err) {
             console.error("Error deleting image:", err);
@@ -94,7 +100,7 @@ const EditPost = () => {
 
     return (
         <div className="edit-post">
-            <h1>Edit Post</h1>
+            <h1> Sửa bài viết </h1>
             <Formik
                 initialValues={{ textContent: post.textContent }}
                 enableReinitialize={true}
@@ -103,7 +109,7 @@ const EditPost = () => {
                 {({ values, setFieldValue }) => (
                     <Form>
                         <div className="form-group">
-                            <label htmlFor="textContent">Text Content</label>
+                            <label htmlFor="textContent">Nội dung</label>
                             <Field
                                 as="textarea"
                                 id="textContent"
@@ -116,7 +122,7 @@ const EditPost = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="images">Images</label>
+                            <label htmlFor="images">Ảnh</label>
                             <input
                                 id="images"
                                 name="images"
@@ -131,10 +137,10 @@ const EditPost = () => {
                         <div className="image-list">
                             {images.map((image) => (
                                 <div key={image.id} className="image-item">
-                                    <img src={image.imageUrl} alt="" />
+                                    <img src={image.imgUrl} alt="" />
                                     <button
                                         type="button"
-                                        onClick={() => handleDeleteImage(image.id)}>
+                                        onClick={() => handleDeleteImage(image.postImageId)}>
                                         Xóa
                                     </button>
                                 </div>

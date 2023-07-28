@@ -1,5 +1,5 @@
 import "./Wall.css";
-import {Link, useParams} from "react-router-dom";
+import {Link, Outlet, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
@@ -14,6 +14,7 @@ import ImageList from "../../../../components/image/ImageList";
 
 export default function Wall() {
 
+    const navigate = useNavigate();
 
     const [imgUrl, setImgUrl] = useState(null);
 
@@ -359,6 +360,8 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
+                <Outlet></Outlet>
+                <hr/>
                 {postListDisplay.length > 0 && postListDisplay
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
                     .reverse()
@@ -412,6 +415,10 @@ export default function Wall() {
                                                                     <Menu.Item key="1"
                                                                                onClick={() => handleDeletePost(item.postId)}>
                                                                         Xoá bài viết
+                                                                    </Menu.Item>
+                                                                    <Menu.Item key="1"
+                                                                               onClick={() => navigate(`/post/${item.postId}`) }>
+                                                                        Sửa bài viết
                                                                     </Menu.Item>
                                                                 </Menu>
                                                             }

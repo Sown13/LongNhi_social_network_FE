@@ -24,6 +24,7 @@ import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
+import EditPost from "./pages/user/update_status/EditPost";
 
 
 
@@ -109,6 +110,7 @@ function App() {
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"favorite"} element={<Favorite/>}></Route>
+                    <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
@@ -123,7 +125,6 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
-                <Route path={"/test"} element={<MyComponent></MyComponent>}></Route>
             </Routes>
         </div>
     );

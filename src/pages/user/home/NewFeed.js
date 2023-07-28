@@ -101,26 +101,38 @@ export default function NewFeed(props) {
         return isLiked.includes(postId);
     };
 
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
-            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
-
                 dateCreated: new Date().toISOString(),
                 postPostId: postId,
                 userUserId: user.userId,
                 accountName: accountName,
                 reactionType: 'like'
-
             };
             console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(true);
+
+
+            // Update the likedPosts state and store it in local storage
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -129,8 +141,8 @@ export default function NewFeed(props) {
 
     const handleUnlike = async (postId) => {
         try {
-
-            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            // Call the API to update the like status
+            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
 
@@ -146,7 +158,13 @@ export default function NewFeed(props) {
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(false);
+
+            // Update the likedPosts state and store it in local storage
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -295,7 +313,7 @@ export default function NewFeed(props) {
                     <br/>
                     <hr/>
                     {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
-                        const images = item.postImageList || []
+                        const images = postImages[item.postId] || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
                         return (

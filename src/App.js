@@ -22,6 +22,9 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
+import Test from "./pages/Test";
+import MyComponent from "./pages/Test";
+
 
 
 function App() {
@@ -120,6 +123,7 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
+                <Route path={"/test"} element={<MyComponent></MyComponent>}></Route>
             </Routes>
         </div>
     );

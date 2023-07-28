@@ -650,4 +650,22 @@ li {
     width: 80%
 }
 
+.feedCardHeaderAction {
+    display: flex;
+    flex-direction: row;
+}
+.feedCardHeaderAction-button{
+    display: flex;
+    margin-left: 480px;
+}
+.chan-view-button{
+    border-radius: 50%;
+}
+.delete-post-button :hover{
+    cursor: pointer;
+}
+.delete-post-button {
+    margin-left: 10px;
+}
+
 

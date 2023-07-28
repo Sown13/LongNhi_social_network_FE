@@ -59,9 +59,9 @@ export default function Wall() {
             axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`).then((res) => {
                 if (res.data !== null && res.data.accepted === true) {
                     setRelation(true)
+                } else {
+                    setRelation(false);
                 }
-                else {setRelation(false)}
-                console.log(res.data.accepted)
             })
         }
     }, [userId]);
@@ -257,6 +257,60 @@ export default function Wall() {
         }
     };
 
+    const [selectedOption, setSelectedOption] = useState(() => {
+        // Get the value from localStorage or default to 'PUBLIC' if it's not available
+        const storedValue = localStorage.getItem('selectedOption');
+        return storedValue ? storedValue : 'public';
+    });
+
+    const [selectedPostId, setSelectedPostId] = useState("");
+
+
+    // -------- Thay đổi quyền hiển thị
+    const handleShowAlert = async (selectedPostId) => {
+        const result = await Swal.fire({
+            title: 'Chọn một tùy chọn',
+            input: 'radio',
+            inputOptions: {
+                public: 'Mọi người',
+                friend: 'Chỉ bạn bè',
+                private: 'Chỉ mình tôi',
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Hủy',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Bạn cần chọn một tùy chọn';
+                }
+            },
+        });
+
+        if (result.isConfirmed) {
+            const selectedValue = result.value;
+            setSelectedOption(selectedValue);
+            setSelectedPostId(selectedPostId);
+            // Save the selected option to localStorage
+            localStorage.setItem('selectedOption', selectedValue);
+        }
+    };
+
+    const updateAuthorizedView = (postId, selectedValue) => {
+        axios.put(`http://localhost:8080/posts/update-authorized-view/${selectedPostId}/authorizedView/${selectedValue}`)
+            .then(response => {
+                console.log('Post updated successfully:', response.data);
+                // Optionally, you can show a success message to the user here
+            })
+            .catch(error => {
+                console.error('Error updating authorizedView:', error);
+                // Optionally, you can show an error message to the user here
+            });
+    };
+
+    useEffect(() => {
+        // Replace the API endpoint with the correct one
+        updateAuthorizedView(selectedPostId, selectedOption);
+    }, [selectedOption]);
+
     return (
         <div className="newFeed">
             <div className="newFeedContainer">
@@ -306,7 +360,7 @@ export default function Wall() {
                 <br/>
                 <hr/>
                 {postListDisplay.length > 0 && postListDisplay
-                    .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || ( relation === true && post.authorizedView === "friend"))
+                    .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
                     .reverse()
                     .map((item, index) => {
                         const images = item.postImageList || []
@@ -319,43 +373,56 @@ export default function Wall() {
                                             alt={"Avatar"}/>
                                     </div>
                                     <div className="feedCardHeaderInfo">
-                                        <div>
+                                        <div className={"feedCardHeaderAction"}>
                                             <div className="feedCardHeaderName">
                                                 <Link
                                                     to={`/user/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
-                                            {
-                                                Number(user.userId) !== Number(userId) ? (
-                                                    <Dropdown
-                                                        overlay={
-                                                            <Menu>
-                                                                <Menu.Item key="1">
-                                                                    Ẩn bài viết
-                                                                </Menu.Item>
-                                                            </Menu>
-                                                        }
-                                                        trigger={["click"]}
-                                                    >
-                                                        <span>•••</span>
-                                                    </Dropdown>
-                                                ) : (
-                                                    <Dropdown
-                                                        overlay={
-                                                            <Menu>
-                                                                <Menu.Item key="1"
-                                                                           onClick={() => handleDeletePost(item.postId)}>
-                                                                    Xoá bài viết
-                                                                </Menu.Item>
-                                                            </Menu>
-                                                        }
-                                                        trigger={["click"]}
-                                                    >
-                                                        <span>•••</span>
-                                                    </Dropdown>
-                                                )
 
-                                            }
 
+                                            {/*Nút thay đổi quyền hiển thị*/}
+                                            <div className={"feedCardHeaderAction-button"}>
+                                            <div className={"change-view-button"}>
+                                                <button style={{borderRadius: "50%", padding: "1px"}} onClick={() => handleShowAlert(item.postId)}>
+                                                    {selectedOption === 'public' && <i className="fas fa-globe"></i>}
+                                                    {selectedOption === 'friend' &&
+                                                        <i className="fas fa-user-friends"></i>}
+                                                    {selectedOption === 'private' && <i className="fas fa-user"></i>}
+                                                </button>
+                                            </div>
+                                            <div className={"delete-post-button"}>
+                                                {
+                                                    Number(user.userId) !== Number(userId) ? (
+                                                        <Dropdown
+                                                            overlay={
+                                                                <Menu>
+                                                                    <Menu.Item key="1">
+                                                                        Ẩn bài viết
+                                                                    </Menu.Item>
+                                                                </Menu>
+                                                            }
+                                                            trigger={["click"]}
+                                                        >
+                                                            <span></span>
+                                                        </Dropdown>
+                                                    ) : (
+                                                        <Dropdown
+                                                            overlay={
+                                                                <Menu>
+                                                                    <Menu.Item key="1"
+                                                                               onClick={() => handleDeletePost(item.postId)}>
+                                                                        Xoá bài viết
+                                                                    </Menu.Item>
+                                                                </Menu>
+                                                            }
+                                                            trigger={["click"]}
+                                                        >
+                                                            <span>•••</span>
+                                                        </Dropdown>
+                                                    )
+                                                }
+                                            </div>
+                                            </div>
                                         </div>
 
                                         <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>

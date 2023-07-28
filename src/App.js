@@ -123,7 +123,6 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
-                <Route path={"/test"} element={<MyComponent></MyComponent>}></Route>
             </Routes>
         </div>
     );

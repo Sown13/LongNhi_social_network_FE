@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import { Formik, Form, Field } from "formik";
+import {Formik, Form, Field} from "formik";
 import "./EditPost.css";
 
 const EditPost = () => {
-    const { postId } = useParams();
-    const [post, setPost] = useState({ textContent: "" });
+    const {postId} = useParams();
+    const [post, setPost] = useState({textContent: ""});
     const [images, setImages] = useState([]);
     const navigate = useNavigate();
     const [user] = useState(() => {
@@ -67,8 +67,8 @@ const EditPost = () => {
             };
 
             if (images.length > 0) {
-                const response = await axios.post(
-                    `http://localhost:8080/post-images/${postId}`,
+                const response = await axios.get(
+                    `http://localhost:8080/post-images/post/${postId}`,
                     formData,
                     {
                         headers: {
@@ -90,9 +90,11 @@ const EditPost = () => {
     const handleDeleteImage = async (imageId) => {
         console.log(imageId)
         try {
-            await axios.delete(`http://localhost:8080/post-images/${imageId}`);
-            setImages(images.filter((image) => image.postImageId !== imageId));
-            alert("Xóa ảnh thành công!");
+            if (window.confirm("Bạn có chắc chắn muốn xóa ảnh không?")) {
+                await axios.delete(`http://localhost:8080/post-images/${imageId}`);
+                setImages(images.filter((image) => image.postImageId !== imageId));
+                alert("Xóa ảnh thành công!");
+            }
         } catch (err) {
             console.error("Error deleting image:", err);
         }
@@ -102,11 +104,11 @@ const EditPost = () => {
         <div className="edit-post">
             <h1> Sửa bài viết </h1>
             <Formik
-                initialValues={{ textContent: post.textContent }}
+                initialValues={{textContent: post.textContent}}
                 enableReinitialize={true}
                 onSubmit={handleFormSubmit}
             >
-                {({ values, setFieldValue }) => (
+                {({values, setFieldValue}) => (
                     <Form>
                         <div className="form-group">
                             <label htmlFor="textContent">Nội dung</label>
@@ -137,7 +139,7 @@ const EditPost = () => {
                         <div className="image-list">
                             {images.map((image) => (
                                 <div key={image.id} className="image-item">
-                                    <img src={image.imgUrl} alt="" />
+                                    <img src={image.imgUrl} alt=""/>
                                     <button
                                         type="button"
                                         onClick={() => handleDeleteImage(image.postImageId)}>

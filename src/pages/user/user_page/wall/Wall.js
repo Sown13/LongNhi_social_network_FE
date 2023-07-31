@@ -36,6 +36,9 @@ export default function Wall() {
     const [imagePost, setImagePost] = useState([]);
 
     const [relation, setRelation] = useState(false);
+    const [comments, setComments] = useState({
+        commentId:0
+    });
 
 
     const [user, setUser] = useState(() => {
@@ -194,6 +197,20 @@ export default function Wall() {
             }
 
         })
+    }
+
+    const deleteComment = (commentId) => {
+        axios.delete(`http://localhost:8080/comments/${commentId}`)
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res=>{
+                    setPostList(res.data);
+                    setPostListDisplay(res.data);
+                    console.log("test dang bai ---------------- " + res.data)
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     const toggleLike = async (postId) => {
@@ -476,7 +493,12 @@ export default function Wall() {
                                                             <img src={comment.user.avatar} alt={"avt"}/>
                                                             <h2> {comment.user.fullName} </h2>
                                                         </div>
-                                                        <p> {comment.textContent} </p>
+                                                        <p>{comment.textContent}</p>
+                                                        <button onClick={()=>deleteComment(comment.commentId)}>
+                                                          xoa
+                                                        </button>
+
+
                                                     </div>
                                                     <div>
                                                         <span> 20 </span>

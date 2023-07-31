@@ -1,12 +1,15 @@
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import "./NewFeed.css"
 import React, {useEffect, useState} from "react";
-import {Field, Formik} from "formik";
+import {Field, Form, Formik} from "formik";
 import axios from "axios";
-import ImageList from "./ImageList";
+import ImageList from "../../../components/image/ImageList";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import "./like-button.css"
+import Swal from "sweetalert2";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "../../../firebase";
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -26,16 +29,28 @@ export default function NewFeed(props) {
             return loggedInUser;
         }
     )
+
+    const {userId} = useParams();
+
     const [postImages, setPostImages] = useState({});
 
-    const [listPosts, setListPosts] = useState([])
+    const [listPosts, setListPosts] = useState([]);
+
+    const [reactionCount, setReactionCount] = useState([]);
 
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
+
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [accountName, setAccountName] = useState("");
+
+    const [imagePost, setImagePost] = useState([]);
+
+    const [imgUrl, setImgUrl] = useState(null);
+
+    const [postList, setPostList] = useState([]);
 
 
     useEffect(() => {
@@ -51,21 +66,21 @@ export default function NewFeed(props) {
         console.log("danh sách các ảnh của bài viết", postImages)
     }, [listPosts]);
 
-    useEffect(() => {
-        const fetchImagesForPost = async (postId) => {
-            try {
-                const response = await axios.get(`http://localhost:8080/posts/${postId}`);
-                const images = response.data;
-                console.log("Kiểm tra chỗ này nha", images)
-                setPostImages({...postImages, [postId]: images});
-            } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu ảnh cho bài đăng:", error);
-            }
-        };
-        listPosts.forEach((post) => {
-            fetchImagesForPost(post.postId);
-        });
-    }, [listPosts]);
+    // useEffect(() => {
+    //     const fetchImagesForPost = async (postId) => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8080/post-images/${postId}`);
+    //             const images = response.data;
+    //             console.log("Kiểm tra chỗ này nha", images)
+    //             setPostImages({...postImages, [postId]: images});
+    //         } catch (error) {
+    //             console.error("Lỗi khi lấy dữ liệu ảnh cho bài đăng:", error);
+    //         }
+    //     };
+    //     listPosts.forEach((post) => {
+    //         fetchImagesForPost(post.postId);
+    //     });
+    // }, [listPosts]);
 
 
     useEffect(() => {
@@ -86,26 +101,38 @@ export default function NewFeed(props) {
         return isLiked.includes(postId);
     };
 
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
-            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            const apiUrl = `http://localhost:8080/post-reactions/add/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
-
                 dateCreated: new Date().toISOString(),
                 postPostId: postId,
                 userUserId: user.userId,
                 accountName: accountName,
                 reactionType: 'like'
-
             };
             console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(true);
+
+
+            // Update the likedPosts state and store it in local storage
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -114,8 +141,8 @@ export default function NewFeed(props) {
 
     const handleUnlike = async (postId) => {
         try {
-
-            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/` + user.userId; // Replace with your actual API endpoint
+            // Call the API to update the like status
+            const apiUrl = `http://localhost:8080/post-reactions/deleteAndAdd/post/${postId}/user/${user.userId}`; // Replace with your actual API endpoint
 
             const postReaction = {
 
@@ -131,7 +158,13 @@ export default function NewFeed(props) {
             await axios.post(apiUrl, postReaction);
 
             // Update the local state to reflect the new like status
-            setIsLiked((prevState) => !prevState);
+            setIsLiked(false);
+
+            // Update the likedPosts state and store it in local storage
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -148,7 +181,75 @@ export default function NewFeed(props) {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
-    const handleCreatePost = () => {
+    const handleSubmit = async (values,) => {
+        window.event.preventDefault();
+
+        if (!imagePost || !imagePost.length) {
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                }
+            ).then(() => {
+                axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
+                    setPostList(response.data);
+                    console.log("test dang bai ---------------- " + response.data)
+                    Swal.fire({
+                        icon: 'success',
+                        timer: 2000
+                    })
+                })
+            });
+            return []
+        }
+
+
+        const promises = [];
+
+        for (let i = 0; i < imagePost.length; i++) {
+            const file = imagePost[i];
+            const storageRef = ref(storage, `files/${file.name}`);
+            const promise = uploadBytes(storageRef, file)
+                .then((snapshot) => {
+                    console.log("File uploaded successfully");
+                    return getDownloadURL(snapshot.ref);
+                })
+                .catch((error) => {
+                    console.error("Error uploading file:", error);
+                });
+            promises.push(promise);
+        }
+        Promise.all(promises).then((downloadURLs) => {
+            setImgUrl(downloadURLs);
+            const postData = {
+                user: {
+                    userId: user.userId
+                },
+                textContent: values.textContent,
+            };
+            axios.post("http://localhost:8080/posts", postData).then((res) => {
+                    const post = {postId: res.data.postId};
+                    const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
+                    axios.post("http://localhost:8080/post-images/list", imageData);
+                }
+            ).then(() => {
+                    axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
+                        setPostList(response.data);
+                        console.log("test dang bai ---------------- " + response.data)
+                        Swal.fire({
+                            icon: 'success',
+                            timer: 2000
+                        })
+                    })
+                }
+            );
+        }).catch((error) => {
+            alert(error);
+        });
     };
 
     return (
@@ -157,124 +258,190 @@ export default function NewFeed(props) {
                 <div className="newFeedContainer">
                     <br/>
                     <div className={"newFeedWelcome"}>
-                        <img src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
-                        <h3> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
-                            nhé</h3>
+                        <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
+                        <h2 style={{margin:"30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
+                            nhé :) </h2>
                     </div>
 
 
-                    <div className={"feedCarAvatarContainer"}>
-                        <div className={"feedCardAvatar"}>
-                            <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
+                    <div className="feedCarAvatarContainer">
+                        <div className="feedCardAvatar-head">
+                            <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
                         </div>
-                        <div className={"feedCardTextarea"}>
-                            <textarea style={{width: "80%"}} name="postContent"
-                                      placeholder={`${user.fullName} ơi, bạn đang nghĩ gì thế?`}></textarea>
-                            <button> Đăng</button>
+                        <div className={"input-head"}>
+                                <Formik
+                                    initialValues={{
+                                        textContent: "",
+                                        authorizedView: "PUBLIC",
+                                    }}
+                                    onSubmit={(values, {resetForm}) => {
+                                        handleSubmit({
+                                                textContent: values.textContent,
+                                                price: values.authorizedView,
+                                            }
+                                        );
+                                        resetForm();
+                                    }
+                                    }
+                                >
+                                    <Form className="feedCardTextarea-head">
+                                        <Field
+                                            name="textContent"
+                                            as="textarea"
+                                            placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                                        />
+                                        <div className={"input-action"}>
+                                            <input
+                                                className={"input-file-button"}
+                                                type="file"
+                                                name="file"
+                                                onChange={(event) => {
+                                                    const files = event.currentTarget.files;
+                                                    console.log("file  " + JSON.stringify(files));
+                                                    setImagePost(files);
+                                                }}
+                                                multiple
+                                            />
+                                            <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                        </div>
+                                    </Form>
+                                </Formik>
                         </div>
                     </div>
 
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 &&
-                        listPosts.map((item, index) => {
-                            const images = postImages[item.postId] || [];
-                            const isPostVisible = visiblePostIds.includes(item.postId);
+                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
+                        const images = item.postImageList || [];
+                        const isPostVisible = visiblePostIds.includes(item.postId);
 
-                            return (
-                                <div className="feedCard">
-                                    <div className="feedCardHeader">
-                                        <div className="feedCardAvatar">
-                                            <img src={"img/example-ava.jpg"} alt={"Avatar"}/>
-                                        </div>
-                                        <div className="feedCardHeaderInfo">
-                                            <div className="feedCardHeaderName">
-                                                <Link to={"/user/1"}><span> Tên người đăng </span></Link>
-                                            </div>
-                                            <div className="feedCardHeaderTimestamp"> 22:00 15/7/2023</div>
-                                        </div>
+                        return (
+                            <div className="feedCard">
+                                <div className="feedCardHeader">
+                                    <div className="feedCardAvatar">
+                                        <img src={item.user.avatar} alt={"Avatar"}/>
                                     </div>
-                                    <div className="feedCardBody">
-                                        <ul key={index}>
-                                            <ul>
-                                                <p>{item.textContent}</p>
-                                                {images.length > 0 && <ImageList images={images}/>}
-                                            </ul>
-                                            {/*{imageList.length > 0 && <ImageList images={imageList} /> }*/}
-                                        </ul>
-
-
-                                    </div>
-                                    <div className="feedCardActions">
-                                        <div>
-                                            <p>{isPostVisible ? item.accountName : ''}</p>
-                                            <button
-                                                className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
-                                                onClick={() => handleToggleLike(item.postId)}
-                                            >
-                                                <FontAwesomeIcon icon={faThumbsUp} />
-                                                {isPostVisible ? '' : ''}
-                                            </button>
+                                    <div className="feedCardHeaderInfo">
+                                        <div className="feedCardHeaderName">
+                                            <Link to={`/users/${item.user.userId}`}><span> {item.user.fullName} </span></Link>
                                         </div>
-                                        <div>
-                                            <button>Chia sẻ</button>
-                                        </div>
+                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated}</div>
                                     </div>
-                                    <div className={"user-comment"}>
-                                        <input placeholder={"Viết bình luận.."}/>
-                                        <button>Bình Luận</button>
-                                    </div>
-                                    <ul>
-                                        <li>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                        <h2> name </h2>
-                                                    </div>
-                                                    <p> bình luận </p>
-                                                </div>
-                                                <div>
-                                                    <span> số like </span>
-                                                    <button> like</button>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                        <h2> name </h2>
-                                                    </div>
-                                                    <p> bình luận </p>
-                                                </div>
-                                                <div>
-                                                    <span> số like </span>
-                                                    <button> like</button>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={"img/example-ava-2.png"} alt={"avt"}/>
-                                                        <h2> name </h2>
-                                                    </div>
-                                                    <p> bình luận </p>
-                                                </div>
-                                                <div>
-                                                    <span> số like </span>
-                                                    <button> like</button>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </div>
-                            )
-                        })}
+                                <div className="feedCardBody">
+                                    <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
+                                        <p>{item.textContent}</p>
+                                    </div>
+                                    <div className={"feedCardImage"}>
+                                        {console.log("list ảnh" + JSON.stringify(item))}
+                                        {images.length > 0 && <ImageList images={item.postImageList}/>}
+                                    </div>
+                                </div>
+                                <div className="feedCardActions">
+                                    <div style={{}}>
+                                        <p> {item.postReactionList.length}</p>
+                                    </div>
+                                    <div>
+                                        <button>{isPostVisible ? item.accountName : ''}</button>
+                                        {console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}
+                                        {/*{if(item.postReactionList.filter(postReaction => postReaction.user.userId =  )}*/}
+                                        <button
+                                            // className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
+                                            onClick={() => handleToggleLike(item.postId)}
+                                        >
+                                            <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
+                                            {isPostVisible ? '' : ''}
+                                        </button>
+                                        <button>Chia sẻ</button>
+                                    </div>
+                                </div>
+                                <ul style={{marginTop: "16px"}}>
+                                    <li style={{minWidth: "90%"}}>
+                                        <div className={"comment-container"}>
+                                            <div>
+                                                <div className={"comment-container-avatar"}>
+                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
+                                                    <h2> {user.fullName} </h2>
+                                                </div>
+                                                <div className={"comment-input"}>
+                                                    <textarea placeholder={"Viết bình luận.."}/>
+                                                </div>
+                                                <div>
+                                                    <button className={"comment-submit"}>Bình Luận</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {item.commentList.map(comment => {
+                                        return (
+                                            <li>
+                                                <div className={"comment-container"}>
+                                                    <div>
+                                                        <div className={"comment-container-avatar"}>
+                                                            <img src={comment.user.avatar} alt={"avt"}/>
+                                                           <Link to={`/users/${comment.user.userId}`}> <h2> {comment.user.fullName} </h2></Link>
+                                                        </div>
+                                                        <p> {comment.textContent} </p>
+                                                    </div>
+                                                    <div>
+                                                        <span> 20 </span>
+                                                        <button> like</button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        )
+                                    })}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                    {/*    <div className={"comment-container"}>*/}
+                                    {/*        <div>*/}
+                                    {/*            <div className={"comment-container-avatar"}>*/}
+                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                    {/*                <h2> name </h2>*/}
+                                    {/*            </div>*/}
+                                    {/*            <p> bình luận </p>*/}
+                                    {/*        </div>*/}
+                                    {/*        <div>*/}
+                                    {/*            <span> số like </span>*/}
+                                    {/*            <button> like</button>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</li>*/}
+                                </ul>
+                            </div>
+                        )
+                    })}
 
                 </div>
             </div>

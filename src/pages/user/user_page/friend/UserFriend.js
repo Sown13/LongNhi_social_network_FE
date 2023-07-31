@@ -3,7 +3,7 @@ import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 import "./UserFriend.css"
 
-export default function UserFriend(){
+export default function UserFriend() {
     const {userId} = useParams();
 
     const [user, setUser] = useState(
@@ -28,25 +28,23 @@ export default function UserFriend(){
 
     const [displayFriendList, setDisplayFriendList] = useState([]);
 
-    useEffect(()=>{
-        axios.get("http://localhost:8080/user-friends/users/"+ userId).then((response) =>{
+    useEffect(() => {
+        axios.get("http://localhost:8080/user-friends/users/" + userId).then((response) => {
             let result = response.data;
             let friendListResult = [];
             console.log(result);
             for (let i = 0; i < result.length; i++) {
                 if (result[i].sourceUser.userId == userId) {
                     friendListResult.push(result[i].targetUser);
-                    console.log(" result "+result[i])
-                }
-                else if (result[i].targetUser.userId == userId) {
+                    console.log(" result " + result[i])
+                } else if (result[i].targetUser.userId == userId) {
                     friendListResult.push(result[i].sourceUser);
                 }
             }
             setFriendList(friendListResult);
             setDisplayFriendList(friendListResult);
         })
-    },[])
-
+    }, [])
 
 
     const search = (e) => {
@@ -60,12 +58,16 @@ export default function UserFriend(){
         <div className={"userFriend"}>
             <h1> Bạn bè </h1>
             <input name={"search"} type={"text"} onChange={search} placeholder={"Nhập tên"}/>
-            <button> Tìm </button>
-            {displayFriendList.map((friend, index) =>{
+            <button> Tìm</button>
+            {displayFriendList.map((friend, index) => {
                 console.log("user" + friend)
                 return (
-                    <div key={friend.userId}>
-                      <Link to={`/users/${friend.userId}`}>  <h2> {friend.fullName} </h2></Link>
+                    <div>
+
+                        <Link to={`/users/${friend.userId}`}>
+                            <div key={friend.userId}><h2> {friend.fullName} </h2></div>
+                        </Link>
+
                     </div>
                 )
             })}

@@ -38,6 +38,7 @@ export default function Community() {
         setDisplayUserList(searchResult);
     }
 
+
     return (
         <div className={"community"}>
             <h1> Cộng đồng </h1>
@@ -45,10 +46,15 @@ export default function Community() {
             {displayUserList.map((userCom, index) => {
                 return (
                     <div className={"communityItem"}>
-                    <Link to={"/users/"+ userCom.userId} ><h2>
+                    <Link to={"/users/"+ userCom.userId} style={{display:"flex", justifyContent:"space-between"}}>
+                        <div style={{display:"flex",alignItems:"center"}}>
+                        <img src={userCom.avatar} alt={userCom.fullName + "avatar"}/>
+                        <h2>
                             {userCom.fullName}
                         </h2>
+                        </div>
                     </Link>
+                        <button className={"button-send-friend-request"}> Thêm bạn </button>
                     </div>
                 )
             })}

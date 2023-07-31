@@ -66,7 +66,7 @@ export default function Header(props){
                 <i className="fas fa-bell header__icon"></i>
                 <div className="dropdown">
                     <div className="avatar-container">
-                        <img src="img/example-ava.jpg" alt="ava" className="avatar-img"/>
+                        <img src={user.avatar} alt="ava" className="avatar-img"/>
                         <div className="dropdown-content">
                             <Link to={`users/${user.userId}`}>
                                 <button className="dropdown-button">{user.fullName}</button>

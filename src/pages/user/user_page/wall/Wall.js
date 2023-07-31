@@ -379,7 +379,7 @@ export default function Wall() {
                                         <div className={"feedCardHeaderAction"}>
                                             <div className="feedCardHeaderName">
                                                 <Link
-                                                    to={`/user/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
+                                                    to={`/users/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
 
 

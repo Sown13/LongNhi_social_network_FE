@@ -313,7 +313,7 @@ export default function NewFeed(props) {
                     <br/>
                     <hr/>
                     {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
-                        const images = postImages[item.postId] || [];
+                        const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
                         return (
@@ -334,6 +334,7 @@ export default function NewFeed(props) {
                                         <p>{item.textContent}</p>
                                     </div>
                                     <div className={"feedCardImage"}>
+                                        {console.log("list ảnh" + JSON.stringify(item))}
                                         {images.length > 0 && <ImageList images={item.postImageList}/>}
                                     </div>
                                 </div>

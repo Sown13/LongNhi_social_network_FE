@@ -24,6 +24,7 @@ import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
+import NewFeedTest from "./pages/user/home/NewFeedTest";
 
 
 
@@ -100,7 +101,7 @@ function App() {
                 <Route path="/" element={<PrivateRoute element={<MainPage/>} role="USER" loggedIn={loggedIn}
                                                        user={user} setLoggedIn={setLoggedIn}
                                                        setUser={setUser}></PrivateRoute>}>
-                    <Route path={""} element={<NewFeed></NewFeed>}></Route>
+                    <Route path={""} element={<NewFeedTest></NewFeedTest>}></Route>
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
                     <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>

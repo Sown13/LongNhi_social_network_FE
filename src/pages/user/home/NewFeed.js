@@ -52,6 +52,8 @@ export default function NewFeed(props) {
 
     const [postList, setPostList] = useState([]);
 
+    const [commentList, setCommentList] = useState([]);
+
 
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
@@ -181,6 +183,70 @@ export default function NewFeed(props) {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
+
+// like comment
+
+
+    const likeComment = async (commentId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
+            const commentReaction = {
+                dateCreated: new Date().toISOString(),
+                reactionType: 'like',
+                comment_comment_id: commentId,
+                user_user_id: user.userId,
+            };
+            console.log("co o day khong", commentReaction)
+            await axios.post(apiUrl, commentReaction);
+            console.log(commentReaction)
+            setIsLiked(true);
+            if (!likedPosts.includes(commentId)) {
+                setLikedPosts([...likedPosts, commentId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, commentId]));
+            }
+        } catch (error) {
+            console.error("Error liking comment:", error);
+        }
+    };
+
+
+    const unlikeComment = async (commentId) => {
+        try {
+            // Call the API to delete the like reaction
+            const apiUrl = `http://localhost:8080/comment-reactions/delete/comment/${commentId}/user/${user.userId}`; // Replace with your actual API endpoint
+
+            await axios.post(apiUrl);
+
+            // Update the local state to reflect the new like status
+            setIsLiked(false);
+
+            // Update the likedPosts state and remove the commentId from it
+            if (likedPosts.includes(commentId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== commentId)));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const handleToggleLikeComment = async (commentId) => {
+        console.log(commentId)
+        try {
+            if (likedPosts.includes(commentId)) {
+                // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
+                await unlikeComment(commentId);
+            } else {
+                // Bình luận chưa được thích, nên ta muốn thích nó
+                await likeComment(commentId);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
 
@@ -259,7 +325,8 @@ export default function NewFeed(props) {
                     <br/>
                     <div className={"newFeedWelcome"}>
                         <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
-                        <h2 style={{margin:"30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
+                        <h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long
+                            Nhi và mọi người biết
                             nhé :) </h2>
                     </div>
 
@@ -269,50 +336,50 @@ export default function NewFeed(props) {
                             <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
                         </div>
                         <div className={"input-head"}>
-                                <Formik
-                                    initialValues={{
-                                        textContent: "",
-                                        authorizedView: "PUBLIC",
-                                    }}
-                                    onSubmit={(values, {resetForm}) => {
-                                        handleSubmit({
-                                                textContent: values.textContent,
-                                                price: values.authorizedView,
-                                            }
-                                        );
-                                        resetForm();
-                                    }
-                                    }
-                                >
-                                    <Form className="feedCardTextarea-head">
-                                        <Field
-                                            name="textContent"
-                                            as="textarea"
-                                            placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                            <Formik
+                                initialValues={{
+                                    textContent: "",
+                                    authorizedView: "PUBLIC",
+                                }}
+                                onSubmit={(values, {resetForm}) => {
+                                    handleSubmit({
+                                            textContent: values.textContent,
+                                            price: values.authorizedView,
+                                        }
+                                    );
+                                    resetForm();
+                                }
+                                }
+                            >
+                                <Form className="feedCardTextarea-head">
+                                    <Field
+                                        name="textContent"
+                                        as="textarea"
+                                        placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                                    />
+                                    <div className={"input-action"}>
+                                        <input
+                                            className={"input-file-button"}
+                                            type="file"
+                                            name="file"
+                                            onChange={(event) => {
+                                                const files = event.currentTarget.files;
+                                                console.log("file  " + JSON.stringify(files));
+                                                setImagePost(files);
+                                            }}
+                                            multiple
                                         />
-                                        <div className={"input-action"}>
-                                            <input
-                                                className={"input-file-button"}
-                                                type="file"
-                                                name="file"
-                                                onChange={(event) => {
-                                                    const files = event.currentTarget.files;
-                                                    console.log("file  " + JSON.stringify(files));
-                                                    setImagePost(files);
-                                                }}
-                                                multiple
-                                            />
-                                            <button className={"input-file-button-submit"} type="submit">Đăng</button>
-                                        </div>
-                                    </Form>
-                                </Formik>
+                                        <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                    </div>
+                                </Form>
+                            </Formik>
                         </div>
                     </div>
 
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -381,13 +448,20 @@ export default function NewFeed(props) {
                                                     <div>
                                                         <div className={"comment-container-avatar"}>
                                                             <img src={comment.user.avatar} alt={"avt"}/>
-                                                           <Link to={`/users/${comment.user.userId}`}> <h2> {comment.user.fullName} </h2></Link>
+                                                            <Link to={`/users/${comment.user.userId}`}>
+                                                                <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span> 20 </span>
-                                                        <button> like</button>
+                                                        <span>{comment.reactionCount}</span>
+                                                        <button
+                                                            style={{ color: likedPosts.includes(comment.commentId) ? '#ff8c00' : '#808080' }}
+                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
+                                                        >
+                                                            <FontAwesomeIcon icon={faThumbsUp}></FontAwesomeIcon>
+                                                            {likedPosts.includes(comment.commentId) ? "Like" : ""}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </li>

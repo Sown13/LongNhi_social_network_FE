@@ -497,7 +497,11 @@ export default function Wall() {
                                                         <button onClick={()=>deleteComment(comment.commentId)}>
                                                           xoa
                                                         </button>
-
+                                                        <button>
+                                                            <Link to={`edit/${comment.commentId}`}>
+                                                             Sửa
+                                                            </Link>
+                                                        </button>
 
                                                     </div>
                                                     <div>

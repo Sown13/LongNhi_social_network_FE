@@ -25,6 +25,7 @@ import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequ
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
 import NewFeedTest from "./pages/user/home/NewFeedTest";
+import EditComment from "./pages/user/user_page/wall/EditComment";
 
 
 
@@ -112,6 +113,7 @@ function App() {
                     <Route path={"favorite"} element={<Favorite/>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
+                        <Route path={"edit/:commentId"} element={<EditComment/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>

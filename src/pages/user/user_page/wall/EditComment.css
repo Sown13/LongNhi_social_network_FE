@@ -1,0 +1,44 @@
+.edit-comment {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.edit-comment h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.edit-comment form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-comment label {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.edit-comment textarea {
+    height: 200px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.edit-comment button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-comment button:hover {
+    background-color: #0069d9;
+}

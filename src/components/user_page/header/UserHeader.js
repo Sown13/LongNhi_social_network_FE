@@ -39,7 +39,7 @@ export default function UserHeader() {
     //
     // useEffect(() => {
     //     Promise.all([
-    //         axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`),
+    //         axios.get(`http://localhost:8080/user-friends/relationship/${user.userId}/${userId}`),
     //         axios.get(`http://localhost:8080/users/${userId}`)
     //     ])
     //         .then(([relationshipResponse, targetUserResponse]) => {
@@ -50,7 +50,7 @@ export default function UserHeader() {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8080/user-friends/have-been-friend/" + user.userId + "/" + userId).then((response) => {
+        axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
             if (response.data != null) {
                 setRelationShip(JSON.stringify(response.data));
             }

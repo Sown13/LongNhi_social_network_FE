@@ -57,7 +57,7 @@ export default function Wall() {
 
     useEffect(() => {
         if (user.userId !== userId) {
-            axios.get(`http://localhost:8080/user-friends/have-been-friend/${user.userId}/${userId}`).then((res) => {
+            axios.get(`http://localhost:8080/user-friends/relationship/${user.userId}/${userId}`).then((res) => {
                 if (res.data !== null && res.data.accepted === true) {
                     setRelation(true)
                 } else {

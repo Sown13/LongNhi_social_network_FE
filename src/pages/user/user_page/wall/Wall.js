@@ -11,6 +11,8 @@ import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
+import Modal from 'react-modal';
+import EditPost from "./update_post/EditPost";
 
 export default function Wall() {
 
@@ -37,6 +39,10 @@ export default function Wall() {
     const [imagePost, setImagePost] = useState([]);
 
     const [relation, setRelation] = useState(false);
+
+    /* Show Edit Form */
+    const [showModal, setShowModal] = useState(false);
+    const  [idEditPost, setIdEditPost] = useState(null);
 
 
     const [user, setUser] = useState(() => {
@@ -68,7 +74,7 @@ export default function Wall() {
     }, [userId]);
 
 
-    const handleSubmit = async (values,) => {
+    const handleSubmit = async (values) => {
         window.event.preventDefault();
 
         if (!imagePost || !imagePost.length) {
@@ -314,6 +320,12 @@ export default function Wall() {
 
     return (
         <div className="newFeed">
+            <div>
+                <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>
+                    <EditPost id={idEditPost}   onClose={() => setShowModal(false)} ></EditPost>
+                    <button onClick={() => setShowModal(false)}>Close Modal</button>
+                </Modal>
+            </div>
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -368,7 +380,9 @@ export default function Wall() {
                     .map((item, index) => {
                         const images = item.postImageList || []
                         return (
+
                             <div className="feedCard">
+
                                 <div className="feedCardHeader">
                                     <div className="feedCardAvatar">
                                         <img
@@ -417,7 +431,14 @@ export default function Wall() {
                                                                             Xoá bài viết
                                                                         </Menu.Item>
                                                                         <Menu.Item key="1"
-                                                                                   onClick={() => navigate(`/post/${item.postId}`) }>
+                                                                                   // onClick={() => navigate(`/post/${item.postId}`) }
+                                                                             onClick = {() =>
+                                                                             {
+                                                                                 setShowModal(true);
+                                                                                 setIdEditPost(item.postId);
+                                                                             }
+                                                                             }
+                                                                            >
                                                                             Sửa bài viết
                                                                         </Menu.Item>
                                                                     </Menu>

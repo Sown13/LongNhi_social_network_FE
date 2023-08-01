@@ -84,7 +84,7 @@ export default function Wall() {
                     const post = {postId: res.data.postId};
                 }
             ).then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
                     setPostList(response.data);
                     setPostListDisplay(response.data);
                     console.log("test dang bai ---------------- " + response.data)

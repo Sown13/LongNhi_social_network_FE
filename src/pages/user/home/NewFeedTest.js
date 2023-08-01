@@ -53,6 +53,7 @@ export default function NewFeedTest(props) {
     const [postList, setPostList] = useState([]);
 
     const [commentList, setListComment] = useState([]);
+    const [postListDisplay, setPostListDisplay] = useState([]);
 
 
 
@@ -64,18 +65,35 @@ export default function NewFeedTest(props) {
             console.log("du lieu tu server", JSON.stringify(response.data))
         })
     }, [])
-    const handleComment = (values, {resetForm}) => {
-        axios.post('http://localhost:8080/comments', values)
-            .then((res) => {
-                 axios.get(`http://localhost:8080/posts/user/${user.userId}`).then(resPose=>{
-                    setListPosts(resPose.data)
-                });
+    const handleComment = async (values, { resetForm, setError }) => {
+        try {
+            const response = await axios.post('http://localhost:8080/comments', values);
+            const comment = response.data;
+            const postResponse = await axios.get(`http://localhost:8080/posts/${user.userId}`);
+            const comments = [comment, ...postResponse.data];
+            setListComment(comments);
+            Swal.fire({
+                icon: 'success',
+                timer: 2000
+            });
+        } catch (error) {
+            console.log(error);
+            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+        } finally {
+            resetForm();
+        }
+    };
+    const deleteComment = (commentId) => {
+        axios.delete(`http://localhost:8080/comments/${commentId}`)
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user/" + user.userId).then(res=>{
+                    setPostList(res.data);
+                    setPostListDisplay(res.data);
+                    console.log("test dang bai ---------------- " + res.data)
+                })
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
-            })
-            .finally(() => {
-                resetForm();
             });
     }
 
@@ -315,7 +333,8 @@ export default function NewFeedTest(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.reverse().
+                    filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = postImages[item.postId] || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -394,7 +413,7 @@ export default function NewFeedTest(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    {commentList.map(comment => {
+                                    {item.commentList.map(comment => {
                                         return (
                                             <li>
                                                 <div className={"comment-container"}>
@@ -405,6 +424,7 @@ export default function NewFeedTest(props) {
                                                                 <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
+                                                        <button onClick={() => deleteComment(comment.commentId)}>Xóa</button>
                                                     </div>
                                                     <div>
                                                         <span> 20 </span>
@@ -414,6 +434,28 @@ export default function NewFeedTest(props) {
                                             </li>
                                         )
                                     })}
+                                    {
+                                        commentList.map(comment=>{
+                                            return(
+                                                <li>
+                                                    <div className={"comment-container"}>
+                                                        <div>
+                                                            <div className={"comment-container-avatar"}>
+                                                                <img src={comment.user.avatar} alt={"avt"}/>
+                                                                <Link to={`/users/${comment.user.userId}`}>
+                                                                    <h2> {comment.user.fullName} </h2></Link>
+                                                            </div>
+                                                            <p> {comment.textContent} </p>
+                                                        </div>
+                                                        <div>
+                                                            <span> 20 </span>
+                                                            <button> like</button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })
+                                    }
                                     {/*<li>*/}
                                     {/*    <div className={"comment-container"}>*/}
                                     {/*        <div>*/}

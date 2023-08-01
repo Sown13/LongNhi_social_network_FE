@@ -22,10 +22,10 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import Test from "./pages/Test";
-import MyComponent from "./pages/Test";
+
 import NewFeedTest from "./pages/user/home/NewFeedTest";
-import EditComment from "./pages/user/user_page/wall/EditComment";
+import EditComment from "./pages/user/user_page/comment/EditComment";
+import PostList from "./pages/user/user_page/wall/PostList";
 
 
 

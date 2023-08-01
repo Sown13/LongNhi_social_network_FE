@@ -386,58 +386,14 @@ export default function NewFeed(props) {
                                                         <p> {comment.textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span> 20 </span>
+                                                        <span> {comment.commentReactionList.length} </span>
                                                         <button> like</button>
                                                     </div>
                                                 </div>
                                             </li>
                                         )
                                     })}
-                                    {/*<li>*/}
-                                    {/*    <div className={"comment-container"}>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className={"comment-container-avatar"}>*/}
-                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
-                                    {/*                <h2> name </h2>*/}
-                                    {/*            </div>*/}
-                                    {/*            <p> bình luận </p>*/}
-                                    {/*        </div>*/}
-                                    {/*        <div>*/}
-                                    {/*            <span> số like </span>*/}
-                                    {/*            <button> like</button>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*</li>*/}
-                                    {/*<li>*/}
-                                    {/*    <div className={"comment-container"}>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className={"comment-container-avatar"}>*/}
-                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
-                                    {/*                <h2> name </h2>*/}
-                                    {/*            </div>*/}
-                                    {/*            <p> bình luận </p>*/}
-                                    {/*        </div>*/}
-                                    {/*        <div>*/}
-                                    {/*            <span> số like </span>*/}
-                                    {/*            <button> like</button>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*</li>*/}
-                                    {/*<li>*/}
-                                    {/*    <div className={"comment-container"}>*/}
-                                    {/*        <div>*/}
-                                    {/*            <div className={"comment-container-avatar"}>*/}
-                                    {/*                <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
-                                    {/*                <h2> name </h2>*/}
-                                    {/*            </div>*/}
-                                    {/*            <p> bình luận </p>*/}
-                                    {/*        </div>*/}
-                                    {/*        <div>*/}
-                                    {/*            <span> số like </span>*/}
-                                    {/*            <button> like</button>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*</li>*/}
+
                                 </ul>
                             </div>
                         )

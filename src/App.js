@@ -137,7 +137,7 @@ function PrivateRoute({element: Component, role, loggedIn, user, ...rest}) {
     if(!loggedIn && role === "GUEST"){
         return <>{Component}</>;
     }
-    else if (!loggedIn && Component !== <Guest></Guest>){
+    else if (!loggedIn){
         return <Navigate to="/login" replace/>;
     }
     else if (loggedIn && user.role !== role && role === "GUEST") {

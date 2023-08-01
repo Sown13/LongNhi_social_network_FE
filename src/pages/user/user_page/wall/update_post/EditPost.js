@@ -6,7 +6,6 @@ import "./EditPost.css";
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../../../../../firebase";
-
 const EditPost = (props) => {
     const postId= props.id;
     const [post, setPost] = useState({textContent: ""});
@@ -69,8 +68,6 @@ const EditPost = (props) => {
             };
 
             await axios.put(`http://localhost:8080/posts/${postId}`,postData).then(
-                    alert("Cập nhật bài viết thành công!")
-
             ).then(
                 Promise.all(imagesDelete.map(image => {
                     return axios.delete(`http://localhost:8080/post-images/${image.postImageId}`);
@@ -106,16 +103,19 @@ const EditPost = (props) => {
                         setImgUrlAdd(downloadURLs);
                         const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
                         console.log(imageData);
-                        axios.post("http://localhost:8080/post-images/list", imageData);
-
+                        axios.post("http://localhost:8080/post-images/list", imageData)
                     }).catch((error) => {
                         alert(error);
                     });
 
                 }
             ).then(()=>{
-                alert('Hoàn tất');
-                props.onClose();
+                setImages([]);
+                setImagesAdd([]);
+                setImagesDelete([]);
+                setImgUrlAdd([]);
+
+                props.onClose()
             })
         } catch (err) {
             console.error("Error submitting form:", err);

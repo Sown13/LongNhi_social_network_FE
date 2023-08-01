@@ -4,11 +4,14 @@ import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
 import Swal from "sweetalert2";
 import {Dropdown, Menu} from "antd";
+import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
+import {storage} from "../../../../firebase";
 
 export default function UpdateForm() {
     const {userId} = useParams();
     const [user, setUser] = useState({});
     const navigate = useNavigate();
+    const [imgUrl, setImgUrl] = useState(null)
 
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
@@ -18,42 +21,52 @@ export default function UpdateForm() {
         });
     }, []);
 
-    const handleAvatarChange = (event) => {
-        const file = event.target.files[0];
-        setUser((prevUser) => ({ ...prevUser, avatar: file }));
-    };
+    const handleUpdateUser = async (values) => {
+        try {
+            const avatarFile = user.avatar;
+            const backgroundFile = user.background;
 
-    const handleBackgroundChange = (event) => {
-        const file = event.target.files[0];
-        setUser((prevUser) => ({ ...prevUser, background: file }));
-    };
+            // Check if avatar and background files are selected
+            if (!avatarFile || !backgroundFile) {
+                console.error("Please select both avatar and background files.");
+                return;
+            }
 
-    const handleUpdateUser = (values) => {
-        const formData = new FormData();
-        formData.append("avatar", user.avatar);
-        formData.append("background", user.background);
-        formData.append("accountName", values.accountName);
-        formData.append("email", values.email);
-        // Tiếp tục thêm các trường dữ liệu khác vào formData
+            // Upload avatar and background images to Firebase Storage
+            const avatarStorageRef = ref(storage, `avatars/${avatarFile.name}`);
+            const backgroundStorageRef = ref(storage, `backgrounds/${backgroundFile.name}`);
 
-        axios
-            .put(`http://localhost:8080/users/${userId}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            })
-            .then((response) => {
-                setUser(response.data);
-                Swal.fire({
-                    icon: "success",
-                    timer: 1200,
-                    showConfirmButton: false,
-                    confirmButtonColor: "#fff",
-                });
+            const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarFile);
+            const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundFile);
+
+            await Promise.all([avatarUploadTask, backgroundUploadTask]);
+
+            // Get download URLs
+            const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
+            const backgroundDownloadURL = await getDownloadURL(backgroundUploadTask.snapshot.ref);
+
+            // Update user data with download URLs
+            const updatedUser = {
+                ...values,
+                avatar: avatarDownloadURL,
+                background: backgroundDownloadURL,
+            };
+
+            // Send updated user data to the server
+            await axios.put(`http://localhost:8080/users/${userId}`, updatedUser);
+
+            setUser(updatedUser);
+            Swal.fire({
+                icon: "success",
+                timer: 1200,
+                showConfirmButton: false,
+                confirmButtonColor: "#fff",
             });
+        } catch (error) {
+            console.error("Error updating user:", error);
+            // Handle error if needed
+        }
     };
-
-
 
     return (
         <>
@@ -67,7 +80,6 @@ export default function UpdateForm() {
                         <table>
                             <tbody>
                             <tr>
-
                                 <td colSpan={2}>
                                     <div className="user-about-container">
                                         <Dropdown
@@ -78,8 +90,14 @@ export default function UpdateForm() {
                                                         <input
                                                             type="file"
                                                             name="background"
-                                                            accept="image/*"
-                                                            onChange={handleBackgroundChange}
+                                                            onChange={(event) => {
+                                                                const file = event.target.files[0];
+                                                                // Lưu file vào state
+                                                                setUser((prevUser) => ({
+                                                                    ...prevUser,
+                                                                    background: file
+                                                                }));
+                                                            }}
                                                         />
                                                     </Menu.Item>
                                                     <Menu.Item key="2">Xem ảnh nền</Menu.Item>
@@ -103,11 +121,17 @@ export default function UpdateForm() {
                                                                 <input
                                                                     type="file"
                                                                     name="avatar"
-                                                                    accept="image/*"
-                                                                    onChange={handleAvatarChange}
+                                                                    onChange={(event) => {
+                                                                        const file = event.currentTarget.files;
+                                                                        // Lưu file vào state
+                                                                        setUser((prevUser) => ({
+                                                                            ...prevUser,
+                                                                            avatar: file
+                                                                        }));
+                                                                    }}
                                                                 />
                                                             </Menu.Item>
-                                                            <Menu.Item key="1">
+                                                            <Menu.Item key="2">
                                                                 Xem ảnh đại diện
                                                             </Menu.Item>
                                                         </Menu>

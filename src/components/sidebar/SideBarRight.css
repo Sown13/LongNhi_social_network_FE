@@ -1,6 +1,6 @@
 .sideBarRight {
     position: sticky;
-    top: 0;
+    top: 56px;
     width: 300px;
     height: 100vh;
     display: flex;
@@ -9,7 +9,7 @@
     justify-content: flex-start;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -37,15 +37,15 @@
 .friend-list {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 0px;
+    padding: 5px;
+    border-radius: 4px;
     background-color: #f5f5f5;
 }
 
 .friend-avatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 10px;
@@ -61,8 +61,8 @@
     flex-grow: 1;
 }
 
-.friend-details h2 {
-    font-size: 14px;
+.friend-details h3 {
+    font-size: 13px;
     font-weight: bold;
     color: #333;
     margin: 0;
@@ -73,7 +73,7 @@
     color: #ffffff;
     text-transform: uppercase;
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: 50%;
     background-color: #58b44e;
 }
 
@@ -87,7 +87,7 @@
 
 .sideBarRight-content::-webkit-scrollbar-thumb {
     background-color: #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .friend-list:hover {

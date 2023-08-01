@@ -54,7 +54,7 @@ export default function SideBarRight() {
                             <img src={friend.avatar} alt={"icon"}/>
                         </div>
                         <div className={"friend-details"}>
-                            <Link to={`/users/${friend.userId}`}><h2> {friend.fullName} </h2></Link>
+                            <Link to={`/users/${friend.userId}`}><h3> {friend.fullName} </h3></Link>
                         </div>
                         <div className={"friend-status-online"}> on</div>
                     </div>

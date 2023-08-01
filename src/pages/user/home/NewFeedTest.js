@@ -53,9 +53,6 @@ export default function NewFeedTest(props) {
     const [postList, setPostList] = useState([]);
 
     const [commentList, setListComment] = useState([]);
-    const [postListDisplay, setPostListDisplay] = useState([]);
-
-
 
 
 
@@ -65,20 +62,21 @@ export default function NewFeedTest(props) {
             console.log("du lieu tu server", JSON.stringify(response.data))
         })
     }, [])
-    const handleComment = async (values, { resetForm, setError }) => {
+    const handleComment = async (values, {resetForm, setError}) => {
         try {
-            const response = await axios.post('http://localhost:8080/comments', values);
-            const comment = response.data;
-            const postResponse = await axios.get(`http://localhost:8080/posts/${user.userId}`);
-            const comments = [comment, ...postResponse.data];
-            setListComment(comments);
+            await axios.post('http://localhost:8080/comments', values).then(()=>{
+                axios.get(`http://localhost:8080/posts/user/${userId.length}`).then(res=>{
+                    setPostList(res.data)
+                });
+            })
+
             Swal.fire({
                 icon: 'success',
                 timer: 2000
             });
         } catch (error) {
             console.log(error);
-            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
         } finally {
             resetForm();
         }
@@ -86,11 +84,10 @@ export default function NewFeedTest(props) {
     const deleteComment = (commentId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
-                axios.get("http://localhost:8080/posts/user/" + user.userId).then(res=>{
-                    setPostList(res.data);
-                    setPostListDisplay(res.data);
-                    console.log("test dang bai ---------------- " + res.data)
-                })
+                axios.get(`http://localhost:8080/posts/user/${user.userId}`)
+                    .then(res => {
+                        setPostList(res.data);
+                    })
             })
             .catch(error => {
                 console.log(error);
@@ -333,8 +330,7 @@ export default function NewFeedTest(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.reverse().
-                    filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = postImages[item.postId] || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -424,7 +420,9 @@ export default function NewFeedTest(props) {
                                                                 <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
-                                                        <button onClick={() => deleteComment(comment.commentId)}>Xóa</button>
+                                                        <button
+                                                            onClick={() => deleteComment(comment.commentId, user.userId)}>Xóa
+                                                        </button>
                                                     </div>
                                                     <div>
                                                         <span> 20 </span>
@@ -435,8 +433,8 @@ export default function NewFeedTest(props) {
                                         )
                                     })}
                                     {
-                                        commentList.map(comment=>{
-                                            return(
+                                        commentList.map(comment => {
+                                            return (
                                                 <li>
                                                     <div className={"comment-container"}>
                                                         <div>

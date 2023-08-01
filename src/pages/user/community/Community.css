@@ -15,7 +15,7 @@
     background-color: #fff;
     width: 400px;
     margin: auto;
-    border-radius: 10px;
+    border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -28,7 +28,7 @@
 .community input[name="search"] {
     padding: 8px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px;
     width: 100%;
     margin-bottom: 10px;
     font-size: 16px;
@@ -44,7 +44,7 @@
     margin-bottom: 10px;
     border: 1px solid #ddd;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: #f5f5f5;
 }
 

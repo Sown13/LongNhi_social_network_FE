@@ -101,7 +101,7 @@ export default function UserHeader() {
         })
     }
 
-    const sendFriendRequest = (relationship) => {
+    const sendFriendRequest = () => {
         const friendRequest = {
             sourceUser: {
                 userId: user.userId
@@ -115,20 +115,23 @@ export default function UserHeader() {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
-            if (response.data != null) {
-                setRelationShip(response.data);
-            } else {
-                setRelationShip({
-                    accepted: false,
-                    friendType: "",
-                    sourceUser: {
-                        userId: 0
-                    },
-                    targetUser: {
-                        userId: 0
-                    }
-                })
-            }
+            axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                if (response.data != null) {
+                    setRelationShip(response.data);
+                } else {
+                    setRelationShip({
+                        accepted: false,
+                        friendType: "",
+                        sourceUser: {
+                            userId: 0
+                        },
+                        targetUser: {
+                            userId: 0
+                        }
+                    })
+                }
+                console.log("relation   " + relationship)
+            })
         })
     }
 
@@ -237,22 +240,6 @@ export default function UserHeader() {
                 </div>
                 <div className={"user-misc"}></div>
                 <div className={"user-action"}>
-                    {/*{console.log("user.userId= " + user.userId + "userId = " + userId + "relation" + relationship.accepted)}*/}
-                    {/*{console.log("relation userID---" + relationship.sourceUser.userId)}*/}
-                    {/*{user.userId == userId ?*/}
-                    {/*    <button> Chỉnh sửa trang cá nhân </button>*/}
-                    {/*    : relationship.accepted ?*/}
-                    {/*        <div>*/}
-                    {/*            <button onClick={deleteFriend}> Xóa Bạn</button>*/}
-                    {/*            <button> Nhắn tin</button>*/}
-                    {/*        </div>*/}
-                    {/*        : <div>*/}
-                    {/*            <button onClick={sendFriendRequest}> Thêm bạn</button>*/}
-                    {/*            <button> Nhắn tin</button>*/}
-                    {/*        </div>}*/}
-
-                    {/*<UserAction relationship={relationship} user={user}></UserAction>*/}
-
                     {console.log("check relation --" + JSON.stringify(relationship))}
                     {relationship.sourceUser.userId === 0 ?
                         user.userId == userId ?
@@ -261,7 +248,7 @@ export default function UserHeader() {
                                 <button> Nhắn tin</button>
                             </div>
                             : <div>
-                                <button onClick={() => sendFriendRequest(relationship)}> Thêm bạn</button>
+                                <button onClick={() => sendFriendRequest()}> Thêm bạn</button>
                                 <button> Nhắn tin</button>
                             </div>
                         : relationship.accepted === true ?

@@ -38,7 +38,7 @@ export default function FriendRequestList(){
 
     return (
         <div className={"friendRequestList"}>
-            <h1> Lời mời kết bạn bạn đã gửi </h1>
+            <h1> Lời mời kết bạn bạn đã nhận </h1>
             {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((friend,index) =>{
                 return (
                     <div>

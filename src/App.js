@@ -22,10 +22,7 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import Test from "./pages/Test";
-import MyComponent from "./pages/Test";
-import Modal from "react-modal";
-import EditPost from "./pages/user/update_status/EditPost";
+
 
 
 
@@ -111,7 +108,6 @@ function App() {
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"favorite"} element={<Favorite/>}></Route>
-                    <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>

@@ -9,7 +9,7 @@
     justify-content: flex-start;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -39,7 +39,7 @@
     align-items: center;
     margin-bottom: 0px;
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: #f5f5f5;
 }
 
@@ -73,7 +73,7 @@
     color: #ffffff;
     text-transform: uppercase;
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: 50%;
     background-color: #58b44e;
 }
 
@@ -87,7 +87,7 @@
 
 .sideBarRight-content::-webkit-scrollbar-thumb {
     background-color: #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .friend-list:hover {

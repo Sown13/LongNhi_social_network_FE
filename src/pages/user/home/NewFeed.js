@@ -258,8 +258,9 @@ export default function NewFeed(props) {
                 <div className="newFeedContainer">
                     <br/>
                     <div className={"newFeedWelcome"}>
-                        <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
-                        <h2 style={{margin:"30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long Nhi và mọi người biết
+                        {/*<img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>*/}
+                        <h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long
+                            Nhi và mọi người biết
                             nhé :) </h2>
                     </div>
 
@@ -269,50 +270,50 @@ export default function NewFeed(props) {
                             <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
                         </div>
                         <div className={"input-head"}>
-                                <Formik
-                                    initialValues={{
-                                        textContent: "",
-                                        authorizedView: "PUBLIC",
-                                    }}
-                                    onSubmit={(values, {resetForm}) => {
-                                        handleSubmit({
-                                                textContent: values.textContent,
-                                                price: values.authorizedView,
-                                            }
-                                        );
-                                        resetForm();
-                                    }
-                                    }
-                                >
-                                    <Form className="feedCardTextarea-head">
-                                        <Field
-                                            name="textContent"
-                                            as="textarea"
-                                            placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                            <Formik
+                                initialValues={{
+                                    textContent: "",
+                                    authorizedView: "PUBLIC",
+                                }}
+                                onSubmit={(values, {resetForm}) => {
+                                    handleSubmit({
+                                            textContent: values.textContent,
+                                            price: values.authorizedView,
+                                        }
+                                    );
+                                    resetForm();
+                                }
+                                }
+                            >
+                                <Form className="feedCardTextarea-head">
+                                    <Field
+                                        name="textContent"
+                                        as="textarea"
+                                        placeholder={`  ${user.fullName} ơi, bạn đang nghĩ gì thế?...`}
+                                    />
+                                    <div className={"input-action"}>
+                                        <input
+                                            className={"input-file-button"}
+                                            type="file"
+                                            name="file"
+                                            onChange={(event) => {
+                                                const files = event.currentTarget.files;
+                                                // console.log("file  " + JSON.stringify(files));
+                                                setImagePost(files);
+                                            }}
+                                            multiple
                                         />
-                                        <div className={"input-action"}>
-                                            <input
-                                                className={"input-file-button"}
-                                                type="file"
-                                                name="file"
-                                                onChange={(event) => {
-                                                    const files = event.currentTarget.files;
-                                                    // console.log("file  " + JSON.stringify(files));
-                                                    setImagePost(files);
-                                                }}
-                                                multiple
-                                            />
-                                            <button className={"input-file-button-submit"} type="submit">Đăng</button>
-                                        </div>
-                                    </Form>
-                                </Formik>
+                                        <button className={"input-file-button-submit"} type="submit">Đăng</button>
+                                    </div>
+                                </Form>
+                            </Formik>
                         </div>
                     </div>
 
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView==="public" || post.authorizedView==="friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter((post,index) => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -339,22 +340,23 @@ export default function NewFeed(props) {
                                     </div>
                                 </div>
                                 <div className="feedCardActions">
-                                    <div style={{}}>
-                                        <p> {item.postReactionList.length}</p>
-                                    </div>
-                                    <div>
-                                        <button>{isPostVisible ? item.accountName : ''}</button>
-                                        {/*{console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}*/}
-                                        {/*{if(item.postReactionList.filter(postReaction => postReaction.user.userId =  )}*/}
+                                    <div className={"div-like"}>
+                                        <span>{item.postReactionList.length}</span>
                                         <button
-                                            // className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
                                             className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                             {isPostVisible ? '' : ''}
                                         </button>
-                                        <button>Chia sẻ</button>
+                                    </div>
+                                    <div className={"div-comment"}>
+                                        <span>{item.commentList.length} </span>
+                                        <span><label htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
+                                    </div>
+                                    <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
+                                        <span> 20  </span>
+                                        <i className="fas fa-share fa-lg" style={{fontSize: "27px"}}></i>
                                     </div>
                                 </div>
                                 <ul style={{marginTop: "16px"}}>
@@ -366,7 +368,7 @@ export default function NewFeed(props) {
                                                     <h2> {user.fullName} </h2>
                                                 </div>
                                                 <div className={"comment-input"}>
-                                                    <textarea placeholder={"Viết bình luận.."}/>
+                                                    <textarea id={`comment-textarea-${index}`} placeholder={"Viết bình luận.."}/>
                                                 </div>
                                                 <div>
                                                     <button className={"comment-submit"}>Bình Luận</button>
@@ -381,7 +383,8 @@ export default function NewFeed(props) {
                                                     <div>
                                                         <div className={"comment-container-avatar"}>
                                                             <img src={comment.user.avatar} alt={"avt"}/>
-                                                           <Link to={`/users/${comment.user.userId}`}> <h2> {comment.user.fullName} </h2></Link>
+                                                            <Link to={`/users/${comment.user.userId}`}>
+                                                                <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
                                                     </div>

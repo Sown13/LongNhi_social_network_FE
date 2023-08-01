@@ -134,13 +134,16 @@ function PrivateRoute({element: Component, role, loggedIn, user, ...rest}) {
     // console.log("user: " + JSON.stringify(user));
     // console.log("role: " + role);
 
-    if (!loggedIn) {
+    if(!loggedIn && role === "GUEST"){
+        return <>{Component}</>;
+    }
+    else if (!loggedIn && Component !== <Guest></Guest>){
         return <Navigate to="/login" replace/>;
     }
-    if (role && user && user.role !== role && role === "GUEST") {
+    else if (loggedIn && user.role !== role && role === "GUEST") {
         return <Navigate to="/" replace/>;
     }
-    if (role && user && user.role !== role && user.role !== "ADMIN") {
+    else if (loggedIn && user.role !== role && user.role !== "ADMIN") {
         return <Navigate to="/un-authorized" replace/>;
     }
 

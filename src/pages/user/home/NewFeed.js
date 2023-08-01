@@ -60,11 +60,9 @@ export default function NewFeed(props) {
         })
     }, [])
 
-    // useEffect(() => {
-    //     console.log("danh sach cac bai dang", listPosts)
-    //     console.log("Id cua user", user.userId)
-    //     console.log("danh sách các ảnh của bài viết", postImages)
-    // }, [listPosts]);
+    useEffect(() => {
+        console.log(localStorage.getItem(user));
+    }, []);
 
     // useEffect(() => {
     //     const fetchImagesForPost = async (postId) => {
@@ -252,6 +250,36 @@ export default function NewFeed(props) {
         });
     };
 
+    const showMoreComment = (index, currentIndex) => {
+        let restComment = "";
+        console.log(listPosts[index].commentList);
+        for(let i = currentIndex; i < listPosts[index].commentList.length && i < currentIndex+10;i++){
+            restComment += ` <li>
+                                                <div className={"comment-container"}>
+                                                    <div>
+                                                        <div className={"comment-container-avatar"}>
+                                                            <img src={listPosts[index].commentList[i].user.avatar} alt={"avt"}/>
+                                                            <Link to={"/users/"+ ${listPosts[index].commentList[i].user.userId}}>
+                                                                <h2> {listPosts[index].commentList[i].user.fullName} </h2></Link>
+                                                        </div>
+                                                        <p> {listPosts[index].commentList[i].textContent} </p>
+                                                    </div>
+                                                    <div>
+                                                        <span> {listPosts[index].commentList[i].commentReactionList.length} </span>
+                                                        <button> like</button>
+                                                    </div>
+                                                </div>
+                                            </li>`
+        }
+        if (listPosts[index].commentList.length > currentIndex+10){
+            restComment += "{item.commentList.length > 3 && <div id=\"rest-comment\"><a id={\"show-more\"}\n" +
+                "                                                                                              onClick={() => showMoreComment(index,currentIndex+3)}> Hiện\n" +
+                "                                        thêm... </a></div>}"
+        }
+        document.getElementById("rest-comment").innerHTML = restComment;
+
+    }
+
     return (
         <>
             <div className={"newFeed"}>
@@ -309,11 +337,10 @@ export default function NewFeed(props) {
                             </Formik>
                         </div>
                     </div>
-
-
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.filter((post,index) => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend")
+                        .map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -352,7 +379,8 @@ export default function NewFeed(props) {
                                     </div>
                                     <div className={"div-comment"}>
                                         <span>{item.commentList.length} </span>
-                                        <span><label htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
+                                        <span><label
+                                            htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
                                     </div>
                                     <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
                                         <span> 20  </span>
@@ -368,7 +396,8 @@ export default function NewFeed(props) {
                                                     <h2> {user.fullName} </h2>
                                                 </div>
                                                 <div className={"comment-input"}>
-                                                    <textarea id={`comment-textarea-${index}`} placeholder={"Viết bình luận.."}/>
+                                                    <textarea id={`comment-textarea-${index}`}
+                                                              placeholder={"Viết bình luận.."}/>
                                                 </div>
                                                 <div>
                                                     <button className={"comment-submit"}>Bình Luận</button>
@@ -376,7 +405,7 @@ export default function NewFeed(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    {item.commentList.map(comment => {
+                                    {item.commentList.slice(0, 3).map(comment => {
                                         return (
                                             <li>
                                                 <div className={"comment-container"}>
@@ -396,7 +425,9 @@ export default function NewFeed(props) {
                                             </li>
                                         )
                                     })}
-
+                                    {item.commentList.length > 3 && <div id="rest-comment"><a id={"show-more"}
+                                                                                              onClick={() => showMoreComment(index,3)}> Hiện
+                                        thêm... </a></div>}
                                 </ul>
                             </div>
                         )

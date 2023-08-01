@@ -11,6 +11,8 @@ import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
+import Modal from 'react-modal';
+import EditPost from "./update_post/EditPost";
 
 export default function Wall() {
 
@@ -37,6 +39,10 @@ export default function Wall() {
     const [imagePost, setImagePost] = useState([]);
 
     const [relation, setRelation] = useState(false);
+
+    /* Show Edit Form */
+    const [showModal, setShowModal] = useState(false);
+    const  [idEditPost, setIdEditPost] = useState(null);
 
 
     const [user, setUser] = useState(() => {
@@ -68,7 +74,7 @@ export default function Wall() {
     }, [userId]);
 
 
-    const handleSubmit = async (values,) => {
+    const handleSubmit = async (values) => {
         window.event.preventDefault();
 
         if (!imagePost || !imagePost.length) {
@@ -314,6 +320,12 @@ export default function Wall() {
 
     return (
         <div className="newFeed">
+            <div>
+                <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>
+                    <EditPost id={idEditPost}   onClose={() => setShowModal(false)} ></EditPost>
+                    <button onClick={() => setShowModal(false)}>Close Modal</button>
+                </Modal>
+            </div>
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -368,7 +380,9 @@ export default function Wall() {
                     .map((item, index) => {
                         const images = item.postImageList || []
                         return (
+
                             <div className="feedCard">
+
                                 <div className="feedCardHeader">
                                     <div className="feedCardAvatar">
                                         <img
@@ -385,50 +399,57 @@ export default function Wall() {
 
                                             {/*Nút thay đổi quyền hiển thị*/}
                                             <div className={"feedCardHeaderAction-button"}>
-                                            <div className={"change-view-button"}>
-                                                <button style={{borderRadius: "50%", padding: "1px"}} onClick={() => handleShowAlert(item.postId)}>
-                                                    {selectedOption === 'public' && <i className="fas fa-globe"></i>}
-                                                    {selectedOption === 'friend' &&
-                                                        <i className="fas fa-user-friends"></i>}
-                                                    {selectedOption === 'private' && <i className="fas fa-user"></i>}
-                                                </button>
-                                            </div>
-                                            <div className={"delete-post-button"}>
-                                                {
-                                                    Number(user.userId) !== Number(userId) ? (
-                                                        <Dropdown
-                                                            overlay={
-                                                                <Menu>
-                                                                    <Menu.Item key="1">
-                                                                        Ẩn bài viết
-                                                                    </Menu.Item>
-                                                                </Menu>
-                                                            }
-                                                            trigger={["click"]}
-                                                        >
-                                                            <span></span>
-                                                        </Dropdown>
-                                                    ) : (
-                                                        <Dropdown
-                                                            overlay={
-                                                                <Menu>
-                                                                    <Menu.Item key="1"
-                                                                               onClick={() => handleDeletePost(item.postId)}>
-                                                                        Xoá bài viết
-                                                                    </Menu.Item>
-                                                                    <Menu.Item key="1"
-                                                                               onClick={() => navigate(`/post/${item.postId}`) }>
-                                                                        Sửa bài viết
-                                                                    </Menu.Item>
-                                                                </Menu>
-                                                            }
-                                                            trigger={["click"]}
-                                                        >
-                                                            <span>•••</span>
-                                                        </Dropdown>
-                                                    )
-                                                }
-                                            </div>
+                                                <div className={"change-view-button"}>
+                                                    <button style={{borderRadius: "50%", padding: "1px"}} onClick={() => handleShowAlert(item.postId)}>
+                                                        {selectedOption === 'public' && <i className="fas fa-globe"></i>}
+                                                        {selectedOption === 'friend' &&
+                                                            <i className="fas fa-user-friends"></i>}
+                                                        {selectedOption === 'private' && <i className="fas fa-user"></i>}
+                                                    </button>
+                                                </div>
+                                                <div className={"delete-post-button"}>
+                                                    {
+                                                        Number(user.userId) !== Number(userId) ? (
+                                                            <Dropdown
+                                                                overlay={
+                                                                    <Menu>
+                                                                        <Menu.Item key="1">
+                                                                            Ẩn bài viết
+                                                                        </Menu.Item>
+                                                                    </Menu>
+                                                                }
+                                                                trigger={["click"]}
+                                                            >
+                                                                <span></span>
+                                                            </Dropdown>
+                                                        ) : (
+                                                            <Dropdown
+                                                                overlay={
+                                                                    <Menu>
+                                                                        <Menu.Item key="1"
+                                                                                   onClick={() => handleDeletePost(item.postId)}>
+                                                                            Xoá bài viết
+                                                                        </Menu.Item>
+                                                                        <Menu.Item key="1"
+                                                                                   // onClick={() => navigate(`/post/${item.postId}`) }
+                                                                             onClick = {() =>
+                                                                             {
+                                                                                 setShowModal(true);
+                                                                                 setIdEditPost(item.postId);
+                                                                             }
+                                                                             }
+                                                                            >
+                                                                            Sửa bài viết
+                                                                        </Menu.Item>
+                                                                    </Menu>
+                                                                }
+                                                                trigger={["click"]}
+                                                            >
+                                                                <span>•••</span>
+                                                            </Dropdown>
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
 

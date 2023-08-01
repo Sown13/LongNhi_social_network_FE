@@ -17,6 +17,7 @@ import UpdateForm from './UpdateForm';
 import {MDBIcon} from "mdbreact";
 import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
+import PasswordUserUpdate from "./UserPassUpdate";
 
 export default function UserAbout() {
     const {userId} = useParams()
@@ -40,10 +41,14 @@ export default function UserAbout() {
 
     // Rename the state variable to match the other component
     const [showUpdateForm, setShowUpdateForm] = useState(false);
+    const [showUpdatePass, setShowUpdatePass] = useState(false);
 
     // Add the trigger to open the modal
     const handleOpenUpdateForm = () => {
         setShowUpdateForm(true);
+    };
+    const handleOpenUpdatePassForm = () => {
+        setShowUpdatePass(true);
     };
 
     useEffect(() => {
@@ -63,7 +68,59 @@ export default function UserAbout() {
             <MDBContainer className="py-5">
 
                 <MDBRow>
+                    <MDBCol lg="4">
+
+
+                        {
+                            Number(user.userId) !== Number(userId) ? (
+                                    <MDBCard className="mb-4 mb-lg-0">
+                                    <MDBCardBody className="p-0">
+                                <MDBListGroup flush className="rounded-3">
+                                    <MDBListGroupItem
+                                        className="d-flex justify-content-between align-items-center p-3">
+                                        <MDBIcon fas icon="globe fa-lg text-warning"/>
+                                        <MDBCardText>https://mdbootstrap.com</MDBCardText>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem
+                                        className="d-flex justify-content-between align-items-center p-3">
+                                        <MDBIcon fab icon="github fa-lg" style={{color: '#333333'}}/>
+                                        <MDBCardText>mdbootstrap</MDBCardText>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem
+                                        className="d-flex justify-content-between align-items-center p-3">
+                                        <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>
+                                        <MDBCardText>@mdbootstrap</MDBCardText>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem
+                                        className="d-flex justify-content-between align-items-center p-3">
+                                        <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>
+                                        <MDBCardText>mdbootstrap</MDBCardText>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem
+                                        className="d-flex justify-content-between align-items-center p-3">
+                                        <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>
+                                        <MDBCardText>mdbootstrap</MDBCardText>
+                                    </MDBListGroupItem>
+                                </MDBListGroup>
+                            </MDBCardBody>
+                        </MDBCard>
+
+                            ) : (
+                                <MDBCard>
+                                    <MDBCard>
+                                        <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
+                                    </MDBCard>
+                                    <MDBCard>
+                                        <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
+                                    </MDBCard>
+                                </MDBCard>
+                            )
+                        }
+
+
+                    </MDBCol>
                     <MDBCol lg="8">
+
                         <MDBCard className="mb-4">
                             <MDBCardBody>
                                 <MDBRow>
@@ -142,47 +199,7 @@ export default function UserAbout() {
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
-                    <MDBCol lg="4">
-                        {/*<MDBCard className="mb-4 mb-lg-0">*/}
-                        {/*    <MDBCardBody className="p-0">*/}
-                        {/*        <MDBListGroup flush className="rounded-3">*/}
-                        {/*            <MDBListGroupItem*/}
-                        {/*                className="d-flex justify-content-between align-items-center p-3">*/}
-                        {/*                <MDBIcon fas icon="globe fa-lg text-warning"/>*/}
-                        {/*                <MDBCardText>https://mdbootstrap.com</MDBCardText>*/}
-                        {/*            </MDBListGroupItem>*/}
-                        {/*            <MDBListGroupItem*/}
-                        {/*                className="d-flex justify-content-between align-items-center p-3">*/}
-                        {/*                <MDBIcon fab icon="github fa-lg" style={{color: '#333333'}}/>*/}
-                        {/*                <MDBCardText>mdbootstrap</MDBCardText>*/}
-                        {/*            </MDBListGroupItem>*/}
-                        {/*            <MDBListGroupItem*/}
-                        {/*                className="d-flex justify-content-between align-items-center p-3">*/}
-                        {/*                <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>*/}
-                        {/*                <MDBCardText>@mdbootstrap</MDBCardText>*/}
-                        {/*            </MDBListGroupItem>*/}
-                        {/*            <MDBListGroupItem*/}
-                        {/*                className="d-flex justify-content-between align-items-center p-3">*/}
-                        {/*                <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>*/}
-                        {/*                <MDBCardText>mdbootstrap</MDBCardText>*/}
-                        {/*            </MDBListGroupItem>*/}
-                        {/*            <MDBListGroupItem*/}
-                        {/*                className="d-flex justify-content-between align-items-center p-3">*/}
-                        {/*                <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>*/}
-                        {/*                <MDBCardText>mdbootstrap</MDBCardText>*/}
-                        {/*            </MDBListGroupItem>*/}
-                        {/*        </MDBListGroup>*/}
-                        {/*    </MDBCardBody>*/}
-                        {/*</MDBCard>*/}
-                        <MDBCard>
 
-
-                            <MDBCard>
-                                <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
-                            </MDBCard>
-
-                        </MDBCard>
-                    </MDBCol>
                 </MDBRow>
 
             </MDBContainer>
@@ -190,10 +207,20 @@ export default function UserAbout() {
 
             <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
                 <ModalHeader closeButton>
-                    <ModalTitle>Chỉnh sửa thông tin cá nhân</ModalTitle>
+                    <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>
                 <ModalBody>
                     <UpdateForm></UpdateForm>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+            </Modal>
+
+            <Modal visible={showUpdatePass} onCancel={() => setShowUpdatePass(false)} footer={null} centered>
+                <ModalHeader closeButton>
+                    <ModalTitle>Đổi mật khẩu</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <PasswordUserUpdate></PasswordUserUpdate>
                 </ModalBody>
                 <ModalFooter></ModalFooter>
             </Modal>
@@ -201,3 +228,4 @@ export default function UserAbout() {
 
     );
 }
+

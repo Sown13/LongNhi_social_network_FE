@@ -147,31 +147,31 @@ export default function UpdateForm() {
 
                             </tr>
                             <tr>
-                                <td>Tên tài khoản</td>
+                                <td><strong>Tên tài khoản</strong></td>
                                 <Field type="text" name="accountName"/>
                             </tr>
                             <tr>
-                                <td>Email</td>
+                                <td><strong>Email</strong></td>
                                 <Field type="text" name={"email"}></Field>
                             </tr>
                             <tr>
-                                <td>Họ tên</td>
+                                <td><strong>Họ tên</strong></td>
                                 <Field type="text" name={"fullName"}></Field>
                             </tr>
                             <tr>
-                                <td>Số điện thoại</td>
+                                <td><strong>Số điện thoại</strong></td>
                                 <Field type="text" name={"phone"}></Field>
                             </tr>
                             <tr>
-                                <td>Sinh nhật</td>
+                                <td><strong>Sinh nhật</strong></td>
                                 <Field name={"birthday"} type="date" value={user.birthday}></Field>
                             </tr>
                             <tr>
-                                <td>Sở thích</td>
+                                <td><strong>Sở thích</strong></td>
                                 <Field type="text" name={"hobby"}></Field>
                             </tr>
                             <tr>
-                                <td>Địa chỉ</td>
+                                <td><strong>Địa chỉ</strong></td>
                                 <Field type="text" name={"address"} v></Field>
                             </tr>
                             <tr>

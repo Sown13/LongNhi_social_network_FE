@@ -58,15 +58,15 @@ export default function NewFeed(props) {
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
             setListPosts(response.data)
-            console.log("du lieu tu server", JSON.stringify(response.data))
+            // console.log("du lieu tu server", JSON.stringify(response.data))
         })
     }, [])
 
-    useEffect(() => {
-        console.log("danh sach cac bai dang", listPosts)
-        console.log("Id cua user", user.userId)
-        console.log("danh sách các ảnh của bài viết", postImages)
-    }, [listPosts]);
+    // useEffect(() => {
+    //     console.log("danh sach cac bai dang", listPosts)
+    //     console.log("Id cua user", user.userId)
+    //     console.log("danh sách các ảnh của bài viết", postImages)
+    // }, [listPosts]);
 
     // useEffect(() => {
     //     const fetchImagesForPost = async (postId) => {
@@ -122,7 +122,7 @@ export default function NewFeed(props) {
                 accountName: accountName,
                 reactionType: 'like'
             };
-            console.log(postReaction);
+            // console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
@@ -134,6 +134,10 @@ export default function NewFeed(props) {
             if (!likedPosts.includes(postId)) {
                 setLikedPosts([...likedPosts, postId]);
                 localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data)
+                    // console.log("du lieu tu server", JSON.stringify(response.data))
+                })
             }
         } catch (error) {
             console.error("Error:", error);
@@ -155,7 +159,7 @@ export default function NewFeed(props) {
                 reactionType: 'like'
 
             };
-            console.log(postReaction);
+            // console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
 
@@ -167,6 +171,10 @@ export default function NewFeed(props) {
                 setLikedPosts(likedPosts.filter((id) => id !== postId));
                 localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
             }
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+                // console.log("du lieu tu server", JSON.stringify(response.data))
+            })
         } catch (error) {
             console.error("Error:", error);
         }
@@ -186,7 +194,6 @@ export default function NewFeed(props) {
 
 // like comment
 
-
     const likeComment = async (commentId) => {
         try {
 
@@ -205,12 +212,16 @@ export default function NewFeed(props) {
                 setLikedPosts([...likedPosts, commentId]);
                 localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, commentId]));
             }
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+                // console.log("du lieu tu server", JSON.stringify(response.data))
+            })
         } catch (error) {
             console.error("Error liking comment:", error);
         }
     };
 
-
+// unLike comment
     const unlikeComment = async (commentId) => {
         try {
             // Call the API to delete the like reaction
@@ -220,17 +231,22 @@ export default function NewFeed(props) {
 
             // Update the local state to reflect the new like status
             setIsLiked(false);
-
             // Update the likedPosts state and remove the commentId from it
             if (likedPosts.includes(commentId)) {
                 setLikedPosts(likedPosts.filter((id) => id !== commentId));
                 localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== commentId)));
             }
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+                // console.log("du lieu tu server", JSON.stringify(response.data))
+            })
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
+
+    // xét like and unLike
     const handleToggleLikeComment = async (commentId) => {
         console.log(commentId)
         try {
@@ -245,6 +261,8 @@ export default function NewFeed(props) {
             console.error("Error:", error);
         }
     };
+
+
 
 
     const handleSubmit = async (values,) => {
@@ -262,8 +280,8 @@ export default function NewFeed(props) {
                 }
             ).then(() => {
                 axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
-                    setPostList(response.data);
-                    console.log("test dang bai ---------------- " + response.data)
+                    setPostList(response.data.reverse());
+                    // console.log("test dang bai ---------------- " + response.data)
                     Swal.fire({
                         icon: 'success',
                         timer: 2000
@@ -305,7 +323,7 @@ export default function NewFeed(props) {
             ).then(() => {
                     axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
                         setPostList(response.data);
-                        console.log("test dang bai ---------------- " + response.data)
+                        // console.log("test dang bai ---------------- " + response.data)
                         Swal.fire({
                             icon: 'success',
                             timer: 2000
@@ -364,7 +382,7 @@ export default function NewFeed(props) {
                                             name="file"
                                             onChange={(event) => {
                                                 const files = event.currentTarget.files;
-                                                console.log("file  " + JSON.stringify(files));
+                                                // console.log("file  " + JSON.stringify(files));
                                                 setImagePost(files);
                                             }}
                                             multiple
@@ -379,7 +397,7 @@ export default function NewFeed(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.reverse().filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -401,7 +419,7 @@ export default function NewFeed(props) {
                                         <p>{item.textContent}</p>
                                     </div>
                                     <div className={"feedCardImage"}>
-                                        {console.log("list ảnh" + JSON.stringify(item))}
+                                        {/*{console.log("list ảnh" + JSON.stringify(item))}*/}
                                         {images.length > 0 && <ImageList images={item.postImageList}/>}
                                     </div>
                                 </div>
@@ -411,7 +429,7 @@ export default function NewFeed(props) {
                                     </div>
                                     <div>
                                         <button>{isPostVisible ? item.accountName : ''}</button>
-                                        {console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}
+                                        {/*{console.log("test" + JSON.stringify(!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId)))}*/}
                                         {/*{if(item.postReactionList.filter(postReaction => postReaction.user.userId =  )}*/}
                                         <button
                                             // className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
@@ -454,13 +472,12 @@ export default function NewFeed(props) {
                                                         <p> {comment.textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span>{comment.reactionCount}</span>
+                                                        <span>{comment.commentReactionList.length}</span>
                                                         <button
-                                                            style={{ color: likedPosts.includes(comment.commentId) ? '#ff8c00' : '#808080' }}
+                                                            style={{color: likedPosts.includes(comment.commentId) ? '#ff8c00' : '#808080'}}
                                                             onClick={() => handleToggleLikeComment(comment.commentId)}
                                                         >
-                                                            <FontAwesomeIcon icon={faThumbsUp}></FontAwesomeIcon>
-                                                            {likedPosts.includes(comment.commentId) ? "Like" : ""}
+                                                            {likedPosts.includes(comment.commentId) ? "Like" : "Like"}
                                                         </button>
                                                     </div>
                                                 </div>

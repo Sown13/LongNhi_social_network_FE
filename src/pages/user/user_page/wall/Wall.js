@@ -11,12 +11,17 @@ import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
+import Modal from 'react-modal';
+import EditPost from "./update_post/EditPost";
 
 export default function Wall() {
 
     const navigate = useNavigate();
 
-    const [imgUrl, setImgUrl] = useState(null);
+    const [imgUrlNewPost, setImgUrlNewPost] = useState(null);
+    const [imagesNewPost, setImagesNewPost] = useState([]);
+    const [imagesAddNewPost, setImagesAddNewPost] = useState([]);
+    const [imagesDeleteNewPost, setImagesDeleteNewPost] = useState([]);
 
     const [dropDown, setDropDown] = useState(false)
 
@@ -27,16 +32,18 @@ export default function Wall() {
     const [postList, setPostList] = useState([]);
 
     const [postListDisplay, setPostListDisplay] = useState([]);
-
-    const [postImages, setPostImages] = useState([]);
-
+    
     const [isLiked, setIsLiked] = useState(false);
 
     const [likedPosts, setLikedPosts] = useState([]);
 
-    const [imagePost, setImagePost] = useState([]);
-
     const [relation, setRelation] = useState(false);
+
+
+    /* Show Edit Form */
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const [upLoadSuccess, setUpLoadSuccess] = useState(false);
+    const [idEditPost, setIdEditPost] = useState(null);
 
 
     const [user, setUser] = useState(() => {
@@ -68,10 +75,36 @@ export default function Wall() {
     }, [userId]);
 
 
-    const handleSubmit = async (values,) => {
+    const handleAddImageNewPost = (e) => {
+        const files = e.target.files;
+
+
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            const file = files[i];
+            reader.onload = (e) => {
+                setImagesNewPost((prevImages) => [...prevImages, {
+                    file :file,
+                    imgUrl : e.target.result}]
+                );
+
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDeleteImageNewPost = async (image) => {
+        setImagesNewPost(imagesNewPost.filter((item) => item !== image));
+        setImagesAddNewPost(imagesAddNewPost.filter((item)=>item !== image.file));
+        setImagesDeleteNewPost(imagesDeleteNewPost.concat(image));
+
+    };
+
+
+    const handleSubmitNewPost = async (values) => {
         window.event.preventDefault();
 
-        if (!imagePost || !imagePost.length) {
+        if (!imagesAddNewPost || !imagesAddNewPost.length) {
             const postData = {
                 user: {
                     userId: user.userId
@@ -97,8 +130,8 @@ export default function Wall() {
 
         const promises = [];
 
-        for (let i = 0; i < imagePost.length; i++) {
-            const file = imagePost[i];
+        for (let i = 0; i < imagesAddNewPost.length; i++) {
+            const file = imagesAddNewPost[i];
             const storageRef = ref(storage, `files/${file.name}`);
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
@@ -111,7 +144,7 @@ export default function Wall() {
             promises.push(promise);
         }
         Promise.all(promises).then((downloadURLs) => {
-            setImgUrl(downloadURLs);
+            setImgUrlNewPost(downloadURLs);
             const postData = {
                 user: {
                     userId: user.userId
@@ -135,12 +168,27 @@ export default function Wall() {
                         })
                     })
                 }
+            ).then(()=>{
+                setImagesNewPost([]);
+                setImagesAddNewPost([]);
+                setImagesDeleteNewPost([]);
+                setImgUrlNewPost([]);
+                }
             );
         }).catch((error) => {
             alert(error);
         });
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
+    useEffect(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                    // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                })
+
+    }, [showModalUpdate]);
+
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
             setPostList(response.data);
@@ -159,6 +207,9 @@ export default function Wall() {
             setUserInformationWall(response.data);
         })
     }, [userId])
+
+
+
 
     //Thông tin của vài thứ có trong trang này
     // useEffect(() => {
@@ -314,6 +365,33 @@ export default function Wall() {
 
     return (
         <div className="newFeed">
+            <div>
+                <Modal isOpen={showModalUpdate} onRequestClose={() => setShowModalUpdate(false)}>
+                    <EditPost id={idEditPost} onClose={
+                        () => {
+
+                            Swal.fire({
+                                title: 'Loading...',
+
+                                closeOnClickOutside : false,
+                                timer: 2000
+                            }).then(()=>{
+                                setShowModalUpdate(false);
+                                setUpLoadSuccess(!upLoadSuccess)
+                            }).then(()=>{
+                                Swal.fire({
+                                    title: 'Done',
+                                    icon: "success",
+                                    closeOnClickOutside : false,
+                                    timer: 1000
+                                })
+                            })
+                        }
+                    }></EditPost>
+                    <button onClick={() => setShowModalUpdate(false)}>Close Modal</button>
+                </Modal>
+            </div>
+
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -324,7 +402,7 @@ export default function Wall() {
                                 authorizedView: "PUBLIC",
                             }}
                             onSubmit={(values, {resetForm}) => {
-                                handleSubmit({
+                                handleSubmitNewPost({
                                         textContent: values.textContent,
                                         price: values.authorizedView,
                                     }
@@ -345,13 +423,26 @@ export default function Wall() {
                                         className={"input-file-button"}
                                         type="file"
                                         name="file"
-                                        onChange={(event) => {
-                                            const files = event.currentTarget.files;
-                                            console.log("file  " + JSON.stringify(files));
-                                            setImagePost(files);
+                                        onChange={(e) => {
+                                            handleAddImageNewPost(e);
+                                            const files = e.currentTarget.files;
+                                            setImagesAddNewPost([...imagesAddNewPost,...files]);
                                         }}
                                         multiple
                                     />
+                                    <div className="image-list">
+                                        {imagesNewPost.map((image) => (
+                                            <div key={image.id} className="image-item">
+                                                <img src={image.imgUrl} alt=""/>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeleteImageNewPost(image)}>
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+
                                     <button className={"input-file-button-submit-wall"} type="submit">Đăng</button>
                                 </div>
                             </Form>
@@ -368,7 +459,9 @@ export default function Wall() {
                     .map((item, index) => {
                         const images = item.postImageList || []
                         return (
+
                             <div className="feedCard">
+
                                 <div className="feedCardHeader">
                                     <div className="feedCardAvatar">
                                         <img
@@ -385,50 +478,59 @@ export default function Wall() {
 
                                             {/*Nút thay đổi quyền hiển thị*/}
                                             <div className={"feedCardHeaderAction-button"}>
-                                            <div className={"change-view-button"}>
-                                                <button style={{borderRadius: "50%", padding: "1px"}} onClick={() => handleShowAlert(item.postId)}>
-                                                    {selectedOption === 'public' && <i className="fas fa-globe"></i>}
-                                                    {selectedOption === 'friend' &&
-                                                        <i className="fas fa-user-friends"></i>}
-                                                    {selectedOption === 'private' && <i className="fas fa-user"></i>}
-                                                </button>
-                                            </div>
-                                            <div className={"delete-post-button"}>
-                                                {
-                                                    Number(user.userId) !== Number(userId) ? (
-                                                        <Dropdown
-                                                            overlay={
-                                                                <Menu>
-                                                                    <Menu.Item key="1">
-                                                                        Ẩn bài viết
-                                                                    </Menu.Item>
-                                                                </Menu>
-                                                            }
-                                                            trigger={["click"]}
-                                                        >
-                                                            <span></span>
-                                                        </Dropdown>
-                                                    ) : (
-                                                        <Dropdown
-                                                            overlay={
-                                                                <Menu>
-                                                                    <Menu.Item key="1"
-                                                                               onClick={() => handleDeletePost(item.postId)}>
-                                                                        Xoá bài viết
-                                                                    </Menu.Item>
-                                                                    <Menu.Item key="1"
-                                                                               onClick={() => navigate(`/post/${item.postId}`) }>
-                                                                        Sửa bài viết
-                                                                    </Menu.Item>
-                                                                </Menu>
-                                                            }
-                                                            trigger={["click"]}
-                                                        >
-                                                            <span>•••</span>
-                                                        </Dropdown>
-                                                    )
-                                                }
-                                            </div>
+                                                <div className={"change-view-button"}>
+                                                    <button style={{borderRadius: "50%", padding: "1px"}}
+                                                            onClick={() => handleShowAlert(item.postId)}>
+                                                        {selectedOption === 'public' &&
+                                                            <i className="fas fa-globe"></i>}
+                                                        {selectedOption === 'friend' &&
+                                                            <i className="fas fa-user-friends"></i>}
+                                                        {selectedOption === 'private' &&
+                                                            <i className="fas fa-user"></i>}
+                                                    </button>
+                                                </div>
+                                                <div className={"delete-post-button"}>
+                                                    {
+                                                        Number(user.userId) !== Number(userId) ? (
+                                                            <Dropdown
+                                                                overlay={
+                                                                    <Menu>
+                                                                        <Menu.Item key="1">
+                                                                            Ẩn bài viết
+                                                                        </Menu.Item>
+                                                                    </Menu>
+                                                                }
+                                                                trigger={["click"]}
+                                                            >
+                                                                <span></span>
+                                                            </Dropdown>
+                                                        ) : (
+                                                            <Dropdown
+                                                                overlay={
+                                                                    <Menu>
+                                                                        <Menu.Item key="1"
+                                                                                   onClick={() => handleDeletePost(item.postId)}>
+                                                                            Xoá bài viết
+                                                                        </Menu.Item>
+                                                                        <Menu.Item key="1"
+                                                                            // onClick={() => navigate(`/post/${item.postId}`) }
+                                                                                   onClick={() => {
+                                                                                       setShowModalUpdate(true);
+                                                                                       setIdEditPost(item.postId);
+                                                                                   }
+                                                                                   }
+                                                                        >
+                                                                            Sửa bài viết
+                                                                        </Menu.Item>
+                                                                    </Menu>
+                                                                }
+                                                                trigger={["click"]}
+                                                            >
+                                                                <span>•••</span>
+                                                            </Dropdown>
+                                                        )
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
 

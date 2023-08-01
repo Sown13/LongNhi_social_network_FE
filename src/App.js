@@ -24,6 +24,7 @@ import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
+import Modal from "react-modal";
 import EditPost from "./pages/user/update_status/EditPost";
 
 

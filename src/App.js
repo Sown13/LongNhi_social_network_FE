@@ -25,7 +25,7 @@ import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequ
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
 import EditPost from "./pages/user/update_status/EditPost";
-
+import UpdateForm from "./pages/user/user_page/about/UpdateForm";
 
 
 function App() {
@@ -103,7 +103,8 @@ function App() {
                                                        setUser={setUser}></PrivateRoute>}>
                     <Route path={""} element={<NewFeed></NewFeed>}></Route>
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
-                    <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
+                    <Route path={"friend-request-pending"}
+                           element={<FriendRequestPending></FriendRequestPending>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}></Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
@@ -125,6 +126,7 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
+
             </Routes>
         </div>
     );

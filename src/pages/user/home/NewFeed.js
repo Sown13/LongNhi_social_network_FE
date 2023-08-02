@@ -401,7 +401,6 @@ export default function NewFeed(props) {
                         .map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
-
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">

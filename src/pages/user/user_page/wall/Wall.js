@@ -13,6 +13,7 @@ import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
 import Modal from 'react-modal';
 import EditPost from "./update_post/EditPost";
+import CommentList from "../../../../components/comment/CommentList";
 
 export default function Wall() {
 
@@ -602,18 +603,13 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
-                <Outlet></Outlet>
-                <hr/>
                 {postListDisplay.length > 0 && postListDisplay
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
-                    .reverse()
                     .map((item, index) => {
                         const images = item.postImageList || []
                         return (
-
                             <div className="feedCard">
-
-                                <div className="feedCardHeader">
+                                <div className="feedCardHeader-wall">
                                     <div className="feedCardAvatar">
                                         <img
                                             src={item.user.avatar}
@@ -625,21 +621,19 @@ export default function Wall() {
                                                 <Link
                                                     to={`/users/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
-
-
                                             {/*Nút thay đổi quyền hiển thị*/}
                                             <div className={"feedCardHeaderAction-button"}>
-                                                <div className={"change-view-button"}>
-                                                    <button style={{borderRadius: "50%", padding: "1px"}}
-                                                            onClick={() => handleShowAlert(item.postId)}>
-                                                        {selectedOption === 'public' &&
-                                                            <i className="fas fa-globe"></i>}
-                                                        {selectedOption === 'friend' &&
-                                                            <i className="fas fa-user-friends"></i>}
-                                                        {selectedOption === 'private' &&
-                                                            <i className="fas fa-user"></i>}
-                                                    </button>
-                                                </div>
+                                                {/*<div className={"change-view-button"}>*/}
+                                                {/*    <button style={{borderRadius: "50%", padding: "1px"}}*/}
+                                                {/*            onClick={() => handleShowAlert(item.postId)} >*/}
+                                                {/*        {selectedOption === 'public' &&*/}
+                                                {/*            <i className="fas fa-globe"></i>}*/}
+                                                {/*        {selectedOption === 'friend' &&*/}
+                                                {/*            <i className="fas fa-user-friends"></i>}*/}
+                                                {/*        {selectedOption === 'private' &&*/}
+                                                {/*            <i className="fas fa-user"></i>}*/}
+                                                {/*    </button>*/}
+                                                {/*</div>*/}
                                                 <div className={"delete-post-button"}>
                                                     {
                                                         Number(user.userId) !== Number(userId) ? (
@@ -663,7 +657,7 @@ export default function Wall() {
                                                                                    onClick={() => handleDeletePost(item.postId)}>
                                                                             Xoá bài viết
                                                                         </Menu.Item>
-                                                                        <Menu.Item key="1"
+                                                                        <Menu.Item key="2"
                                                                             // onClick={() => navigate(`/post/${item.postId}`) }
                                                                                    onClick={() => {
                                                                                        setShowModalUpdate(true);
@@ -672,6 +666,10 @@ export default function Wall() {
                                                                                    }
                                                                         >
                                                                             Sửa bài viết
+                                                                        </Menu.Item>
+                                                                        <Menu.Item key="3"
+                                                                                   onClick={() => handleShowAlert(item.postId)}>
+                                                                            Hiển thị
                                                                         </Menu.Item>
                                                                     </Menu>
                                                                 }
@@ -685,7 +683,7 @@ export default function Wall() {
                                             </div>
                                         </div>
 
-                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>
+                                        <div className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">
@@ -697,17 +695,23 @@ export default function Wall() {
                                     </div>
                                 </div>
                                 <div className="feedCardActions">
-                                    <div style={{}}>
-                                        <p> {item.postReactionList.length}</p>
-                                    </div>
-                                    <div>
+                                    <div className={"div-like"}>
+                                        <span>{item.postReactionList.length}</span>
                                         <button
                                             className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                         </button>
-                                        <button>Chia sẻ</button>
+                                    </div>
+                                    <div className={"div-comment"}>
+                                        <span>{item.commentList.length} </span>
+                                        <span><label
+                                            htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
+                                    </div>
+                                    <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
+                                        <span> 20  </span>
+                                        <i className="fas fa-share fa-lg" style={{fontSize: "27px"}}></i>
                                     </div>
                                 </div>
                                 <ul style={{marginTop: "16px"}}>
@@ -729,9 +733,9 @@ export default function Wall() {
                                                         textContent: ""
                                                     }} onSubmit={handleComment}>
                                                         <Form>
-                                                            <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                            <Field as={"textarea"} id={`comment-textarea-${index}`} name={"textContent"} placeholder={"Viết bình luận.."}
                                                             />
-                                                            <button>Bình Luận</button>
+                                                            <button className={"comment-submit"}>Bình Luận</button>
                                                         </Form>
                                                     </Formik>
                                                 </div>
@@ -740,37 +744,7 @@ export default function Wall() {
                                             </div>
                                         </div>
                                     </li>
-                                    {item.commentList.map(comment => {
-                                        return (
-                                            <li>
-                                                <div className={"comment-container"}>
-                                                    <div>
-                                                        <div className={"comment-container-avatar"}>
-                                                            <img src={comment.user.avatar} alt={"avt"}/>
-                                                            <h2> {comment.user.fullName} </h2>
-                                                        </div>
-                                                        <p>{comment.textContent}</p>
-                                                        <button onClick={()=>deleteComment(comment.commentId)}>
-                                                          xoa
-                                                        </button>
-
-                                                        <Link to={`edit/${comment.commentId}`}>
-                                                            Sửa
-                                                        </Link>
-                                                    </div>
-                                                    <div>
-                                                        <span>{comment.commentReactionList.length}</span>
-                                                        <button
-                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
-                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
-                                                        >
-                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })}
+                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} />
                                 </ul>
                             </div>
                         )

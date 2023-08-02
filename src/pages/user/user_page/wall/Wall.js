@@ -95,10 +95,10 @@ export default function Wall() {
             })
             });
 
-            Swal.fire({
-                icon: 'success',
-                timer: 2000
-            });
+            // Swal.fire({
+            //     icon: '',
+            //     timer: 2000
+            // });
         } catch (error) {
             console.log(error);
             setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
@@ -741,6 +741,7 @@ export default function Wall() {
                                         </div>
                                     </li>
                                     {item.commentList.map(comment => {
+                                        const isCurrentUserComment = comment.user.userId === user.userId;
                                         return (
                                             <li>
                                                 <div className={"comment-container"}>
@@ -750,13 +751,26 @@ export default function Wall() {
                                                             <h2> {comment.user.fullName} </h2>
                                                         </div>
                                                         <p>{comment.textContent}</p>
-                                                        <button onClick={()=>deleteComment(comment.commentId)}>
-                                                          xoa
-                                                        </button>
+                                                        {isCurrentUserComment&&
+                                                            (
+                                                                <button onClick={()=>deleteComment(comment.commentId)}>
+                                                                    xoa
+                                                                </button>
+                                                            )
+                                                        }
 
-                                                        <Link to={`edit/${comment.commentId}`}>
-                                                            Sửa
-                                                        </Link>
+                                                          {isCurrentUserComment&&
+                                                            (
+
+                                                                <Link to={`edit/${comment.commentId}`}>
+                                                                    Sửa
+                                                                </Link>
+                                                            )
+                                                        }
+
+
+
+
                                                     </div>
                                                     <div>
                                                         <span>{comment.commentReactionList.length}</span>

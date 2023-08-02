@@ -25,8 +25,12 @@ import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequ
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
 import Modal from "react-modal";
-import EditPost from "./pages/user/update_status/EditPost";
 import UpdateForm from "./pages/user/user_page/about/UpdateForm";
+
+import NewFeedTest from "./pages/user/home/NewFeedTest";
+import EditComment from "./pages/user/user_page/wall/EditComment";
+import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
+
 
 
 function App() {
@@ -104,8 +108,7 @@ function App() {
                                                        setUser={setUser}></PrivateRoute>}>
                     <Route path={""} element={<NewFeed></NewFeed>}></Route>
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
-                    <Route path={"friend-request-pending"}
-                           element={<FriendRequestPending></FriendRequestPending>}></Route>
+                    <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}></Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
@@ -115,6 +118,7 @@ function App() {
                     <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
+                        <Route path={"edit/:commentId"} element={<EditComment/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>
@@ -127,7 +131,6 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" replace/> :
                     <Login setUser={setUser} setLoggedIn={setLoggedIn}/>}></Route>
                 <Route path="/register" element={loggedIn ? <Navigate to="/" replace/> : <Register/>}></Route>
-
             </Routes>
         </div>
     );

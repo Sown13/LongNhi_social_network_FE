@@ -32,18 +32,22 @@ export default function Wall() {
     const [postList, setPostList] = useState([]);
 
     const [postListDisplay, setPostListDisplay] = useState([]);
-    
+
     const [isLiked, setIsLiked] = useState(false);
 
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [relation, setRelation] = useState(false);
 
+    const [listPosts, setListPosts] = useState([]);
+    const [likedComment, setLikedComment] = useState([]);
+
 
     /* Show Edit Form */
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [upLoadSuccess, setUpLoadSuccess] = useState(false);
     const [idEditPost, setIdEditPost] = useState(null);
+
 
 
     const [user, setUser] = useState(() => {
@@ -61,6 +65,7 @@ export default function Wall() {
         }
         return loggedInUser;
     })
+
 
     useEffect(() => {
         if (user.userId !== userId) {
@@ -248,6 +253,16 @@ export default function Wall() {
         })
     }
 
+
+    // like bai post
+
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
@@ -265,8 +280,20 @@ export default function Wall() {
 
             await axios.post(apiUrl, postReaction);
 
+
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -292,6 +319,16 @@ export default function Wall() {
 
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -308,6 +345,83 @@ export default function Wall() {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
+
+   // like comment
+    useEffect(() => {
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
+    const likeComment = async (commentId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
+
+            await axios.post(apiUrl);
+            setIsLiked(true);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedComment.includes(commentId)) {
+                setLikedComment([...likedComment, commentId]);
+                localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
+            }
+
+
+        } catch (error) {
+            console.error("Error liking comment:", error);
+        }
+    };
+
+    // unLike comment
+    const unlikeComment = async (commentId) => {
+        try {
+            // Call the API to delete the like reaction
+            const apiUrl = `http://localhost:8080/comment-reactions/delete/comment/${commentId}/user/${user.userId}`; // Replace with your actual API endpoint
+
+            await axios.post(apiUrl);
+
+            // Update the local state to reflect the new like status
+            setIsLiked(false);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+
+            if (likedComment.includes(commentId)) {
+                setLikedComment(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    // xét like and unLike
+    const handleToggleLikeComment = async (commentId) => {
+        console.log(commentId)
+        try {
+            if (likedComment.includes(commentId)) {
+                // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
+                await unlikeComment(commentId);
+                setLikedComment(likedComment.filter((id) => id !== commentId));
+            } else {
+                // Bình luận chưa được thích, nên ta muốn thích nó
+                await likeComment(commentId);
+                setLikedComment([...likedComment, commentId]);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
 
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
@@ -551,7 +665,7 @@ export default function Wall() {
                                     </div>
                                     <div>
                                         <button
-                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
@@ -588,8 +702,13 @@ export default function Wall() {
                                                         <p> {comment.textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span> 20 </span>
-                                                        <button> like</button>
+                                                        <span>{comment.commentReactionList.length}</span>
+                                                        <button
+                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
+                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
+                                                        >
+                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </li>

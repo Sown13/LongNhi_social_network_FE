@@ -36,8 +36,6 @@ export default function NewFeed(props) {
 
     const [listPosts, setListPosts] = useState([]);
 
-    const [reactionCount, setReactionCount] = useState([]);
-
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -52,7 +50,7 @@ export default function NewFeed(props) {
 
     const [postList, setPostList] = useState([]);
 
-    const [commentList, setCommentList] = useState([]);
+    const [likedComment, setLikedComment] = useState([]);
 
 
     useEffect(() => {
@@ -125,20 +123,18 @@ export default function NewFeed(props) {
             // console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
-
             // Update the local state to reflect the new like status
             setIsLiked(true);
-
-
-            // Update the likedPosts state and store it in local storage
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+                // console.log("du lieu tu server", JSON.stringify(response.data))
+            })
             if (!likedPosts.includes(postId)) {
                 setLikedPosts([...likedPosts, postId]);
                 localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
-                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                    setListPosts(response.data)
-                    // console.log("du lieu tu server", JSON.stringify(response.data))
-                })
             }
+
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -165,16 +161,14 @@ export default function NewFeed(props) {
 
             // Update the local state to reflect the new like status
             setIsLiked(false);
-
-            // Update the likedPosts state and store it in local storage
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+            })
             if (likedPosts.includes(postId)) {
                 setLikedPosts(likedPosts.filter((id) => id !== postId));
                 localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
             }
-            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                setListPosts(response.data)
-                // console.log("du lieu tu server", JSON.stringify(response.data))
-            })
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -194,34 +188,34 @@ export default function NewFeed(props) {
 
 // like comment
 
+    useEffect(() => {
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
     const likeComment = async (commentId) => {
         try {
 
             const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
-            const commentReaction = {
-                dateCreated: new Date().toISOString(),
-                reactionType: 'like',
-                comment_comment_id: commentId,
-                user_user_id: user.userId,
-            };
-            console.log("co o day khong", commentReaction)
-            await axios.post(apiUrl, commentReaction);
-            console.log(commentReaction)
+
+            await axios.post(apiUrl);
             setIsLiked(true);
-            if (!likedPosts.includes(commentId)) {
-                setLikedPosts([...likedPosts, commentId]);
-                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, commentId]));
-            }
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
                 setListPosts(response.data)
-                // console.log("du lieu tu server", JSON.stringify(response.data))
             })
+            if (!likedComment.includes(commentId)) {
+                setLikedComment([...likedComment, commentId]);
+                localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
+            }
+
+
         } catch (error) {
             console.error("Error liking comment:", error);
         }
     };
 
-// unLike comment
+    // unLike comment
     const unlikeComment = async (commentId) => {
         try {
             // Call the API to delete the like reaction
@@ -231,15 +225,15 @@ export default function NewFeed(props) {
 
             // Update the local state to reflect the new like status
             setIsLiked(false);
-            // Update the likedPosts state and remove the commentId from it
-            if (likedPosts.includes(commentId)) {
-                setLikedPosts(likedPosts.filter((id) => id !== commentId));
-                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== commentId)));
-            }
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
                 setListPosts(response.data)
-                // console.log("du lieu tu server", JSON.stringify(response.data))
             })
+
+            if (likedComment.includes(commentId)) {
+                setLikedComment(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -250,20 +244,33 @@ export default function NewFeed(props) {
     const handleToggleLikeComment = async (commentId) => {
         console.log(commentId)
         try {
-            if (likedPosts.includes(commentId)) {
+            if (likedComment.includes(commentId)) {
                 // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
                 await unlikeComment(commentId);
+                setLikedComment(likedComment.filter((id) => id !== commentId));
             } else {
                 // Bình luận chưa được thích, nên ta muốn thích nó
                 await likeComment(commentId);
+                setLikedComment([...likedComment, commentId]);
             }
+
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
 
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
 
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
 
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
@@ -401,6 +408,7 @@ export default function NewFeed(props) {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
+
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">
@@ -474,10 +482,10 @@ export default function NewFeed(props) {
                                                     <div>
                                                         <span>{comment.commentReactionList.length}</span>
                                                         <button
-                                                            style={{color: likedPosts.includes(comment.commentId) ? '#ff8c00' : '#808080'}}
+                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
                                                             onClick={() => handleToggleLikeComment(comment.commentId)}
                                                         >
-                                                            {likedPosts.includes(comment.commentId) ? "Like" : "Like"}
+                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
                                                         </button>
                                                     </div>
                                                 </div>

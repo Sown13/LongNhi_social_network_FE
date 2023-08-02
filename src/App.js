@@ -22,11 +22,14 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-
 import Test from "./pages/Test";
 import MyComponent from "./pages/Test";
+import Modal from "react-modal";
+import UpdateForm from "./pages/user/user_page/about/UpdateForm";
+
 import NewFeedTest from "./pages/user/home/NewFeedTest";
 import EditComment from "./pages/user/user_page/wall/EditComment";
+import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 
 
 
@@ -103,7 +106,7 @@ function App() {
                 <Route path="/" element={<PrivateRoute element={<MainPage/>} role="USER" loggedIn={loggedIn}
                                                        user={user} setLoggedIn={setLoggedIn}
                                                        setUser={setUser}></PrivateRoute>}>
-                    <Route path={""} element={<NewFeedTest></NewFeedTest>}></Route>
+                    <Route path={""} element={<NewFeed></NewFeed>}></Route>
                     <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
                     <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
@@ -112,6 +115,7 @@ function App() {
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"favorite"} element={<Favorite/>}></Route>
+                    <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
                         <Route path={"edit/:commentId"} element={<EditComment/>}></Route>

@@ -21,6 +21,10 @@ export default function Wall() {
     const {commentId} = useParams();
 
     const [imgUrl, setImgUrl] = useState(null);
+    const [imgUrlNewPost, setImgUrlNewPost] = useState(null);
+    const [imagesNewPost, setImagesNewPost] = useState([]);
+    const [imagesAddNewPost, setImagesAddNewPost] = useState([]);
+    const [imagesDeleteNewPost, setImagesDeleteNewPost] = useState([]);
 
     const [dropDown, setDropDown] = useState(false)
 
@@ -32,13 +36,9 @@ export default function Wall() {
 
     const [postListDisplay, setPostListDisplay] = useState([]);
 
-    const [postImages, setPostImages] = useState([]);
-
     const [isLiked, setIsLiked] = useState(false);
 
     const [likedPosts, setLikedPosts] = useState([]);
-
-    const [imagePost, setImagePost] = useState([]);
 
     const [relation, setRelation] = useState(false);
 
@@ -49,9 +49,14 @@ export default function Wall() {
         textContent:""
     });
 
+    const [listPosts, setListPosts] = useState([]);
+    const [likedComment, setLikedComment] = useState([]);
+
+
     /* Show Edit Form */
-    const [showModal, setShowModal] = useState(false);
-    const  [idEditPost, setIdEditPost] = useState(null);
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const [upLoadSuccess, setUpLoadSuccess] = useState(false);
+    const [idEditPost, setIdEditPost] = useState(null);
 
 
     const [user, setUser] = useState(() => {
@@ -103,10 +108,36 @@ export default function Wall() {
     };
 
 
-    const handleSubmit = async (values) => {
+    const handleAddImageNewPost = (e) => {
+        const files = e.target.files;
+
+
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            const file = files[i];
+            reader.onload = (e) => {
+                setImagesNewPost((prevImages) => [...prevImages, {
+                    file :file,
+                    imgUrl : e.target.result}]
+                );
+
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDeleteImageNewPost = async (image) => {
+        setImagesNewPost(imagesNewPost.filter((item) => item !== image));
+        setImagesAddNewPost(imagesAddNewPost.filter((item)=>item !== image.file));
+        setImagesDeleteNewPost(imagesDeleteNewPost.concat(image));
+
+    };
+
+
+    const handleSubmitNewPost = async (values) => {
         window.event.preventDefault();
 
-        if (!imagePost || !imagePost.length) {
+        if (!imagesAddNewPost || !imagesAddNewPost.length) {
             const postData = {
                 user: {
                     userId: user.userId
@@ -132,8 +163,8 @@ export default function Wall() {
 
         const promises = [];
 
-        for (let i = 0; i < imagePost.length; i++) {
-            const file = imagePost[i];
+        for (let i = 0; i < imagesAddNewPost.length; i++) {
+            const file = imagesAddNewPost[i];
             const storageRef = ref(storage, `files/${file.name}`);
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
@@ -146,7 +177,7 @@ export default function Wall() {
             promises.push(promise);
         }
         Promise.all(promises).then((downloadURLs) => {
-            setImgUrl(downloadURLs);
+            setImgUrlNewPost(downloadURLs);
             const postData = {
                 user: {
                     userId: user.userId
@@ -170,12 +201,27 @@ export default function Wall() {
                         })
                     })
                 }
+            ).then(()=>{
+                setImagesNewPost([]);
+                setImagesAddNewPost([]);
+                setImagesDeleteNewPost([]);
+                setImgUrlNewPost([]);
+                }
             );
         }).catch((error) => {
             alert(error);
         });
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
+    useEffect(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                    // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                })
+
+    }, [showModalUpdate]);
+
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
             setPostList(response.data);
@@ -187,7 +233,6 @@ export default function Wall() {
     const handleShowDropDown = () => {
         setDropDown(!dropDown); // Khi bấm vào thì đảo ngược trạng thái
     };
-
 
     //Thông tin của 1 người
     useEffect(() => {
@@ -247,6 +292,16 @@ export default function Wall() {
             });
     }
 
+
+    // like bai post
+
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
@@ -266,6 +321,17 @@ export default function Wall() {
 
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -291,6 +357,16 @@ export default function Wall() {
 
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -307,6 +383,83 @@ export default function Wall() {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
+
+   // like comment
+    useEffect(() => {
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
+    const likeComment = async (commentId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
+
+            await axios.post(apiUrl);
+            setIsLiked(true);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedComment.includes(commentId)) {
+                setLikedComment([...likedComment, commentId]);
+                localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
+            }
+
+
+        } catch (error) {
+            console.error("Error liking comment:", error);
+        }
+    };
+
+    // unLike comment
+    const unlikeComment = async (commentId) => {
+        try {
+            // Call the API to delete the like reaction
+            const apiUrl = `http://localhost:8080/comment-reactions/delete/comment/${commentId}/user/${user.userId}`; // Replace with your actual API endpoint
+
+            await axios.post(apiUrl);
+
+            // Update the local state to reflect the new like status
+            setIsLiked(false);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+
+            if (likedComment.includes(commentId)) {
+                setLikedComment(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    // xét like and unLike
+    const handleToggleLikeComment = async (commentId) => {
+        console.log(commentId)
+        try {
+            if (likedComment.includes(commentId)) {
+                // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
+                await unlikeComment(commentId);
+                setLikedComment(likedComment.filter((id) => id !== commentId));
+            } else {
+                // Bình luận chưa được thích, nên ta muốn thích nó
+                await likeComment(commentId);
+                setLikedComment([...likedComment, commentId]);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
 
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
@@ -365,13 +518,31 @@ export default function Wall() {
     return (
         <div className="newFeed">
             <div>
+                <Modal isOpen={showModalUpdate} onRequestClose={() => setShowModalUpdate(false)}>
+                    <EditPost id={idEditPost} onClose={
+                        () => {
+
+                            Swal.fire({
+                                title: 'Loading...',
+
+                                closeOnClickOutside : false,
+                                timer: 2000
+                            }).then(()=>{
+                                setShowModalUpdate(false);
+                                setUpLoadSuccess(!upLoadSuccess)
+                            }).then(()=>{
+                                Swal.fire({
+                                    title: 'Done',
+                                    icon: "success",
+                                    closeOnClickOutside : false,
+                                    timer: 1000
+                                })
+                            })
+                        }
+                    }></EditPost>
+                    <button onClick={() => setShowModalUpdate(false)}>Close Modal</button>
+                </Modal>
             </div>
-            {/*<div>*/}
-            {/*    <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>*/}
-            {/*        <EditPost id={idEditPost}   onClose={() => setShowModal(false)} ></EditPost>*/}
-            {/*        <button onClick={() => setShowModal(false)}>Close Modal</button>*/}
-            {/*    </Modal>*/}
-            {/*</div>*/}
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -382,7 +553,7 @@ export default function Wall() {
                                 authorizedView: "PUBLIC",
                             }}
                             onSubmit={(values, {resetForm}) => {
-                                handleSubmit({
+                                handleSubmitNewPost({
                                         textContent: values.textContent,
                                         price: values.authorizedView,
                                     }
@@ -403,13 +574,26 @@ export default function Wall() {
                                         className={"input-file-button"}
                                         type="file"
                                         name="file"
-                                        onChange={(event) => {
-                                            const files = event.currentTarget.files;
-                                            console.log("file  " + JSON.stringify(files));
-                                            setImagePost(files);
+                                        onChange={(e) => {
+                                            handleAddImageNewPost(e);
+                                            const files = e.currentTarget.files;
+                                            setImagesAddNewPost([...imagesAddNewPost,...files]);
                                         }}
                                         multiple
                                     />
+                                    <div className="image-list">
+                                        {imagesNewPost.map((image) => (
+                                            <div key={image.id} className="image-item">
+                                                <img src={image.imgUrl} alt=""/>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeleteImageNewPost(image)}>
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+
                                     <button className={"input-file-button-submit-wall"} type="submit">Đăng</button>
                                 </div>
                             </Form>
@@ -446,11 +630,14 @@ export default function Wall() {
                                             {/*Nút thay đổi quyền hiển thị*/}
                                             <div className={"feedCardHeaderAction-button"}>
                                                 <div className={"change-view-button"}>
-                                                    <button style={{borderRadius: "50%", padding: "1px"}} onClick={() => handleShowAlert(item.postId)}>
-                                                        {selectedOption === 'public' && <i className="fas fa-globe"></i>}
+                                                    <button style={{borderRadius: "50%", padding: "1px"}}
+                                                            onClick={() => handleShowAlert(item.postId)}>
+                                                        {selectedOption === 'public' &&
+                                                            <i className="fas fa-globe"></i>}
                                                         {selectedOption === 'friend' &&
                                                             <i className="fas fa-user-friends"></i>}
-                                                        {selectedOption === 'private' && <i className="fas fa-user"></i>}
+                                                        {selectedOption === 'private' &&
+                                                            <i className="fas fa-user"></i>}
                                                     </button>
                                                 </div>
                                                 <div className={"delete-post-button"}>
@@ -477,14 +664,13 @@ export default function Wall() {
                                                                             Xoá bài viết
                                                                         </Menu.Item>
                                                                         <Menu.Item key="1"
-                                                                                   // onClick={() => navigate(`/post/${item.postId}`) }
-                                                                             onClick = {() =>
-                                                                             {
-                                                                                 setShowModal(true);
-                                                                                 setIdEditPost(item.postId);
-                                                                             }
-                                                                             }
-                                                                            >
+                                                                            // onClick={() => navigate(`/post/${item.postId}`) }
+                                                                                   onClick={() => {
+                                                                                       setShowModalUpdate(true);
+                                                                                       setIdEditPost(item.postId);
+                                                                                   }
+                                                                                   }
+                                                                        >
                                                                             Sửa bài viết
                                                                         </Menu.Item>
                                                                     </Menu>
@@ -516,7 +702,7 @@ export default function Wall() {
                                     </div>
                                     <div>
                                         <button
-                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
@@ -573,8 +759,13 @@ export default function Wall() {
                                                         </Link>
                                                     </div>
                                                     <div>
-                                                        <span> 20 </span>
-                                                        <button> like</button>
+                                                        <span>{comment.commentReactionList.length}</span>
+                                                        <button
+                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
+                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
+                                                        >
+                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </li>

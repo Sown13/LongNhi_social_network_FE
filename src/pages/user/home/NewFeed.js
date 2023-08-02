@@ -36,8 +36,6 @@ export default function NewFeed(props) {
 
     const [listPosts, setListPosts] = useState([]);
 
-    const [reactionCount, setReactionCount] = useState([]);
-
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -51,6 +49,8 @@ export default function NewFeed(props) {
     const [imgUrl, setImgUrl] = useState(null);
 
     const [postList, setPostList] = useState([]);
+
+    const [likedComment, setLikedComment] = useState([]);
 
 
     useEffect(() => {
@@ -123,12 +123,12 @@ export default function NewFeed(props) {
             // console.log(postReaction);
 
             await axios.post(apiUrl, postReaction);
-
             // Update the local state to reflect the new like status
             setIsLiked(true);
-
-
-            // Update the likedPosts state and store it in local storage
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+                // console.log("du lieu tu server", JSON.stringify(response.data))
+            })
             if (!likedPosts.includes(postId)) {
                 setLikedPosts([...likedPosts, postId]);
                 localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
@@ -159,8 +159,9 @@ export default function NewFeed(props) {
 
             // Update the local state to reflect the new like status
             setIsLiked(false);
-
-            // Update the likedPosts state and store it in local storage
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+            })
             if (likedPosts.includes(postId)) {
                 setLikedPosts(likedPosts.filter((id) => id !== postId));
                 localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
@@ -181,6 +182,93 @@ export default function NewFeed(props) {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
+
+// like comment
+
+    useEffect(() => {
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
+    const likeComment = async (commentId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
+
+            await axios.post(apiUrl);
+            setIsLiked(true);
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+            })
+            if (!likedComment.includes(commentId)) {
+                setLikedComment([...likedComment, commentId]);
+                localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
+            }
+
+
+        } catch (error) {
+            console.error("Error liking comment:", error);
+        }
+    };
+
+    // unLike comment
+    const unlikeComment = async (commentId) => {
+        try {
+            // Call the API to delete the like reaction
+            const apiUrl = `http://localhost:8080/comment-reactions/delete/comment/${commentId}/user/${user.userId}`; // Replace with your actual API endpoint
+
+            await axios.post(apiUrl);
+
+            // Update the local state to reflect the new like status
+            setIsLiked(false);
+            axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                setListPosts(response.data)
+            })
+
+            if (likedComment.includes(commentId)) {
+                setLikedComment(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    // xét like and unLike
+    const handleToggleLikeComment = async (commentId) => {
+        console.log(commentId)
+        try {
+            if (likedComment.includes(commentId)) {
+                // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
+                await unlikeComment(commentId);
+                setLikedComment(likedComment.filter((id) => id !== commentId));
+            } else {
+                // Bình luận chưa được thích, nên ta muốn thích nó
+                await likeComment(commentId);
+                setLikedComment([...likedComment, commentId]);
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
+
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
 
@@ -258,7 +346,7 @@ export default function NewFeed(props) {
                 <div className="newFeedContainer">
                     <br/>
                     <div className={"newFeedWelcome"}>
-                        {/*<img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>*/}
+                        <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
                         <h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long
                             Nhi và mọi người biết
                             nhé :) </h2>
@@ -313,7 +401,7 @@ export default function NewFeed(props) {
 
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.filter((post,index) => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
@@ -389,8 +477,13 @@ export default function NewFeed(props) {
                                                         <p> {comment.textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span> {comment.commentReactionList.length} </span>
-                                                        <button> like</button>
+                                                        <span>{comment.commentReactionList.length}</span>
+                                                        <button
+                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
+                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
+                                                        >
+                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </li>

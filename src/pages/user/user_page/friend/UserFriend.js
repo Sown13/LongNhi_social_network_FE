@@ -29,20 +29,40 @@ export default function UserFriend() {
     const [displayFriendList, setDisplayFriendList] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/user-friends/users/" + userId).then((response) => {
-            let result = response.data;
-            let friendListResult = [];
-            console.log(result);
-            for (let i = 0; i < result.length; i++) {
-                if (result[i].sourceUser.userId == userId) {
-                    friendListResult.push(result[i].targetUser);
-                    console.log(" result " + result[i])
-                } else if (result[i].targetUser.userId == userId) {
-                    friendListResult.push(result[i].sourceUser);
+        axios.get("http://localhost:8080/user-friends/being-friend/" + user.userId + "/" + userId).then((response) => {
+            if (response.status === 204) {
+                let result = response.data;
+                console.log("du lieu tra ve",result)
+                let friendListResult = [];
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].sourceUser.userId === userId) {
+                        friendListResult.push(result[i].targetUser);
+                        console.log(" result " + result[i])
+                    } else if (result[i].targetUser.userId === userId) {
+                        friendListResult.push(result[i].sourceUser);
+                    }
                 }
+            }else  {
+                axios.get("http://localhost:8080/user-friends/users/" + userId).then((response) => {
+                    console.log("userId", userId)
+                    let result = response.data;
+                    let friendListResult = [];
+                    console.log(result);
+                    for (let i = 0; i < result.length; i++) {
+                        if (result[i].sourceUser.userId == userId) {
+                            friendListResult.push(result[i].targetUser);
+                            console.log(" result " + result[i])
+                        } else if (result[i].targetUser.userId == userId) {
+                            friendListResult.push(result[i].sourceUser);
+                        }
+                    }
+                    setFriendList(friendListResult);
+                    setDisplayFriendList(friendListResult);
+                })
+
             }
-            setFriendList(friendListResult);
-            setDisplayFriendList(friendListResult);
+
+
         })
     }, [])
 
@@ -59,18 +79,24 @@ export default function UserFriend() {
             <h1> Bạn bè </h1>
             <input name={"search"} type={"text"} onChange={search} placeholder={"Nhập tên"}/>
             <button> Tìm</button>
-            {displayFriendList.map((friend, index) => {
-                console.log("user" + friend)
-                return (
-                    <div>
 
-                        <Link to={`/users/${friend.userId}`}>
-                            <div key={friend.userId}><h2> {friend.fullName} </h2></div>
-                        </Link>
+            {displayFriendList.length === 0 ? (
+                <div>Bạn không có quyền xem danh sách bạn bè của người này  </div>
+            ) : (
+                displayFriendList.map((friend, index) => {
+                        console.log("user" + friend)
+                        return (
+                            <div>
 
-                    </div>
-                )
-            })}
+                                <Link to={`/users/${friend.userId}`}>
+                                    <div key={friend.userId}><h2> {friend.fullName} </h2></div>
+                                </Link>
+
+                            </div>
+                        )
+                    })
+            )}
+
         </div>
     )
 }

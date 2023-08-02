@@ -1,54 +1,69 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
 import Swal from "sweetalert2";
 import {Dropdown, Menu, Modal} from "antd";
-import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
+import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../../../firebase";
 
 export default function UpdateForm() {
-    const {userId} = useParams();
+    const { userId } = useParams();
     const [user, setUser] = useState({});
-    const navigate = useNavigate();
-    const [imgUrl, setImgUrl] = useState(null)
     const [showAvatarModal, setShowAvatarModal] = useState(false);
     const [showBackgroundModal, setShowBackgroundModal] = useState(false);
 
 
+
     useEffect(() => {
-        axios.get("http://localhost:8080/users/" + userId).then((response) => {
-            setUser(response.data);
-            console.log("thong tin 1 user", user.background);
-            console.log("User sau khi update xong", user)
-        });
-    }, []);
+        axios.get("http://localhost:8080/users/" + userId)
+            .then((response) => {
+                setUser(response.data);
+                console.log("thong tin 1 user", response.data.background);
+                console.log("thong tin 1 user", showBackgroundModal);
+                console.log("ảnh nền của user", showAvatarModal);
+            })
+            .catch((error) => {
+                console.error("Error fetching user:", error);
+            });
+    }, [userId]); // Add userId as a dependency here
+
+    const handleAvatarChange = (event) => {
+        const file = event.currentTarget.files[0];
+        // Update the user state with the selected avatar file
+        setUser((prevUser) => ({
+            ...prevUser,
+            avatar: file
+        }));
+    };
+
+    const handleBackgroundChange = (event) => {
+        const file = event.currentTarget.files[0];
+        // Update the user state with the selected background file
+        setUser((prevUser) => ({
+            ...prevUser,
+            background: file
+        }));
+    };
 
     const handleUpdateUser = async (values) => {
         try {
             const avatarFile = user.avatar;
             const backgroundFile = user.background;
 
-            // Check if avatar and background files are selected
-            if (!avatarFile || !backgroundFile) {
-                console.error("Please select both avatar and background files.");
-                return;
-            }
-
-            // Upload avatar and background images to Firebase Storage
-            const avatarStorageRef = ref(storage, `avatars/${avatarFile.name}`);
-            const backgroundStorageRef = ref(storage, `backgrounds/${backgroundFile.name}`);
+            const avatarStorageRef = ref(storage, `avatars/${user.avatar.name}`);
+            const backgroundStorageRef = ref(storage, `backgrounds/${user.background.name}`);
 
             const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarFile);
             const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundFile);
 
             await Promise.all([avatarUploadTask, backgroundUploadTask]);
 
-            // Get download URLs
+
             const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
             const backgroundDownloadURL = await getDownloadURL(backgroundUploadTask.snapshot.ref);
 
-            // Update user data with download URLs
+
             const updatedUser = {
                 ...values,
                 avatar: avatarDownloadURL,
@@ -57,9 +72,9 @@ export default function UpdateForm() {
 
             // Send updated user data to the server
             await axios.put(`http://localhost:8080/users/${userId}`, updatedUser);
-
+            console.log("values up ảnh", values)
             setUser(updatedUser);
-            Swal.fire({
+            await Swal.fire({
                 icon: "success",
                 timer: 1200,
                 showConfirmButton: false,
@@ -67,7 +82,6 @@ export default function UpdateForm() {
             });
         } catch (error) {
             console.error("Error updating user:", error);
-            // Handle error if needed
         }
     };
 
@@ -93,14 +107,7 @@ export default function UpdateForm() {
                                                         <input
                                                             type="file"
                                                             name="background"
-                                                            onChange={(event) => {
-                                                                const file = event.target.files[0];
-                                                                // Lưu file vào state
-                                                                setUser((prevUser) => ({
-                                                                    ...prevUser,
-                                                                    background: file
-                                                                }));
-                                                            }}
+                                                            onChange={handleBackgroundChange}
                                                         />
                                                     </Menu.Item>
                                                     <Menu.Item key="2" onClick={() => setShowBackgroundModal(true)}>
@@ -126,14 +133,7 @@ export default function UpdateForm() {
                                                                 <input
                                                                     type="file"
                                                                     name="avatar"
-                                                                    onChange={(event) => {
-                                                                        const file = event.currentTarget.files;
-                                                                        // Lưu file vào state
-                                                                        setUser((prevUser) => ({
-                                                                            ...prevUser,
-                                                                            avatar: file
-                                                                        }));
-                                                                    }}
+                                                                    onChange={handleAvatarChange}
                                                                 />
                                                             </Menu.Item>
                                                             <Menu.Item key="2" onClick={() => setShowAvatarModal(true)}>

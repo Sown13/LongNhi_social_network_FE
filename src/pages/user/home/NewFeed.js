@@ -412,7 +412,7 @@ export default function NewFeed(props) {
                                         <div className="feedCardHeaderName">
                                             <Link to={`/users/${item.user.userId}`}><span> {item.user.fullName} </span></Link>
                                         </div>
-                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated}</div>
+                                        <div className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">

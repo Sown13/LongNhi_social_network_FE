@@ -1,7 +1,8 @@
 import "./FriendRequestList.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
-export default function FriendRequestList(){
+
+export default function FriendRequestList() {
 
     const [user, setUser] = useState(
         () => {
@@ -24,32 +25,78 @@ export default function FriendRequestList(){
     const [friendRequestList, setFriendRequestList] = useState([]);
     const [displayFriendRequestList, setDisplayFriendRequestList] = useState([]);
 
+
     useEffect(() => {
-        axios.get(`http://localhost:8080/user-friends/user/${user.userId}/friend-request-receive`).then((response) => {
-            setFriendRequestList(response.data);
-            setDisplayFriendRequestList(response.data);
+        axios.get(`http://localhost:8080/user-friends/user/${user.userId}/v2/friend-request-receive`).then((response) => {
+            let data = response.data;
+            let requestList = [];
+            if (data.length !== 0) {
+                for (let i = 0; i < data.length; i++) {
+                    if (!data[i].accepted) {
+                        requestList.push(data[i])
+                    }
+                }
+            }
+            setFriendRequestList(requestList);
+            setDisplayFriendRequestList(requestList);
         }).catch()
     }, [])
 
-    useEffect(()=>{
-        console.log("friend request list   " + displayFriendRequestList)
-    },[])
+
+    const acceptRequest = (relationship) => {
+        axios.put(`http://localhost:8080/user-friends/${relationship.userFriendId}`).then(() => {
+            axios.get(`http://localhost:8080/user-friends/user/${user.userId}/v2/friend-request-receive`).then((response) => {
+                let data = response.data;
+                let requestList = [];
+                if (data.length !== 0) {
+                    for (let i = 0; i < data.length; i++) {
+                        if (!data[i].accepted) {
+                            requestList.push(data[i])
+                        }
+                    }
+                }
+                setFriendRequestList(requestList);
+                setDisplayFriendRequestList(requestList);
+            }).catch()
+        })
+    }
+
+    const rejectRequest = (relationship) => {
+        axios.delete("http://localhost:8080/user-friends/" + relationship.userFriendId)
+            .then(response => {
+                axios.get(`http://localhost:8080/user-friends/user/${user.userId}/v2/friend-request-receive`).then((response) => {
+                    let data = response.data;
+                    let requestList = [];
+                    if (data.length !== 0) {
+                        for (let i = 0; i < data.length; i++) {
+                            if (!data[i].accepted) {
+                                requestList.push(data[i])
+                            }
+                        }
+                    }
+                    setFriendRequestList(requestList);
+                    setDisplayFriendRequestList(requestList);
+                }).catch()
+            })
+    }
 
 
     return (
         <div className={"friendRequestList"}>
             <h1> Lời mời kết bạn bạn đã nhận </h1>
-            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((friend,index) =>{
+            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((request, index) => {
                 return (
                     <div>
                         <div>
-                        {friend.accountName}
+                            {request.sourceUser.fullName}
                         </div>
-                        <button>Đồng ý</button>
-                        <button>Từ chối</button>
+                        <div>
+                            <button onClick={() => acceptRequest(request)}>Đồng ý</button>
+                            <button onClick={() => rejectRequest(request)}>Từ chối</button>
+                        </div>
                     </div>
                 )
-            }) : <h2> Không có lời mời nào </h2> }
+            }) : <h2> Không có lời mời nào </h2>}
         </div>
     )
 }

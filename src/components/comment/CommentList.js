@@ -1,8 +1,8 @@
 import "./CommentList.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import {Link} from "react-router-dom";
 
-export default function CommentList({ item,likedComment ,handleToggleLikeComment}) {
+export default function CommentList({ item,likedComment ,handleToggleLikeComment,user,deleteComment}) {
     const [numShownComments, setNumShownComments] = useState(0);
     const [isHidden, setIsHidden] = useState(true);
 
@@ -18,37 +18,52 @@ export default function CommentList({ item,likedComment ,handleToggleLikeComment
 
     const visibleComments = item.commentList.slice(0, numShownComments);
 
+
     if (item.commentList.length === 0) {
         return <p style={{ marginLeft: "10px",fontSize:"14px" }}>Chưa có bình luận nào</p>;
     }
 
+
     return (
         <div>
             <div>
-                {visibleComments.map((comment) => (
-                    <li key={comment.commentId}>
-                        <div className="comment-container">
-                            <div>
-                                <div className="comment-container-avatar">
-                                    <img src={comment.user.avatar} alt="avt" />
-                                    <Link to={`/users/${comment.user.userId}`}>
-                                        <h2>{comment.user.fullName}</h2>
-                                    </Link>
+                {visibleComments.map((comment) => {
+                    const isCurrentUserComment = comment.user.userId === user.userId;
+                    return (
+                        <li key={comment.commentId}>
+                            <div className="comment-container">
+                                <div>
+                                    <div className="comment-container-avatar">
+                                        <img src={comment.user.avatar} alt="avt" />
+                                        <Link to={`/users/${comment.user.userId}`}>
+                                            <h2>{comment.user.fullName}</h2>
+                                        </Link>
+                                    </div>
+                                    <p>{comment.textContent}</p>
                                 </div>
-                                <p>{comment.textContent}</p>
+                                <div>
+                                    <span>{comment.commentReactionList.length}</span>
+                                    <button
+                                        style={{ color: likedComment.includes(comment.commentId) ? "#ff4500" : "#808080" }}
+                                        onClick={() => handleToggleLikeComment(comment.commentId)}
+                                    >
+                                        {likedComment.includes(comment.commentId) ? "Bỏ thích" : "Thích"}
+                                    </button>
+                                    {isCurrentUserComment && (
+                                        <button>
+                                            Sửa
+                                        </button>
+                                    )}
+                                    {isCurrentUserComment && (
+                                        <button onClick={() => deleteComment(comment.commentId, user.userId)}>
+                                            Xóa
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-                            <div>
-                                <span>{comment.commentReactionList.length}</span>
-                                <button
-                                    style={{ color: likedComment.includes(comment.commentId) ? "#ff4500" : "#808080" }}
-                                    onClick={() => handleToggleLikeComment(comment.commentId)}
-                                >
-                                    {likedComment.includes(comment.commentId) ? "Bỏ thích" : "Thích"}
-                                </button>
-                            </div>
-                        </div>
-                    </li>
-                ))}
+                        </li>
+                    )
+                })}
             </div>
             {isHidden ? (
                 <div id="rest-comment">

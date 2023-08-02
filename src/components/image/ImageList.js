@@ -1,20 +1,37 @@
-const ImageList = ({images}) => {
-    // console.log("dữ liệu ảnh:", images);
+import React, { useState, useEffect } from "react";
 
-    if (!images || images.length === 0) {
-        // console.log("Dữ liệu ảnh trống hoặc không có giá trị.");
-        return <div> Không có ảnh để hiển thị </div>;
-    }
-    const numImages = images.length;
-    const containerWidth = numImages < 2 ? "100%" : "calc(50% - 10px)";
+const ImageList = ({ images, imagesPerRow }) => {
+    const [containerWidth, setContainerWidth] = useState(0);
+    const imageWidth = containerWidth / imagesPerRow;
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = document.getElementById("image-list").offsetWidth;
+            setContainerWidth(width);
+        };
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     return (
-        <div style={{ borderTop: "1px solid #e6e6e6", display: "flex", flexWrap: "wrap" }}>
+        <div
+            id="image-list"
+            style={{
+                borderTop: "1px solid #e6e6e6",
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+            }}
+        >
             {images.map((image, index) => (
-                <div key={index} style={{ flex: `0 0 ${containerWidth}`, margin: "5px" }}>
+                <div key={index} style={{ width: `${imageWidth}px`, margin: "1px" }}>
                     <img
-                        className="img-thumbnail"
-                        style={{ maxWidth: "100%", height: "auto" }}
+                        style={{ maxWidth: "100%", height: "auto", aspectRatio: `${image.width} / ${image.height}` }}
                         src={image.imgUrl}
                         alt={`ảnh ${index}`}
                     />

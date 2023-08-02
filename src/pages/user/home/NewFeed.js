@@ -337,6 +337,33 @@ export default function NewFeed(props) {
             alert(error);
         });
     };
+    const handleComment = async (values, {resetForm, setError}) => {
+        try {
+            await axios.post('http://localhost:8080/comments', values).then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data)
+                    // console.log("du lieu tu server", JSON.stringify(response.data))
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
+        } finally {
+            resetForm();
+        }
+    };
+    const deleteComment = (commentId) => {
+        axios.delete(`http://localhost:8080/comments/${commentId}`)
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data)
+                    // console.log("du lieu tu server", JSON.stringify(response.data))
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     return (
         <>
@@ -447,22 +474,46 @@ export default function NewFeed(props) {
                                 <ul style={{marginTop: "16px"}}>
                                     <li style={{minWidth: "90%"}}>
                                         <div className={"comment-container"}>
+                                            {/*<div>*/}
+                                            {/*    <div className={"comment-container-avatar"}>*/}
+                                            {/*        <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
+                                            {/*        <h2> {user.fullName} </h2>*/}
+                                            {/*    </div>*/}
+                                            {/*    <div className={"comment-input"}>*/}
+                                            {/*        <textarea id={`comment-textarea-${index}`}*/}
+                                            {/*                  placeholder={"Viết bình luận.."}/>*/}
+                                            {/*    </div>*/}
+                                            {/*    <div>*/}
+                                            {/*        <button className={"comment-submit"}>Bình Luận</button>*/}
+                                            {/*    </div>*/}
+                                            {/*</div>*/}
                                             <div>
                                                 <div className={"comment-container-avatar"}>
-                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
+                                                    <img src={user.avatar} alt={"avt"}/>
                                                     <h2> {user.fullName} </h2>
                                                 </div>
                                                 <div className={"comment-input"}>
-                                                    <textarea id={`comment-textarea-${index}`}
-                                                              placeholder={"Viết bình luận.."}/>
-                                                </div>
-                                                <div>
-                                                    <button className={"comment-submit"}>Bình Luận</button>
+                                                    <Formik initialValues={{
+                                                        post: {
+                                                            postId: item.postId
+                                                        },
+                                                        user: {
+                                                            userId: user.userId
+                                                        },
+                                                        textContent: ""
+                                                    }} onSubmit={handleComment}>
+                                                        <Form>
+                                                            <Field as={"textarea"} id={`comment-textarea-${index}`}
+                                                                   name={"textContent"} placeholder={"Viết bình luận.."}
+                                                            />
+                                                            <button className={"comment-submit"}>Bình Luận</button>
+                                                        </Form>
+                                                    </Formik>
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
-                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} />
+                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
                                 </ul>
                             </div>
                         )

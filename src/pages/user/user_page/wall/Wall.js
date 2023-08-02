@@ -44,13 +44,12 @@ export default function Wall() {
     const [relation, setRelation] = useState(false);
 
     const [commentList, setListComment] = useState([]);
-    const [post]=useState({})
+    const [post] = useState({})
     const [comments, setComments] = useState({
-        commentId:0,
-        textContent:""
+        commentId: 0,
+        textContent: ""
     });
 
-    const [listPosts, setListPosts] = useState([]);
     const [likedComment, setLikedComment] = useState([]);
 
 
@@ -87,22 +86,18 @@ export default function Wall() {
             })
         }
     }, [userId]);
-    const handleComment = async (values, { resetForm, setError }) => {
+    const handleComment = async (values, {resetForm, setError}) => {
         try {
-             await axios.post('http://localhost:8080/comments', values).then(()=>{
-                 axios.get(`http://localhost:8080/posts/user/${userId}`).then(res=>{
+            await axios.post('http://localhost:8080/comments', values).then(() => {
+                axios.get(`http://localhost:8080/posts/user/${userId}`).then(res => {
                     setPostList(res.data)
                     setPostListDisplay(res.data)
-            })
+                })
             });
 
-            Swal.fire({
-                icon: 'success',
-                timer: 2000
-            });
         } catch (error) {
             console.log(error);
-            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
         } finally {
             resetForm();
         }
@@ -118,8 +113,9 @@ export default function Wall() {
             const file = files[i];
             reader.onload = (e) => {
                 setImagesNewPost((prevImages) => [...prevImages, {
-                    file :file,
-                    imgUrl : e.target.result}]
+                        file: file,
+                        imgUrl: e.target.result
+                    }]
                 );
 
             };
@@ -129,7 +125,7 @@ export default function Wall() {
 
     const handleDeleteImageNewPost = async (image) => {
         setImagesNewPost(imagesNewPost.filter((item) => item !== image));
-        setImagesAddNewPost(imagesAddNewPost.filter((item)=>item !== image.file));
+        setImagesAddNewPost(imagesAddNewPost.filter((item) => item !== image.file));
         setImagesDeleteNewPost(imagesDeleteNewPost.concat(image));
 
     };
@@ -202,11 +198,11 @@ export default function Wall() {
                         })
                     })
                 }
-            ).then(()=>{
-                setImagesNewPost([]);
-                setImagesAddNewPost([]);
-                setImagesDeleteNewPost([]);
-                setImgUrlNewPost([]);
+            ).then(() => {
+                    setImagesNewPost([]);
+                    setImagesAddNewPost([]);
+                    setImagesDeleteNewPost([]);
+                    setImgUrlNewPost([]);
                 }
             );
         }).catch((error) => {
@@ -215,11 +211,11 @@ export default function Wall() {
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    setPostList(response.data);
-                    setPostListDisplay(response.data);
-                    // console.log("Dữ liệu từ server", JSON.stringify(response.data))
-                })
+        axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+            setPostList(response.data);
+            setPostListDisplay(response.data);
+            // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+        })
 
     }, [showModalUpdate]);
 
@@ -282,7 +278,7 @@ export default function Wall() {
     const deleteComment = (commentId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then(res=>{
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res => {
                     setPostList(res.data);
                     setPostListDisplay(res.data);
                     console.log("test dang bai ---------------- " + res.data)
@@ -385,7 +381,7 @@ export default function Wall() {
         }
     };
 
-   // like comment
+    // like comment
     useEffect(() => {
         const storedLikedComment = localStorage.getItem("likedComment");
         if (storedLikedComment) {
@@ -461,7 +457,6 @@ export default function Wall() {
     };
 
 
-
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
         const storedValue = localStorage.getItem('selectedOption');
@@ -526,16 +521,16 @@ export default function Wall() {
                             Swal.fire({
                                 title: 'Loading...',
 
-                                closeOnClickOutside : false,
+                                closeOnClickOutside: false,
                                 timer: 2000
-                            }).then(()=>{
+                            }).then(() => {
                                 setShowModalUpdate(false);
                                 setUpLoadSuccess(!upLoadSuccess)
-                            }).then(()=>{
+                            }).then(() => {
                                 Swal.fire({
                                     title: 'Done',
                                     icon: "success",
-                                    closeOnClickOutside : false,
+                                    closeOnClickOutside: false,
                                     timer: 1000
                                 })
                             })
@@ -578,7 +573,7 @@ export default function Wall() {
                                         onChange={(e) => {
                                             handleAddImageNewPost(e);
                                             const files = e.currentTarget.files;
-                                            setImagesAddNewPost([...imagesAddNewPost,...files]);
+                                            setImagesAddNewPost([...imagesAddNewPost, ...files]);
                                         }}
                                         multiple
                                     />
@@ -683,7 +678,8 @@ export default function Wall() {
                                             </div>
                                         </div>
 
-                                        <div className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
+                                        <div
+                                            className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">
@@ -733,18 +729,18 @@ export default function Wall() {
                                                         textContent: ""
                                                     }} onSubmit={handleComment}>
                                                         <Form>
-                                                            <Field as={"textarea"} id={`comment-textarea-${index}`} name={"textContent"} placeholder={"Viết bình luận.."}
+                                                            <Field as={"textarea"} id={`comment-textarea-${index}`}
+                                                                   name={"textContent"} placeholder={"Viết bình luận.."}
                                                             />
                                                             <button className={"comment-submit"}>Bình Luận</button>
                                                         </Form>
                                                     </Formik>
                                                 </div>
-                                                <div>
-                                                </div>
                                             </div>
                                         </div>
                                     </li>
-                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} />
+                                    <CommentList item={item} likedComment={likedComment}
+                                                 handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
                                 </ul>
                             </div>
                         )

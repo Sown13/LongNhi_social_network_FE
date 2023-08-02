@@ -61,11 +61,7 @@
     margin-top: 20px;
 }
 
-.delete-post-button {
-    flex: 4;
-    max-width: 37%;
-    padding: 5px;
-}
+
 
 .intro-label {
     font-size: 28px;

@@ -519,8 +519,7 @@ export default function Wall() {
                         () => {
 
                             Swal.fire({
-                                title: 'Loading...',
-
+                                title: 'Ảnh đang đang được tải lên, xin hãy chờ trong giây lát..',
                                 closeOnClickOutside: false,
                                 timer: 2000
                             }).then(() => {

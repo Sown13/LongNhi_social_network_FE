@@ -1,8 +1,10 @@
 import "./CommentList.css";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
+import EditComment from "../../pages/user/user_page/wall/EditComment";
+import ReactDOM from "react-dom";
 
-export default function CommentList({ item,likedComment ,handleToggleLikeComment,user,deleteComment}) {
+export default function CommentList({item, likedComment, handleToggleLikeComment, user, deleteComment,handleUpdateComment}) {
     const [numShownComments, setNumShownComments] = useState(0);
     const [isHidden, setIsHidden] = useState(true);
 
@@ -20,8 +22,13 @@ export default function CommentList({ item,likedComment ,handleToggleLikeComment
 
 
     if (item.commentList.length === 0) {
-        return <p style={{ marginLeft: "10px",fontSize:"14px" }}>Chưa có bình luận nào</p>;
+        return <p style={{marginLeft: "10px", fontSize: "14px"}}>Chưa có bình luận nào</p>;
     }
+
+    const showFormEditComment = (comment, divId, handleUpdateComment) => {
+        const element = <EditComment comment={comment} handleUpdateComment={handleUpdateComment}/>;
+        ReactDOM.render(element, document.getElementById(divId));
+    };
 
 
     return (
@@ -31,10 +38,10 @@ export default function CommentList({ item,likedComment ,handleToggleLikeComment
                     const isCurrentUserComment = comment.user.userId === user.userId;
                     return (
                         <li key={comment.commentId}>
-                            <div className="comment-container">
+                            <div className="comment-container" id={`user-comment-${comment.commentId}`}>
                                 <div>
                                     <div className="comment-container-avatar">
-                                        <img src={comment.user.avatar} alt="avt" />
+                                        <img src={comment.user.avatar} alt="avt"/>
                                         <Link to={`/users/${comment.user.userId}`}>
                                             <h2>{comment.user.fullName}</h2>
                                         </Link>
@@ -44,18 +51,19 @@ export default function CommentList({ item,likedComment ,handleToggleLikeComment
                                 <div>
                                     <span>{comment.commentReactionList.length}</span>
                                     <button
-                                        style={{ color: likedComment.includes(comment.commentId) ? "#ff4500" : "#808080" }}
+                                        style={{color: likedComment.includes(comment.commentId) ? "#ff4500" : "#808080"}}
                                         onClick={() => handleToggleLikeComment(comment.commentId)}
                                     >
                                         {likedComment.includes(comment.commentId) ? "Bỏ thích" : "Thích"}
                                     </button>
                                     {isCurrentUserComment && (
-                                        <button>
+                                        <button
+                                            onClick={() => showFormEditComment(comment, `user-comment-${comment.commentId}`,handleUpdateComment)}>
                                             Sửa
                                         </button>
                                     )}
                                     {isCurrentUserComment && (
-                                        <button onClick={() => deleteComment(comment.commentId, user.userId)}>
+                                        <button onClick={() => deleteComment(comment.commentId, comment.user.userId)}>
                                             Xóa
                                         </button>
                                     )}

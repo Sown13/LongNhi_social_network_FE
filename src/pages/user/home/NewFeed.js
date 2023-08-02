@@ -10,6 +10,8 @@ import "./like-button.css"
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../../../firebase"; import CommentList from "../../../components/comment/CommentList";
+import EditComment from "../user_page/wall/EditComment";
+import swal from "sweetalert2";
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -352,7 +354,7 @@ export default function NewFeed(props) {
             resetForm();
         }
     };
-    const deleteComment = (commentId) => {
+    const deleteComment = (commentId,userId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
                 axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
@@ -364,6 +366,29 @@ export default function NewFeed(props) {
                 console.log(error);
             });
     }
+
+
+    const [commentUpdated, setCommentUpdated] = useState(false)
+    const handleUpdateComment = (commentId,values) => {
+        axios.put(`http://localhost:8080/comments/${commentId}`, {
+            textContent: values.textContent
+        })
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data);
+                    setCommentUpdated(true);
+                })
+                Swal.fire({
+                    title: 'Cập nhật bình luận thành công',
+                    icon: 'success',
+                    timer: 1000
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
 
     return (
         <>
@@ -474,19 +499,6 @@ export default function NewFeed(props) {
                                 <ul style={{marginTop: "16px"}}>
                                     <li style={{minWidth: "90%"}}>
                                         <div className={"comment-container"}>
-                                            {/*<div>*/}
-                                            {/*    <div className={"comment-container-avatar"}>*/}
-                                            {/*        <img src={"img/example-ava-2.png"} alt={"avt"}/>*/}
-                                            {/*        <h2> {user.fullName} </h2>*/}
-                                            {/*    </div>*/}
-                                            {/*    <div className={"comment-input"}>*/}
-                                            {/*        <textarea id={`comment-textarea-${index}`}*/}
-                                            {/*                  placeholder={"Viết bình luận.."}/>*/}
-                                            {/*    </div>*/}
-                                            {/*    <div>*/}
-                                            {/*        <button className={"comment-submit"}>Bình Luận</button>*/}
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
                                             <div>
                                                 <div className={"comment-container-avatar"}>
                                                     <img src={user.avatar} alt={"avt"}/>
@@ -513,7 +525,7 @@ export default function NewFeed(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
+                                    <CommentList key={commentUpdated ? "updated" : "not-updated"} item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment} handleUpdateComment={handleUpdateComment} />
                                 </ul>
                             </div>
                         )

@@ -91,6 +91,9 @@ export default function FriendRequestList() {
                             {request.sourceUser.fullName}
                         </div>
                         <div>
+                            <p> Ngày nhận: {request.dateRequested}</p>
+                        </div>
+                        <div>
                             <button onClick={() => acceptRequest(request)}>Đồng ý</button>
                             <button onClick={() => rejectRequest(request)}>Từ chối</button>
                         </div>

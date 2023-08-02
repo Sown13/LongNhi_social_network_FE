@@ -441,6 +441,12 @@ li {
     margin-right: 8px;
 }
 
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
 .comment-container p {
     font-size: 14px;
     margin-bottom: 8px;

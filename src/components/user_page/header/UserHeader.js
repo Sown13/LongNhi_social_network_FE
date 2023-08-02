@@ -73,7 +73,7 @@ export default function UserHeader() {
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
             setTargetUser(response.data);
-            console.log("targetuser   " + targetUser)
+            // console.log("targetuser   " + targetUser)
         }).catch()
     }, [userId])
 
@@ -82,8 +82,26 @@ export default function UserHeader() {
         console.log("relationship" + relationship)
     }, [userId])
 
+    const updateRelationShip = () => {
+        axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+            if (response.data != null) {
+                setRelationShip(response.data);
+            } else {
+                setRelationShip({
+                    accepted: false,
+                    friendType: "",
+                    sourceUser: {
+                        userId: 0
+                    },
+                    targetUser: {
+                        userId: 0
+                    }
+                })
+            }
+        })
+    }
 
-    const sendFriendRequest = () => {
+    const sendFriendRequest = (relationship) => {
         const friendRequest = {
             sourceUser: {
                 userId: user.userId
@@ -96,25 +114,113 @@ export default function UserHeader() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(axios.get("http://localhost:8080/users/" + userId).then((response) => {
-            setTargetUser(response.data);
-            console.log("targetuser   " + targetUser)
-        })).catch()
+        }).then(response => {
+            if (response.data != null) {
+                setRelationShip(response.data);
+            } else {
+                setRelationShip({
+                    accepted: false,
+                    friendType: "",
+                    sourceUser: {
+                        userId: 0
+                    },
+                    targetUser: {
+                        userId: 0
+                    }
+                })
+            }
+        })
     }
 
-    const acceptRequest = () => {
-
+    const cancelRequest = (relationship) => {
+        if (window.confirm("Bạn có chắc muốn hủy lời mời này?")) {
+            axios.delete(`http://localhost:8080/user-friends/${relationship.userFriendId}`).then((response) => {
+                axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                    if (response.data != null) {
+                        setRelationShip(response.data);
+                    } else {
+                        setRelationShip({
+                            accepted: false,
+                            friendType: "",
+                            sourceUser: {
+                                userId: 0
+                            },
+                            targetUser: {
+                                userId: 0
+                            }
+                        })
+                    }
+                    console.log("relation   " + relationship)
+                })
+            })
+        }
     }
 
-    const rejectRequest = () => {
-
+    const acceptRequest = (relationship) => {
+        axios.put(`http://localhost:8080/user-friends/${relationship.userFriendId}`).then(() => {
+            axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                if (response.data != null) {
+                    setRelationShip(response.data);
+                } else {
+                    setRelationShip({
+                        accepted: false,
+                        friendType: "",
+                        sourceUser: {
+                            userId: 0
+                        },
+                        targetUser: {
+                            userId: 0
+                        }
+                    })
+                }
+            })
+        })
     }
 
-    const deleteFriend = () => {
-        axios.delete("http://localhost:8080/user-friends" + relationship.userFriendId).then(axios.get("http://localhost:8080/users/" + userId).then((response) => {
-            setTargetUser(response.data);
-            console.log("targetuser   " + targetUser)
-        })).catch()
+    const rejectRequest = (relationship) => {
+        axios.delete("http://localhost:8080/user-friends/" + relationship.userFriendId)
+            .then(response => {
+                axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                    if (response.data != null) {
+                        setRelationShip(response.data);
+                    } else {
+                        setRelationShip({
+                            accepted: false,
+                            friendType: "",
+                            sourceUser: {
+                                userId: 0
+                            },
+                            targetUser: {
+                                userId: 0
+                            }
+                        })
+                    }
+                })
+            })
+    }
+
+    const deleteFriend = (relationship) => {
+        if (window.confirm("Bạn có chắc muốn xóa kết bạn với người này không?")) {
+            axios.delete("http://localhost:8080/user-friends/" + relationship.userFriendId)
+                .then(response => {
+                    axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                        if (response.data != null) {
+                            setRelationShip(response.data);
+                        } else {
+                            setRelationShip({
+                                accepted: false,
+                                friendType: "",
+                                sourceUser: {
+                                    userId: 0
+                                },
+                                targetUser: {
+                                    userId: 0
+                                }
+                            })
+                        }
+                    })
+                })
+        }
     }
 
     return (
@@ -131,8 +237,8 @@ export default function UserHeader() {
                 </div>
                 <div className={"user-misc"}></div>
                 <div className={"user-action"}>
-                    {console.log("user.userId= " + user.userId + "userId = " + userId + "relation" + relationship.accepted)}
-                    {console.log("relation userID---" + relationship.sourceUser.userId)}
+                    {/*{console.log("user.userId= " + user.userId + "userId = " + userId + "relation" + relationship.accepted)}*/}
+                    {/*{console.log("relation userID---" + relationship.sourceUser.userId)}*/}
                     {/*{user.userId == userId ?*/}
                     {/*    <button> Chỉnh sửa trang cá nhân </button>*/}
                     {/*    : relationship.accepted ?*/}
@@ -154,22 +260,23 @@ export default function UserHeader() {
                                 <button> Chỉnh sửa trang cá nhân</button>
                                 <button> Nhắn tin</button>
                             </div>
-                       : <div>
-                            <button onClick={sendFriendRequest}> Thêm bạn</button>
-                            <button> Nhắn tin</button>
-                        </div>
+                            : <div>
+                                <button onClick={() => sendFriendRequest(relationship)}> Thêm bạn</button>
+                                <button> Nhắn tin</button>
+                            </div>
                         : relationship.accepted === true ?
                             <div>
-                                <button onClick={deleteFriend}> Xóa Bạn</button>
+                                <button onClick={() => deleteFriend(relationship)}> Xóa Bạn</button>
                                 <button> Nhắn tin</button>
                             </div>
                             : relationship.sourceUser.userId === user.userId ?
                                 <div>
-                                    <button> Hủy lời mời</button>
+                                    <button onClick={() => cancelRequest(relationship)}> Hủy lời mời</button>
                                     <button> Nhắn tin</button>
                                 </div>
                                 : <div>
-                                    <button> Đồng ý/ Từ chối</button>
+                                    <button onClick={() => acceptRequest(relationship)}> Đồng ý</button>
+                                    <button onClick={() => rejectRequest(relationship)}> Từ chối</button>
                                     <button> Nhắn tin</button>
                                 </div>
                     }

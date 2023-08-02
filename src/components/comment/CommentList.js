@@ -1,34 +1,32 @@
+import "./CommentList.css";
 import { useState } from "react";
 import {Link} from "react-router-dom";
-import "./CommentList.css";
 
-export default function CommentList({ comments }) {
-    const [currentIndex, setCurrentIndex] = useState(0);
+export default function CommentList({ item,likedComment ,handleToggleLikeComment}) {
+    const [numShownComments, setNumShownComments] = useState(0);
     const [isHidden, setIsHidden] = useState(true);
 
+
     const handleClickShowMore = () => {
-        setCurrentIndex(currentIndex + 10);
+        setNumShownComments(numShownComments + 10);
     };
 
     const handleClickHideAll = () => {
-        setCurrentIndex(0);
+        setNumShownComments(0);
         setIsHidden(true);
     };
 
-    const handleClickShowAll = () => {
-        setCurrentIndex(10);
-        setIsHidden(false);
-    };
+    const visibleComments = item.commentList.slice(0, numShownComments);
 
-    if (comments.length === 0) {
-        return <p style={{marginLeft:"10px"}}>Chưa có bình luận nào</p>;
+    if (item.commentList.length === 0) {
+        return <p style={{ marginLeft: "10px",fontSize:"14px" }}>Chưa có bình luận nào</p>;
     }
 
     return (
         <div>
             <div>
-                {comments.slice(0, currentIndex).map((comment) => (
-                    <li key={comment.id}>
+                {visibleComments.map((comment) => (
+                    <li key={comment.commentId}>
                         <div className="comment-container">
                             <div>
                                 <div className="comment-container-avatar">
@@ -41,7 +39,12 @@ export default function CommentList({ comments }) {
                             </div>
                             <div>
                                 <span>{comment.commentReactionList.length}</span>
-                                <button>like</button>
+                                <button
+                                    style={{ color: likedComment.includes(comment.commentId) ? "#ff4500" : "#808080" }}
+                                    onClick={() => handleToggleLikeComment(comment.commentId)}
+                                >
+                                    {likedComment.includes(comment.commentId) ? "Bỏ thích" : "Thích"}
+                                </button>
                             </div>
                         </div>
                     </li>
@@ -49,21 +52,22 @@ export default function CommentList({ comments }) {
             </div>
             {isHidden ? (
                 <div id="rest-comment">
-                    <a id="show-all" onClick={handleClickShowAll}>
-                        Xem bình luận ( {comments.length} )
-                    </a>
-                </div>
-            ) : currentIndex < comments.length ? (
-                <div id="rest-comment">
-                    <a id="show-more" onClick={handleClickShowMore}>
-                        Xem thêm bình luận
-                    </a>
-                    <a id="hide-all" onClick={handleClickHideAll}>
-                        Ẩn hết
-                    </a>
+                    {numShownComments < item.commentList.length ? (
+                        <a id="show-all" onClick={() => {
+                            setNumShownComments(10);
+                            setIsHidden(false);
+                        }}>
+                            Xem bình luận ({item.commentList.length})
+                        </a>
+                    ) : null}
                 </div>
             ) : (
                 <div id="rest-comment">
+                    {numShownComments < item.commentList.length ? (
+                        <a id="show-more" onClick={handleClickShowMore}>
+                            Xem thêm bình luận
+                        </a>
+                    ) : null}
                     <a id="hide-all" onClick={handleClickHideAll}>
                         Ẩn hết
                     </a>

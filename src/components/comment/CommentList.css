@@ -4,9 +4,20 @@
     justify-self: center;
     width: 95%;
 }
+#show-all{
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
 #show-more{
     margin-left: 10px;
     text-decoration: none;
+    font-size: 14px;
+}
+#hide-all{
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 14px;
 }
 #show-more:hover{
     text-decoration: underline;

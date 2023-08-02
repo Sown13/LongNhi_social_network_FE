@@ -18,6 +18,9 @@ export default function Wall() {
 
     const navigate = useNavigate();
 
+    const {commentId} = useParams();
+
+    const [imgUrl, setImgUrl] = useState(null);
     const [imgUrlNewPost, setImgUrlNewPost] = useState(null);
     const [imagesNewPost, setImagesNewPost] = useState([]);
     const [imagesAddNewPost, setImagesAddNewPost] = useState([]);
@@ -32,12 +35,22 @@ export default function Wall() {
     const [postList, setPostList] = useState([]);
 
     const [postListDisplay, setPostListDisplay] = useState([]);
-    
+
     const [isLiked, setIsLiked] = useState(false);
 
     const [likedPosts, setLikedPosts] = useState([]);
 
     const [relation, setRelation] = useState(false);
+
+    const [commentList, setListComment] = useState([]);
+    const [post]=useState({})
+    const [comments, setComments] = useState({
+        commentId:0,
+        textContent:""
+    });
+
+    const [listPosts, setListPosts] = useState([]);
+    const [likedComment, setLikedComment] = useState([]);
 
 
     /* Show Edit Form */
@@ -73,6 +86,26 @@ export default function Wall() {
             })
         }
     }, [userId]);
+    const handleComment = async (values, { resetForm, setError }) => {
+        try {
+             await axios.post('http://localhost:8080/comments', values).then(()=>{
+                 axios.get(`http://localhost:8080/posts/user/${userId}`).then(res=>{
+                    setPostList(res.data)
+                    setPostListDisplay(res.data)
+            })
+            });
+
+            Swal.fire({
+                icon: 'success',
+                timer: 2000
+            });
+        } catch (error) {
+            console.log(error);
+            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+        } finally {
+            resetForm();
+        }
+    };
 
 
     const handleAddImageNewPost = (e) => {
@@ -115,7 +148,7 @@ export default function Wall() {
                     const post = {postId: res.data.postId};
                 }
             ).then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                axios.get("http://localhost:8080/posts/user/" + user.userId).then((response) => {
                     setPostList(response.data);
                     setPostListDisplay(response.data);
                     console.log("test dang bai ---------------- " + response.data)
@@ -208,9 +241,6 @@ export default function Wall() {
         })
     }, [userId])
 
-
-
-
     //Thông tin của vài thứ có trong trang này
     // useEffect(() => {
     //     console.log("thong tin cua user sau khi chay", userInformationWall)
@@ -248,6 +278,30 @@ export default function Wall() {
         })
     }
 
+    const deleteComment = (commentId) => {
+        axios.delete(`http://localhost:8080/comments/${commentId}`)
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res=>{
+                    setPostList(res.data);
+                    setPostListDisplay(res.data);
+                    console.log("test dang bai ---------------- " + res.data)
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+
+    // like bai post
+
+    useEffect(() => {
+        const storedLikedPosts = localStorage.getItem("likedPosts");
+        if (storedLikedPosts) {
+            setLikedPosts(JSON.parse(storedLikedPosts));
+        }
+    }, []);
+
     const toggleLike = async (postId) => {
         try {
             // Call the API to update the like status
@@ -267,6 +321,17 @@ export default function Wall() {
 
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedPosts.includes(postId)) {
+                setLikedPosts([...likedPosts, postId]);
+                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -292,6 +357,16 @@ export default function Wall() {
 
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
+            }
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -308,6 +383,83 @@ export default function Wall() {
             setLikedPosts([...likedPosts, postId]); // Thêm postId vào mảng likedPosts
         }
     };
+
+   // like comment
+    useEffect(() => {
+        const storedLikedComment = localStorage.getItem("likedComment");
+        if (storedLikedComment) {
+            setLikedComment(JSON.parse(storedLikedComment));
+        }
+    }, []);
+    const likeComment = async (commentId) => {
+        try {
+
+            const apiUrl = `http://localhost:8080/comment-reactions/addCommentReaction/comment/${commentId}/user/${user.userId}`
+
+            await axios.post(apiUrl);
+            setIsLiked(true);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+            if (!likedComment.includes(commentId)) {
+                setLikedComment([...likedComment, commentId]);
+                localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
+            }
+
+
+        } catch (error) {
+            console.error("Error liking comment:", error);
+        }
+    };
+
+    // unLike comment
+    const unlikeComment = async (commentId) => {
+        try {
+            // Call the API to delete the like reaction
+            const apiUrl = `http://localhost:8080/comment-reactions/delete/comment/${commentId}/user/${user.userId}`; // Replace with your actual API endpoint
+
+            await axios.post(apiUrl);
+
+            // Update the local state to reflect the new like status
+            setIsLiked(false);
+            axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                setPostList(response.data);
+                setPostListDisplay(response.data);
+                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+            })
+
+            if (likedComment.includes(commentId)) {
+                setLikedComment(likedPosts.filter((id) => id !== commentId));
+                localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
+    // xét like and unLike
+    const handleToggleLikeComment = async (commentId) => {
+        console.log(commentId)
+        try {
+            if (likedComment.includes(commentId)) {
+                // Bình luận đã được thích trước đó, nên ta muốn bỏ thích nó
+                await unlikeComment(commentId);
+                setLikedComment(likedComment.filter((id) => id !== commentId));
+            } else {
+                // Bình luận chưa được thích, nên ta muốn thích nó
+                await likeComment(commentId);
+                setLikedComment([...likedComment, commentId]);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+
 
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
@@ -391,7 +543,6 @@ export default function Wall() {
                     <button onClick={() => setShowModalUpdate(false)}>Close Modal</button>
                 </Modal>
             </div>
-
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -551,7 +702,7 @@ export default function Wall() {
                                     </div>
                                     <div>
                                         <button
-                                            className={!item.postReactionList.filter(postReaction => postReaction.user.userId == user.userId) ? "like-button like" : "unLike-button"}
+                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
@@ -568,10 +719,23 @@ export default function Wall() {
                                                     <h2> {user.fullName} </h2>
                                                 </div>
                                                 <div className={"comment-input"}>
-                                                    <textarea placeholder={"Viết bình luận.."}/>
+                                                    <Formik initialValues={{
+                                                        post: {
+                                                            postId: item.postId
+                                                        },
+                                                        user: {
+                                                            userId: user.userId
+                                                        },
+                                                        textContent: ""
+                                                    }} onSubmit={handleComment}>
+                                                        <Form>
+                                                            <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                            />
+                                                            <button>Bình Luận</button>
+                                                        </Form>
+                                                    </Formik>
                                                 </div>
                                                 <div>
-                                                    <button className={"comment-submit"}>Bình Luận</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -585,11 +749,23 @@ export default function Wall() {
                                                             <img src={comment.user.avatar} alt={"avt"}/>
                                                             <h2> {comment.user.fullName} </h2>
                                                         </div>
-                                                        <p> {comment.textContent} </p>
+                                                        <p>{comment.textContent}</p>
+                                                        <button onClick={()=>deleteComment(comment.commentId)}>
+                                                          xoa
+                                                        </button>
+
+                                                        <Link to={`edit/${comment.commentId}`}>
+                                                            Sửa
+                                                        </Link>
                                                     </div>
                                                     <div>
-                                                        <span> 20 </span>
-                                                        <button> like</button>
+                                                        <span>{comment.commentReactionList.length}</span>
+                                                        <button
+                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
+                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
+                                                        >
+                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </li>

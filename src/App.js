@@ -25,6 +25,9 @@ import FriendRequestPending from "./pages/user/friend_action/friend_request_pend
 import WallDemo from "./pages/user/user_page/wall/WallDemo";
 import FriendAction from "./pages/user/friend_action/FriendAction";
 
+import NewFeedTest from "./pages/user/home/NewFeedTest";
+import EditComment from "./pages/user/user_page/wall/EditComment";
+import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 
 
 
@@ -112,8 +115,10 @@ function App() {
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"favorite"} element={<Favorite/>}></Route>
+                    <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
+                        <Route path={"edit/:commentId"} element={<EditComment/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>

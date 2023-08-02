@@ -39,6 +39,7 @@ export default function NewFeedTest(props) {
     const [reactionCount, setReactionCount] = useState([]);
 
     const [visiblePostIds, setVisiblePostIds] = useState([]);
+    const [visibleUserIds,setVisibleUserIds]=useState([])
 
     const [isLiked, setIsLiked] = useState(false);
 
@@ -53,6 +54,13 @@ export default function NewFeedTest(props) {
     const [postList, setPostList] = useState([]);
 
     const [commentList, setListComment] = useState([]);
+    const [comment,setComment]=useState({
+        user:{
+            userId
+        }
+    })
+
+
 
 
 
@@ -334,6 +342,7 @@ export default function NewFeedTest(props) {
                         const images = postImages[item.postId] || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
 
+
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">
@@ -410,6 +419,7 @@ export default function NewFeedTest(props) {
                                         </div>
                                     </li>
                                     {item.commentList.map(comment => {
+                                        const isCurrentUserComment = comment.user.userId === user.userId;
                                         return (
                                             <li>
                                                 <div className={"comment-container"}>
@@ -420,9 +430,11 @@ export default function NewFeedTest(props) {
                                                                 <h2> {comment.user.fullName} </h2></Link>
                                                         </div>
                                                         <p> {comment.textContent} </p>
-                                                        <button
-                                                            onClick={() => deleteComment(comment.commentId, user.userId)}>Xóa
-                                                        </button>
+                                                        {isCurrentUserComment && (
+                                                            <button onClick={() => deleteComment(comment.commentId, user.userId)}>
+                                                                Xóa
+                                                            </button>
+                                                        )}
                                                     </div>
                                                     <div>
                                                         <span> 20 </span>

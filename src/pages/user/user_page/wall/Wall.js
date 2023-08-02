@@ -18,6 +18,8 @@ export default function Wall() {
 
     const navigate = useNavigate();
 
+    const {commentId} = useParams();
+
     const [imgUrl, setImgUrl] = useState(null);
 
     const [dropDown, setDropDown] = useState(false)
@@ -41,8 +43,10 @@ export default function Wall() {
     const [relation, setRelation] = useState(false);
 
     const [commentList, setListComment] = useState([]);
+    const [post]=useState({})
     const [comments, setComments] = useState({
-        commentId:0
+        commentId:0,
+        textContent:""
     });
 
     /* Show Edit Form */
@@ -183,6 +187,7 @@ export default function Wall() {
     const handleShowDropDown = () => {
         setDropDown(!dropDown); // Khi bấm vào thì đảo ngược trạng thái
     };
+
 
     //Thông tin của 1 người
     useEffect(() => {
@@ -360,11 +365,13 @@ export default function Wall() {
     return (
         <div className="newFeed">
             <div>
-                <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>
-                    <EditPost id={idEditPost}   onClose={() => setShowModal(false)} ></EditPost>
-                    <button onClick={() => setShowModal(false)}>Close Modal</button>
-                </Modal>
             </div>
+            {/*<div>*/}
+            {/*    <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>*/}
+            {/*        <EditPost id={idEditPost}   onClose={() => setShowModal(false)} ></EditPost>*/}
+            {/*        <button onClick={() => setShowModal(false)}>Close Modal</button>*/}
+            {/*    </Modal>*/}
+            {/*</div>*/}
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
@@ -560,12 +567,10 @@ export default function Wall() {
                                                         <button onClick={()=>deleteComment(comment.commentId)}>
                                                           xoa
                                                         </button>
-                                                        <button>
-                                                            <Link to={`edit/${comment.commentId}`}>
-                                                             Sửa
-                                                            </Link>
-                                                        </button>
 
+                                                        <Link to={`edit/${comment.commentId}`}>
+                                                            Sửa
+                                                        </Link>
                                                     </div>
                                                     <div>
                                                         <span> 20 </span>

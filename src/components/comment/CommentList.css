@@ -1,0 +1,24 @@
+#rest-comment {
+    display: flex;
+    justify-content: space-between;
+    justify-self: center;
+    width: 95%;
+}
+#show-more{
+    margin-left: 10px;
+    text-decoration: none;
+}
+#show-more:hover{
+    text-decoration: underline;
+}
+#hide-all:hover{
+    text-decoration: underline;
+}
+
+#show-all {
+    margin-left: 10px;
+    text-decoration: none;
+}
+#show-all:hover{
+    text-decoration: underline;
+}

@@ -9,7 +9,7 @@ import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import "./like-button.css"
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {storage} from "../../../firebase";
+import {storage} from "../../../firebase"; import CommentList from "../../../components/comment/CommentList";
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -251,21 +251,21 @@ export default function NewFeed(props) {
     };
 
     const showMoreComment = (index, currentIndex) => {
-        let restComment = "";
+        let restComment = document.getElementById("rest-comment").innerHTML;
         console.log(listPosts[index].commentList);
         for(let i = currentIndex; i < listPosts[index].commentList.length && i < currentIndex+10;i++){
             restComment += ` <li>
                                                 <div className={"comment-container"}>
                                                     <div>
                                                         <div className={"comment-container-avatar"}>
-                                                            <img src={listPosts[index].commentList[i].user.avatar} alt={"avt"}/>
+                                                            <img src=${listPosts[index].commentList[i].user.avatar} alt={"avt"}/>
                                                             <Link to={"/users/"+ ${listPosts[index].commentList[i].user.userId}}>
-                                                                <h2> {listPosts[index].commentList[i].user.fullName} </h2></Link>
+                                                                <h2> ${listPosts[index].commentList[i].user.fullName} </h2></Link>
                                                         </div>
-                                                        <p> {listPosts[index].commentList[i].textContent} </p>
+                                                        <p> ${listPosts[index].commentList[i].textContent} </p>
                                                     </div>
                                                     <div>
-                                                        <span> {listPosts[index].commentList[i].commentReactionList.length} </span>
+                                                        <span> ${listPosts[index].commentList[i].commentReactionList.length} </span>
                                                         <button> like</button>
                                                     </div>
                                                 </div>
@@ -273,11 +273,10 @@ export default function NewFeed(props) {
         }
         if (listPosts[index].commentList.length > currentIndex+10){
             restComment += "{item.commentList.length > 3 && <div id=\"rest-comment\"><a id={\"show-more\"}\n" +
-                "                                                                                              onClick={() => showMoreComment(index,currentIndex+3)}> Hiện\n" +
-                "                                        thêm... </a></div>}"
+                "onClick={() => showMoreComment(index,currentIndex+3)}> Hiện\n" +
+                "thêm... </a></div>}"
         }
         document.getElementById("rest-comment").innerHTML = restComment;
-
     }
 
     return (
@@ -405,29 +404,32 @@ export default function NewFeed(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    {item.commentList.slice(0, 3).map(comment => {
-                                        return (
-                                            <li>
-                                                <div className={"comment-container"}>
-                                                    <div>
-                                                        <div className={"comment-container-avatar"}>
-                                                            <img src={comment.user.avatar} alt={"avt"}/>
-                                                            <Link to={`/users/${comment.user.userId}`}>
-                                                                <h2> {comment.user.fullName} </h2></Link>
-                                                        </div>
-                                                        <p> {comment.textContent} </p>
-                                                    </div>
-                                                    <div>
-                                                        <span> {comment.commentReactionList.length} </span>
-                                                        <button> like</button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })}
-                                    {item.commentList.length > 3 && <div id="rest-comment"><a id={"show-more"}
-                                                                                              onClick={() => showMoreComment(index,3)}> Hiện
-                                        thêm... </a></div>}
+                                    <CommentList comments={item.commentList}></CommentList>
+
+
+                                    {/*{item.commentList.slice(0, 3).map(comment => {*/}
+                                    {/*    return (*/}
+                                    {/*        <li>*/}
+                                    {/*            <div className={"comment-container"}>*/}
+                                    {/*                <div>*/}
+                                    {/*                    <div className={"comment-container-avatar"}>*/}
+                                    {/*                        <img src={comment.user.avatar} alt={"avt"}/>*/}
+                                    {/*                        <Link to={`/users/${comment.user.userId}`}>*/}
+                                    {/*                            <h2> {comment.user.fullName} </h2></Link>*/}
+                                    {/*                    </div>*/}
+                                    {/*                    <p> {comment.textContent} </p>*/}
+                                    {/*                </div>*/}
+                                    {/*                <div>*/}
+                                    {/*                    <span> {comment.commentReactionList.length} </span>*/}
+                                    {/*                    <button> like</button>*/}
+                                    {/*                </div>*/}
+                                    {/*            </div>*/}
+                                    {/*        </li>*/}
+                                    {/*    )*/}
+                                    {/*})}*/}
+                                    {/*{item.commentList.length > 3 && <div id="rest-comment"><a id={"show-more"}*/}
+                                    {/*                                                          onClick={() => showMoreComment(index,3)}> Hiện*/}
+                                    {/*    thêm... </a></div>}*/}
                                 </ul>
                             </div>
                         )

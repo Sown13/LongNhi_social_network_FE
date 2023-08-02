@@ -182,7 +182,9 @@ export default function UserAbout() {
                                         <MDBCardText>Sinh nhật</MDBCardText>
                                     </MDBCol>
                                     <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{}</MDBCardText>
+                                        <MDBCardText className="text-muted">
+                                            {new Date(userDetail.birthday).toLocaleDateString("vn-VN")}
+                                        </MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
                                 <hr/>

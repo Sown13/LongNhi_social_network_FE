@@ -3,7 +3,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {Field, Form, Formik} from 'formik';
 import Swal from "sweetalert2";
-import {Dropdown, Menu} from "antd";
+import {Dropdown, Menu, Modal} from "antd";
 import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../../../firebase";
 
@@ -12,6 +12,9 @@ export default function UpdateForm() {
     const [user, setUser] = useState({});
     const navigate = useNavigate();
     const [imgUrl, setImgUrl] = useState(null)
+    const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [showBackgroundModal, setShowBackgroundModal] = useState(false);
+
 
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
@@ -100,7 +103,9 @@ export default function UpdateForm() {
                                                             }}
                                                         />
                                                     </Menu.Item>
-                                                    <Menu.Item key="2">Xem ảnh nền</Menu.Item>
+                                                    <Menu.Item key="2" onClick={() => setShowBackgroundModal(true)}>
+                                                        Xem ảnh nền
+                                                    </Menu.Item>
                                                 </Menu>
                                             }
                                             trigger={['click']}
@@ -131,7 +136,7 @@ export default function UpdateForm() {
                                                                     }}
                                                                 />
                                                             </Menu.Item>
-                                                            <Menu.Item key="2">
+                                                            <Menu.Item key="2" onClick={() => setShowAvatarModal(true)}>
                                                                 Xem ảnh đại diện
                                                             </Menu.Item>
                                                         </Menu>
@@ -164,7 +169,7 @@ export default function UpdateForm() {
                             </tr>
                             <tr>
                                 <td><strong>Sinh nhật</strong></td>
-                                <Field name={"birthday"} type="date" value={user.birthday}></Field>
+                                <Field name={"birthday"} type="date"></Field>
                             </tr>
                             <tr>
                                 <td><strong>Sở thích</strong></td>
@@ -178,7 +183,7 @@ export default function UpdateForm() {
                             </tr>
                             <tr>
                                 <td colSpan="2">
-                                    <button type="submit">Lưu</button>
+                                    <button type="submit" style={{ backgroundColor: '#ff6347' }}>Lưu</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -186,6 +191,22 @@ export default function UpdateForm() {
                     </Form>
                 </Formik>
             </div>
+            <Modal
+
+                visible={showAvatarModal}
+                onCancel={() => setShowAvatarModal(false)}
+                footer={null}
+            >
+                <img src={user.avatar} alt="User Avatar" style={{width:'470px', height:'500px', marginTop:'20px'}}/>
+            </Modal>
+            <Modal
+
+            visible={showBackgroundModal}
+            onCancel={() => setShowBackgroundModal(false)}
+            footer={null}
+        >
+            <img src={user.background} alt="User Avatar" style={{width: '470px', height: '500px', marginTop: '20px'}}/>
+        </Modal>
         </>
     );
 };

@@ -440,9 +440,9 @@ export default function NewFeed(props) {
                     <br/>
                     <div className={"newFeedWelcome"}>
                         {/*<img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>*/}
-                        <h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long
-                            Nhi và mọi người biết
-                            nhé :) </h2>
+                        {/*<h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long*/}
+                        {/*    Nhi và mọi người biết*/}
+                        {/*    nhé :) </h2>*/}
                     </div>
 
 

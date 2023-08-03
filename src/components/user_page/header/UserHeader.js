@@ -242,7 +242,7 @@ export default function UserHeader() {
     return (
         <div className={"user-header"}>
             <div className={"user-background-img"}>
-                <img src={targetUser.avatar} alt={"back ground"}/>
+                <img src={targetUser.background} alt={"back ground"}/>
             </div>
             <div className={"user-info"}>
                 <div className={"user-avatar"}>

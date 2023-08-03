@@ -5,7 +5,7 @@ export default function SideBarLeft() {
     return (
         <div className="sideBarLeft">
             <div className="sideBarLeft-content">
-                <Link to={"/admin"}><img src={"img/example-ava-2.png"}/> <h2> Admin Demo </h2></Link>
+                <Link to={"/admin"}><img src={"https://vapa.vn/wp-content/uploads/2022/12/anh-3d-thien-nhien-010.jpg"}/> <h2> Admin Demo </h2></Link>
                 <hr/>
                 <Link to={"/friend"}> <h2> Kết nối bạn bè </h2> </Link>
                 <hr/>

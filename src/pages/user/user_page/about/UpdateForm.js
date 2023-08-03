@@ -72,6 +72,7 @@ export default function UpdateForm() {
             };
 
             await axios.put(`http://localhost:8080/users/${userId}`, updatedUser);
+
             console.log("values up ảnh - 1", avatarImage);
             console.log("values up ảnh background - 2", backgroundImage);
             setUser(updatedUser);

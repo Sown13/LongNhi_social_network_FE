@@ -43,10 +43,10 @@ export default function Wall() {
     const [relation, setRelation] = useState(false);
 
     const [commentList, setListComment] = useState([]);
-    const [post]=useState({})
+    const [post] = useState({})
     const [comments, setComments] = useState({
-        commentId:0,
-        textContent:""
+        commentId: 0,
+        textContent: ""
     });
 
     const [listPosts, setListPosts] = useState([]);
@@ -86,13 +86,13 @@ export default function Wall() {
             })
         }
     }, [userId]);
-    const handleComment = async (values, { resetForm, setError }) => {
+    const handleComment = async (values, {resetForm, setError}) => {
         try {
-             await axios.post('http://localhost:8080/comments', values).then(()=>{
-                 axios.get(`http://localhost:8080/posts/user/${userId}`).then(res=>{
+            await axios.post('http://localhost:8080/comments', values).then(() => {
+                axios.get(`http://localhost:8080/posts/user/${userId}`).then(res => {
                     setPostList(res.data)
                     setPostListDisplay(res.data)
-            })
+                })
             });
 
             // Swal.fire({
@@ -101,7 +101,7 @@ export default function Wall() {
             // });
         } catch (error) {
             console.log(error);
-            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
         } finally {
             resetForm();
         }
@@ -117,8 +117,9 @@ export default function Wall() {
             const file = files[i];
             reader.onload = (e) => {
                 setImagesNewPost((prevImages) => [...prevImages, {
-                    file :file,
-                    imgUrl : e.target.result}]
+                        file: file,
+                        imgUrl: e.target.result
+                    }]
                 );
 
             };
@@ -128,7 +129,7 @@ export default function Wall() {
 
     const handleDeleteImageNewPost = async (image) => {
         setImagesNewPost(imagesNewPost.filter((item) => item !== image));
-        setImagesAddNewPost(imagesAddNewPost.filter((item)=>item !== image.file));
+        setImagesAddNewPost(imagesAddNewPost.filter((item) => item !== image.file));
         setImagesDeleteNewPost(imagesDeleteNewPost.concat(image));
 
     };
@@ -201,11 +202,11 @@ export default function Wall() {
                         })
                     })
                 }
-            ).then(()=>{
-                setImagesNewPost([]);
-                setImagesAddNewPost([]);
-                setImagesDeleteNewPost([]);
-                setImgUrlNewPost([]);
+            ).then(() => {
+                    setImagesNewPost([]);
+                    setImagesAddNewPost([]);
+                    setImagesDeleteNewPost([]);
+                    setImgUrlNewPost([]);
                 }
             );
         }).catch((error) => {
@@ -214,11 +215,11 @@ export default function Wall() {
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    setPostList(response.data);
-                    setPostListDisplay(response.data);
-                    // console.log("Dữ liệu từ server", JSON.stringify(response.data))
-                })
+        axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+            setPostList(response.data);
+            setPostListDisplay(response.data);
+            // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+        })
 
     }, [showModalUpdate]);
 
@@ -281,7 +282,7 @@ export default function Wall() {
     const deleteComment = (commentId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then(res=>{
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res => {
                     setPostList(res.data);
                     setPostListDisplay(res.data);
                     console.log("test dang bai ---------------- " + res.data)
@@ -384,7 +385,7 @@ export default function Wall() {
         }
     };
 
-   // like comment
+    // like comment
     useEffect(() => {
         const storedLikedComment = localStorage.getItem("likedComment");
         if (storedLikedComment) {
@@ -460,7 +461,6 @@ export default function Wall() {
     };
 
 
-
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
         const storedValue = localStorage.getItem('selectedOption');
@@ -515,6 +515,19 @@ export default function Wall() {
         updateAuthorizedView(selectedPostId, selectedOption);
     }, [selectedOption]);
 
+    const [checkIsAccepted, setCheckIsAccepted] = useState(false)
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/user-friends/check-relationship/" + user.userId + "/" + userId).then((response) => {
+            if (response.status === 200) {
+                console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------",response.data)
+                setCheckIsAccepted(true)
+            } else {
+                setCheckIsAccepted(false)
+            }
+        })
+    })
+
     return (
         <div className="newFeed">
             <div>
@@ -525,16 +538,16 @@ export default function Wall() {
                             Swal.fire({
                                 title: 'Loading...',
 
-                                closeOnClickOutside : false,
+                                closeOnClickOutside: false,
                                 timer: 2000
-                            }).then(()=>{
+                            }).then(() => {
                                 setShowModalUpdate(false);
                                 setUpLoadSuccess(!upLoadSuccess)
-                            }).then(()=>{
+                            }).then(() => {
                                 Swal.fire({
                                     title: 'Done',
                                     icon: "success",
-                                    closeOnClickOutside : false,
+                                    closeOnClickOutside: false,
                                     timer: 1000
                                 })
                             })
@@ -577,7 +590,7 @@ export default function Wall() {
                                         onChange={(e) => {
                                             handleAddImageNewPost(e);
                                             const files = e.currentTarget.files;
-                                            setImagesAddNewPost([...imagesAddNewPost,...files]);
+                                            setImagesAddNewPost([...imagesAddNewPost, ...files]);
                                         }}
                                         multiple
                                     />
@@ -711,35 +724,40 @@ export default function Wall() {
                                     </div>
                                 </div>
                                 <ul style={{marginTop: "16px"}}>
-                                    <li style={{minWidth: "90%"}}>
-                                        <div className={"comment-container"}>
+                                    {checkIsAccepted ? (
+                                        <li style={{minWidth: "90%"}}>
+                                    <div className={"comment-container"}>
+                                        <div>
+                                            <div className={"comment-container-avatar"}>
+                                                <img src={user.avatar} alt={"avt"}/>
+                                                <h2> {user.fullName} </h2>
+                                            </div>
+                                            <div className={"comment-input"}>
+                                                <Formik initialValues={{
+                                                    post: {
+                                                        postId: item.postId
+                                                    },
+                                                    user: {
+                                                        userId: user.userId
+                                                    },
+                                                    textContent: ""
+                                                }} onSubmit={handleComment}>
+                                                    <Form>
+                                                        <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                        />
+                                                        <button>Bình Luận</button>
+                                                    </Form>
+                                                </Formik>
+                                            </div>
                                             <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={user.avatar} alt={"avt"}/>
-                                                    <h2> {user.fullName} </h2>
-                                                </div>
-                                                <div className={"comment-input"}>
-                                                    <Formik initialValues={{
-                                                        post: {
-                                                            postId: item.postId
-                                                        },
-                                                        user: {
-                                                            userId: user.userId
-                                                        },
-                                                        textContent: ""
-                                                    }} onSubmit={handleComment}>
-                                                        <Form>
-                                                            <Field name={"textContent"} placeholder={"Viết bình luận.."}
-                                                            />
-                                                            <button>Bình Luận</button>
-                                                        </Form>
-                                                    </Formik>
-                                                </div>
-                                                <div>
-                                                </div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </div>
+                                </li>
+                                        ) : (
+                                            <div>Bạn cần kết bạn với người này để có thể tương tác</div>
+                                )}
+
                                     {item.commentList.map(comment => {
                                         const isCurrentUserComment = comment.user.userId === user.userId;
                                         return (
@@ -751,15 +769,16 @@ export default function Wall() {
                                                             <h2> {comment.user.fullName} </h2>
                                                         </div>
                                                         <p>{comment.textContent}</p>
-                                                        {isCurrentUserComment&&
+                                                        {isCurrentUserComment &&
                                                             (
-                                                                <button onClick={()=>deleteComment(comment.commentId)}>
+                                                                <button
+                                                                    onClick={() => deleteComment(comment.commentId)}>
                                                                     xoa
                                                                 </button>
                                                             )
                                                         }
 
-                                                          {isCurrentUserComment&&
+                                                        {isCurrentUserComment &&
                                                             (
 
                                                                 <Link to={`edit/${comment.commentId}`}>
@@ -767,8 +786,6 @@ export default function Wall() {
                                                                 </Link>
                                                             )
                                                         }
-
-
 
 
                                                     </div>

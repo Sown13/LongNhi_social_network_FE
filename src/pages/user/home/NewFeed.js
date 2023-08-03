@@ -297,6 +297,7 @@ export default function NewFeed(props) {
                     setPostList(response.data);
                     console.log("test dang bai ---------------- " + response.data)
                     Swal.fire({
+                        title: "Đăng bài viết mới thành công",
                         icon: 'success',
                         timer: 2000
                     })
@@ -340,6 +341,7 @@ export default function NewFeed(props) {
                     setPostList(response.data);
                     console.log("test dang bai ---------------- " + response.data)
                     Swal.fire({
+                        title: "Đăng bài viết mới thành công",
                         icon: 'success',
                         timer: 2000
                     })

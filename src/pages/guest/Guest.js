@@ -1,6 +1,8 @@
 import "./guest.css"
 import {useState} from "react";
 export default function Guest(){
+
+
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -20,7 +22,7 @@ export default function Guest(){
     )
     return (
         <>
-            <GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>
+            {/*<GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>*/}
         </>
     )
 }

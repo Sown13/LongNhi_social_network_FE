@@ -511,6 +511,19 @@ export default function Wall() {
         updateAuthorizedView(selectedPostId, selectedOption);
     }, [selectedOption]);
 
+    const [checkIsAccepted, setCheckIsAccepted] = useState(false)
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/user-friends/check-relationship/" + user.userId + "/" + userId).then((response) => {
+            if (response.status === 200) {
+                console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------",response.data)
+                setCheckIsAccepted(true)
+            } else {
+                setCheckIsAccepted(false)
+            }
+        })
+    })
+
     return (
         <div className="newFeed">
             <div>
@@ -527,7 +540,7 @@ export default function Wall() {
                                 setUpLoadSuccess(!upLoadSuccess)
                             }).then(() => {
                                 Swal.fire({
-                                    title: 'Done',
+                                    title: 'Cập nhật bài viết thành công',
                                     icon: "success",
                                     closeOnClickOutside: false,
                                     timer: 1000
@@ -710,34 +723,37 @@ export default function Wall() {
                                     </div>
                                 </div>
                                 <ul style={{marginTop: "16px"}}>
-                                    <li style={{minWidth: "90%"}}>
-                                        <div className={"comment-container"}>
-                                            <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={user.avatar} alt={"avt"}/>
-                                                    <h2> {user.fullName} </h2>
-                                                </div>
-                                                <div className={"comment-input"}>
-                                                    <Formik initialValues={{
-                                                        post: {
-                                                            postId: item.postId
-                                                        },
-                                                        user: {
-                                                            userId: user.userId
-                                                        },
-                                                        textContent: ""
-                                                    }} onSubmit={handleComment}>
-                                                        <Form>
-                                                            <Field as={"textarea"} id={`comment-textarea-${index}`}
-                                                                   name={"textContent"} placeholder={"Viết bình luận.."}
-                                                            />
-                                                            <button className={"comment-submit"}>Bình Luận</button>
-                                                        </Form>
-                                                    </Formik>
+                                    {checkIsAccepted ? (
+                                        <li style={{minWidth: "90%"}}>
+                                            <div className={"comment-container"}>
+                                                <div>
+                                                    <div className={"comment-container-avatar"}>
+                                                        <img src={user.avatar} alt={"avt"}/>
+                                                        <h2> {user.fullName} </h2>
+                                                    </div>
+                                                    <div className={"comment-input"}>
+                                                        <Formik initialValues={{
+                                                            post: {
+                                                                postId: item.postId
+                                                            },
+                                                            user: {
+                                                                userId: user.userId
+                                                            },
+                                                            textContent: ""
+                                                        }} onSubmit={handleComment}>
+                                                            <Form>
+                                                                <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                                />
+                                                                <button>Bình Luận</button>
+                                                            </Form>
+                                                        </Formik>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    ) : (
+                                        <div>Bạn cần kết bạn với người này để có thể tương tác</div>
+                                    )}
                                     <CommentList item={item} likedComment={likedComment}
                                                  handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
                                 </ul>

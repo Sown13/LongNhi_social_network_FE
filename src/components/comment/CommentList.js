@@ -26,7 +26,7 @@ export default function CommentList({item, likedComment, handleToggleLikeComment
     }
 
     const showFormEditComment = (comment, divId, handleUpdateComment) => {
-        const element = <EditComment comment={comment} handleUpdateComment={handleUpdateComment}/>;
+        const element = <EditComment comment={comment} divId={divId} handleUpdateComment={handleUpdateComment}/>;
         const root = createRoot(document.getElementById(divId));
         root.render(element);
     };

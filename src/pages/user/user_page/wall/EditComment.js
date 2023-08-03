@@ -17,10 +17,12 @@ export default function EditComment({ comment, handleUpdateComment }) {
     const handleClick = () => {
         setShowForm(true);
     };
+    const cancelEditComment = () => {
+
+    }
 
     return (
-        <div className="edit-comment" style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
-
+        // <div className="edit-comment" style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
                 <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit}>
                     {({ values, handleChange, handleSubmit, isSubmitting }) => (
                         <Form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
@@ -34,6 +36,6 @@ export default function EditComment({ comment, handleUpdateComment }) {
                         </Form>
                     )}
                 </Formik>
-        </div>
+        // </div>
     );
 };

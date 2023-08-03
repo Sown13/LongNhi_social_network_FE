@@ -2,7 +2,7 @@ import "./CommentList.css";
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import EditComment from "../../pages/user/user_page/wall/EditComment";
-import ReactDOM from "react-dom";
+import ReactDOM, {createRoot} from "react-dom";
 
 export default function CommentList({item, likedComment, handleToggleLikeComment, user, deleteComment,handleUpdateComment}) {
     const [numShownComments, setNumShownComments] = useState(0);
@@ -27,9 +27,9 @@ export default function CommentList({item, likedComment, handleToggleLikeComment
 
     const showFormEditComment = (comment, divId, handleUpdateComment) => {
         const element = <EditComment comment={comment} handleUpdateComment={handleUpdateComment}/>;
-        ReactDOM.render(element, document.getElementById(divId));
+        const root = createRoot(document.getElementById(divId));
+        root.render(element);
     };
-
 
     return (
         <div>
@@ -38,7 +38,7 @@ export default function CommentList({item, likedComment, handleToggleLikeComment
                     const isCurrentUserComment = comment.user.userId === user.userId;
                     return (
                         <li key={comment.commentId}>
-                            <div className="comment-container" id={`user-comment-${comment.commentId}`}>
+                            <div className="comment-container">
                                 <div>
                                     <div className="comment-container-avatar">
                                         <img src={comment.user.avatar} alt="avt"/>
@@ -46,7 +46,7 @@ export default function CommentList({item, likedComment, handleToggleLikeComment
                                             <h2>{comment.user.fullName}</h2>
                                         </Link>
                                     </div>
-                                    <p>{comment.textContent}</p>
+                                    <p id={`user-comment-${comment.commentId}`}>{comment.textContent}</p>
                                 </div>
                                 <div>
                                     <span>{comment.commentReactionList.length}</span>

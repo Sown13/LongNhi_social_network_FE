@@ -113,7 +113,6 @@ const EditPost = (props) => {
                 setImagesAdd([]);
                 setImagesDelete([]);
                 setImgUrlAdd([]);
-
                 props.onClose()
             })
         } catch (err) {

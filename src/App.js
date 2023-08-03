@@ -22,7 +22,14 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import EditPost from "./pages/user/update_status/EditPost";
+import Test from "./pages/Test";
+import MyComponent from "./pages/Test";
+import Modal from "react-modal";
+import UpdateForm from "./pages/user/user_page/about/UpdateForm";
+
+import NewFeedTest from "./pages/user/home/NewFeedTest";
+import EditComment from "./pages/user/user_page/wall/EditComment";
+import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 
 
 
@@ -87,7 +94,6 @@ function App() {
                 <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={!loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
-                    <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
 
                 </Route>
                 {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}
@@ -112,6 +118,7 @@ function App() {
                     <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>
+                        <Route path={"edit/:commentId"} element={<EditComment/>}></Route>
                         <Route path={"about"} element={<UserAbout/>}></Route>
                         <Route path={"friends"} element={<UserFriend/>}></Route>
                         <Route path={"photos"} element={<UserPhoto/>}></Route>

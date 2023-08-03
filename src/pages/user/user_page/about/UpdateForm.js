@@ -7,19 +7,28 @@ import {Dropdown, Menu, Modal} from "antd";
 import {ref, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import {storage} from "../../../../firebase";
 
+
 export default function UpdateForm() {
+
     const {userId} = useParams();
     const [user, setUser] = useState({});
     const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [avatarDisplay, setAvatarDisplay] = useState(null);
+    const [backgroundDisplay, setBackgroundDisplay] = useState(null);
     const [showBackgroundModal, setShowBackgroundModal] = useState(false);
 
-    const [avatarImage, setAvatarImage] = useState({});
-    const [backgroundImage, setBackgroundImage] = useState({});
+
+    const [avatarImage, setAvatarImage] = useState(null);
+    const [backgroundImage, setBackgroundImage] = useState(null);
+
+
 
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId)
             .then((response) => {
                 setUser(response.data);
+                setAvatarDisplay(response.data.avatar)
+                setBackgroundDisplay(response.data.background)
 
                 console.log("avatar", avatarImage)
                 console.log("background", backgroundImage)
@@ -31,11 +40,13 @@ export default function UpdateForm() {
 
     const handleAvatarChange = (event) => {
         const file = event.currentTarget.files[0];
+        setAvatarDisplay(URL.createObjectURL(file));
         setAvatarImage(file);
     };
 
     const handleBackgroundChange = (event) => {
         const file = event.currentTarget.files[0];
+        setBackgroundDisplay(URL.createObjectURL(file));
         setBackgroundImage(file);
     };
 
@@ -46,15 +57,17 @@ export default function UpdateForm() {
             console.log("72", updatedAvatar)
             console.log("73", updatedBackground)
 
-            if (avatarImage) {
+            if (avatarImage!=null) {
                 const avatarStorageRef = ref(storage, `avatars/${user.avatar.name}`);
                 const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarImage);
                 await avatarUploadTask;
                 const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
                 updatedAvatar = avatarDownloadURL;
                 console.log("avatar - 80", avatarImage)
+            }else{
+                updatedAvatar = user.avatar;
             }
-            if (backgroundImage) {
+            if (backgroundImage !=null) {
                 const backgroundStorageRef = ref(storage, `backgrounds/${user.background.name}`);
                 const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundImage);
                 await backgroundUploadTask;
@@ -62,7 +75,7 @@ export default function UpdateForm() {
                 updatedBackground = backgroundDownloadURL;
                 console.log("background - 89", backgroundImage)
             } else {
-                return;
+                updatedBackground =  user.background;
             }
 
             const updatedUser = {
@@ -135,7 +148,7 @@ export default function UpdateForm() {
 
                                 <td colSpan={2} style={{ textAlign: 'left', padding: '10px', marginLeft: '200px' }}>
                                     {
-                                        !user.avatar  ? (
+                                        !user.avatar? (
                                             <img
                                                 src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
                                                 className="avatar"
@@ -144,7 +157,7 @@ export default function UpdateForm() {
                                             />
                                         ) : (
                                             <img
-                                                src={user.avatar}
+                                                src={avatarDisplay}
                                                 className="avatar"
                                                 style={{ textAlign: 'center', marginLeft: '130px', width: '190px', height: '190px' }}
                                                 alt="User Avatar"
@@ -192,7 +205,7 @@ export default function UpdateForm() {
                             <tr>
                                 <td colSpan={2}>
                                         <img
-                                            src={user.background}
+                                            src={backgroundDisplay}
                                             style={{fontSize: '20px', fontWeight: '50px'}}
                                             className="cover-photo"
                                         ></img>

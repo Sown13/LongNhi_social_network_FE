@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './UserAbout.css';
 import axios from 'axios';
 import {Button, Modal} from 'antd';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {
     MDBCol,
     MDBContainer,
@@ -18,6 +18,7 @@ import {MDBIcon} from "mdbreact";
 import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
 import PasswordUserUpdate from "./UserPassUpdate";
+import Swal from "sweetalert2";
 
 export default function UserAbout() {
     const {userId} = useParams()
@@ -42,6 +43,8 @@ export default function UserAbout() {
     // Rename the state variable to match the other component
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showUpdatePass, setShowUpdatePass] = useState(false);
+
+    const navigate = useNavigate();
 
     // Add the trigger to open the modal
     const handleOpenUpdateForm = () => {
@@ -257,7 +260,11 @@ export default function UserAbout() {
             </MDBContainer>
 
 
-            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+            <Modal visible={showUpdateForm} onCancel={() =>
+            {
+                setShowUpdateForm(false);
+                    navigate(`/users/${userId}`)
+            }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>
@@ -267,7 +274,9 @@ export default function UserAbout() {
                 <ModalFooter></ModalFooter>
             </Modal>
 
-            <Modal visible={showUpdatePass} onCancel={() => setShowUpdatePass(false)} footer={null} centered>
+            <Modal visible={showUpdatePass} onCancel={() => {
+                setShowUpdatePass(false)
+            }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Đổi mật khẩu</ModalTitle>
                 </ModalHeader>

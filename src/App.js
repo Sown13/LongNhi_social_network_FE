@@ -89,7 +89,7 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={!loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
 

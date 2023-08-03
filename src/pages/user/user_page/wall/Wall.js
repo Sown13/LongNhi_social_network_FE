@@ -433,7 +433,7 @@ export default function Wall() {
                                     <div className="image-list">
                                         {imagesNewPost.map((image) => (
                                             <div key={image.id} className="image-item">
-                                                <img src={image.imgUrl} alt=""/>
+                                                <img style={{maxWidth:"50px",maxHeight:"auto"}} src={image.imgUrl} alt=""/>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleDeleteImageNewPost(image)}>

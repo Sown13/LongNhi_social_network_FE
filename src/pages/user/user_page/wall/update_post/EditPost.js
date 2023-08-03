@@ -102,7 +102,6 @@ const EditPost = (props) => {
                     Promise.all(promises).then((downloadURLs) => {
                         setImgUrlAdd(downloadURLs);
                         const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
-                        console.log(imageData);
                         axios.post("http://localhost:8080/post-images/list", imageData)
                     }).catch((error) => {
                         alert(error);

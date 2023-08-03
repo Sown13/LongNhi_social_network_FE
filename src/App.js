@@ -22,9 +22,6 @@ import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
 import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import Test from "./pages/Test";
-import MyComponent from "./pages/Test";
-import Modal from "react-modal";
 import EditPost from "./pages/user/update_status/EditPost";
 
 
@@ -87,9 +84,10 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={!loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
+                    <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
 
                 </Route>
                 {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}

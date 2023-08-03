@@ -1,9 +1,14 @@
 import {Link, useParams} from "react-router-dom";
 import "./UserHeader.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import UserAction from "./UserAction";
+import {MDBCard} from "mdb-react-ui-kit";
+import {Button, Modal} from "antd";
+import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {ModalTitle} from "react-bootstrap";
+import UpdateForm from "../../../pages/user/user_page/about/UpdateForm";
 
 export default function UserHeader() {
     const {userId} = useParams();
@@ -24,6 +29,12 @@ export default function UserHeader() {
             return loggedInUser;
         }
     )
+
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
+
+    const handleOpenUpdateForm = () => {
+        setShowUpdateForm(true);
+    };
 
     const [targetUser, setTargetUser] = useState("");
 
@@ -257,7 +268,7 @@ export default function UserHeader() {
                     {relationship.sourceUser.userId === 0 ?
                         user.userId == userId ?
                             <div>
-                                <button> Chỉnh sửa trang cá nhân</button>
+                                <button onClick={handleOpenUpdateForm}>Chỉnh sửa trang cá nhân</button>
                                 <button> Nhắn tin</button>
                             </div>
                             : <div>
@@ -292,6 +303,15 @@ export default function UserHeader() {
                 <Link to={`/users/${userId}/videos`}>Video</Link>
                 <Link to={`/users/${userId}/checkin`}>Check-in</Link>
             </div>
+            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+                <ModalHeader closeButton>
+                    <ModalTitle>Thông tin cá nhân</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <UpdateForm></UpdateForm>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+            </Modal>
         </div>
     )
 }

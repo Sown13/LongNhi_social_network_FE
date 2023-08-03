@@ -16,7 +16,7 @@ import EditPost from "./update_post/EditPost";
 import CommentList from "../../../../components/comment/CommentList";
 
 export default function Wall() {
-
+    const [checkIsAccepted, setCheckIsAccepted] = useState(false)
     const navigate = useNavigate();
 
     const {commentId} = useParams();
@@ -76,8 +76,10 @@ export default function Wall() {
     })
 
     useEffect(() => {
+
         if (user.userId !== userId) {
             axios.get(`http://localhost:8080/user-friends/relationship/${user.userId}/${userId}`).then((res) => {
+                console.log("bug 82")
                 if (res.data !== null && res.data.accepted === true) {
                     setRelation(true)
                 } else {
@@ -511,14 +513,19 @@ export default function Wall() {
         updateAuthorizedView(selectedPostId, selectedOption);
     }, [selectedOption]);
 
-    const [checkIsAccepted, setCheckIsAccepted] = useState(false)
+
 
     useEffect(() => {
+        console.log("sau khi vào trang cá nhân của 1 người - 519", checkIsAccepted)
+
         axios.get("http://localhost:8080/user-friends/check-relationship/" + user.userId + "/" + userId).then((response) => {
             if (response.status === 200) {
                 console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------", response.data)
                 setCheckIsAccepted(true)
-            } else {
+            } else if(response.status === 204) {
+                setCheckIsAccepted(false)
+            }
+            else {
                 setCheckIsAccepted(false)
             }
         })
@@ -760,6 +767,7 @@ export default function Wall() {
                                         <i className="fas fa-share fa-lg" style={{fontSize: "27px"}}></i>
                                     </div>
                                 </div>
+
                                 <ul style={{marginTop: "16px"}}>
                                     {checkIsAccepted ? (
                                         <li style={{minWidth: "90%"}}>

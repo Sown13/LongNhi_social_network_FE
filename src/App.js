@@ -3,7 +3,7 @@ import MainPage from "./pages/user/MainPage";
 import {Navigate, Route, Routes} from "react-router-dom";
 import NewFeed from "./pages/user/home/NewFeed";
 import Admin from "./pages/admin/Admin";
-import FriendRequestList from "./pages/user/friend_request/FriendRequestList";
+import FriendRequestList from "./pages/user/friend_action/friend_request/FriendRequestList";
 import Wall from "./pages/user/user_page/wall/Wall";
 import UserPage from "./pages/user/user_page/UserPage";
 import UserAbout from "./pages/user/user_page/about/UserAbout";
@@ -21,11 +21,9 @@ import {useEffect, useState} from "react";
 import Guest from "./pages/guest/Guest";
 import UnAuthorized from "./authen/UnAuthorized";
 import Favorite from "./pages/user/favorite/Favorite";
-import FriendRequestPending from "./pages/user/friend_request_pending/FriendRequestPending";
-import Test from "./pages/Test";
-import MyComponent from "./pages/Test";
-import Modal from "react-modal";
-import UpdateForm from "./pages/user/user_page/about/UpdateForm";
+import FriendRequestPending from "./pages/user/friend_action/friend_request_pending/FriendRequestPending";
+import WallDemo from "./pages/user/user_page/wall/WallDemo";
+import FriendAction from "./pages/user/friend_action/FriendAction";
 
 import NewFeedTest from "./pages/user/home/NewFeedTest";
 import EditComment from "./pages/user/user_page/wall/EditComment";
@@ -107,8 +105,10 @@ function App() {
                                                        user={user} setLoggedIn={setLoggedIn}
                                                        setUser={setUser}></PrivateRoute>}>
                     <Route path={""} element={<NewFeed></NewFeed>}></Route>
-                    <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
-                    <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
+                    <Route path={"/friend"} element={<FriendAction></FriendAction>}>
+                        <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
+                        <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
+                    </Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}></Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
@@ -143,13 +143,16 @@ function PrivateRoute({element: Component, role, loggedIn, user, ...rest}) {
     // console.log("user: " + JSON.stringify(user));
     // console.log("role: " + role);
 
-    if (!loggedIn) {
+    if(!loggedIn && role === "GUEST"){
+        return <>{Component}</>;
+    }
+    else if (!loggedIn){
         return <Navigate to="/login" replace/>;
     }
-    if (role && user && user.role !== role && role === "GUEST") {
+    else if (loggedIn && user.role !== role && role === "GUEST") {
         return <Navigate to="/" replace/>;
     }
-    if (role && user && user.role !== role && user.role !== "ADMIN") {
+    else if (loggedIn && user.role !== role && user.role !== "ADMIN") {
         return <Navigate to="/un-authorized" replace/>;
     }
 

@@ -7,9 +7,7 @@ export default function SideBarLeft() {
             <div className="sideBarLeft-content">
                 <Link to={"/admin"}><img src={"img/example-ava-2.png"}/> <h2> Admin Demo </h2></Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Chờ kết bạn </h2> </Link>
-                <hr/>
-                <Link to={"/friend-request-pending"}> <h2> Chờ phản hồi </h2> </Link>
+                <Link to={"/friend"}> <h2> Kết nối bạn bè </h2> </Link>
                 <hr/>
                 <Link to={"/memory"}> <h2> Kỷ niệm </h2> </Link>
                 <hr/>

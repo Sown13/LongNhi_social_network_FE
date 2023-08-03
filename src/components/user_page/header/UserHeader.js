@@ -4,8 +4,13 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import UserAction from "./UserAction";
+import {Modal} from "antd";
+import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {ModalTitle} from "react-bootstrap";
+import UpdateForm from "../../../pages/user/user_page/about/UpdateForm";
 
 export default function UserHeader() {
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
     const {userId} = useParams();
     const [user, setUser] = useState(
         () => {
@@ -101,7 +106,7 @@ export default function UserHeader() {
         })
     }
 
-    const sendFriendRequest = (relationship) => {
+    const sendFriendRequest = () => {
         const friendRequest = {
             sourceUser: {
                 userId: user.userId
@@ -115,20 +120,23 @@ export default function UserHeader() {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
-            if (response.data != null) {
-                setRelationShip(response.data);
-            } else {
-                setRelationShip({
-                    accepted: false,
-                    friendType: "",
-                    sourceUser: {
-                        userId: 0
-                    },
-                    targetUser: {
-                        userId: 0
-                    }
-                })
-            }
+            axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
+                if (response.data != null) {
+                    setRelationShip(response.data);
+                } else {
+                    setRelationShip({
+                        accepted: false,
+                        friendType: "",
+                        sourceUser: {
+                            userId: 0
+                        },
+                        targetUser: {
+                            userId: 0
+                        }
+                    })
+                }
+                console.log("relation   " + relationship)
+            })
         })
     }
 
@@ -223,6 +231,14 @@ export default function UserHeader() {
         }
     }
 
+
+    const handleOpenUpdateForm = () => {
+        setShowUpdateForm(true);
+    };
+
+    const [showPictureModalIndex, setShowPictureModalIndex] = useState(-1); // -1 means no modal is shown
+
+
     return (
         <div className={"user-header"}>
             <div className={"user-background-img"}>
@@ -237,31 +253,15 @@ export default function UserHeader() {
                 </div>
                 <div className={"user-misc"}></div>
                 <div className={"user-action"}>
-                    {/*{console.log("user.userId= " + user.userId + "userId = " + userId + "relation" + relationship.accepted)}*/}
-                    {/*{console.log("relation userID---" + relationship.sourceUser.userId)}*/}
-                    {/*{user.userId == userId ?*/}
-                    {/*    <button> Chỉnh sửa trang cá nhân </button>*/}
-                    {/*    : relationship.accepted ?*/}
-                    {/*        <div>*/}
-                    {/*            <button onClick={deleteFriend}> Xóa Bạn</button>*/}
-                    {/*            <button> Nhắn tin</button>*/}
-                    {/*        </div>*/}
-                    {/*        : <div>*/}
-                    {/*            <button onClick={sendFriendRequest}> Thêm bạn</button>*/}
-                    {/*            <button> Nhắn tin</button>*/}
-                    {/*        </div>}*/}
-
-                    {/*<UserAction relationship={relationship} user={user}></UserAction>*/}
-
                     {console.log("check relation --" + JSON.stringify(relationship))}
                     {relationship.sourceUser.userId === 0 ?
                         user.userId == userId ?
                             <div>
-                                <button> Chỉnh sửa trang cá nhân</button>
+                                <button onClick={() => handleOpenUpdateForm()}> Chỉnh sửa trang cá nhân</button>
                                 <button> Nhắn tin</button>
                             </div>
                             : <div>
-                                <button onClick={() => sendFriendRequest(relationship)}> Thêm bạn</button>
+                                <button onClick={() => sendFriendRequest()}> Thêm bạn</button>
                                 <button> Nhắn tin</button>
                             </div>
                         : relationship.accepted === true ?
@@ -292,6 +292,16 @@ export default function UserHeader() {
                 <Link to={`/users/${userId}/videos`}>Video</Link>
                 <Link to={`/users/${userId}/checkin`}>Check-in</Link>
             </div>
+
+            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+                <ModalHeader closeButton>
+                    <ModalTitle>Thông tin cá nhân</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <UpdateForm></UpdateForm>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+            </Modal>
         </div>
     )
 }

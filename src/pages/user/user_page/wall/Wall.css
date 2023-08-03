@@ -1,616 +1,80 @@
-
-/*.newFeedWelcome {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    !*align-items: center;*!*/
-/*}*/
-
-/*.newFeedWelcome img {*/
-/*    max-width: 100%;*/
-/*    height: 350px;*/
-/*}*/
-
-
-/*.newFeed {*/
-/*    flex: 0 0 60%;*/
-/*    max-width: 60vw;*/
-/*    min-width: 60vw;*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    align-items: center;*/
-/*    !*justify-content: center;*!*/
-/*    !*background-color: #fff;*!*/
-/*    scroll-margin-left: 100px;*/
-/*    scroll-margin-right: 100px;*/
-/*}*/
-
-
-/*.newFeedContainer , .feedCardComment{*/
-/*    width: 100%;*/
-/*    max-width: 800px;*/
-/*    margin: 0 auto;*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    gap: 16px;*/
-/*}*/
-
-/*.feedCard {*/
-/*    background-color: #fff;*/
-/*    border: 1px solid #e6e6e6;*/
-/*    border-radius: 4px;*/
-/*    overflow: hidden;*/
-/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);*/
-/*    margin-bottom: 50px;*/
-/*    font-family: sans-serif;*/
-/*    text-align: start;*/
-/*    margin-left: 20px;*/
-/*    margin-right: 20px;*/
-/*}*/
-
-/*.feedCardHeader, .feedCardCommentHeader {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    padding: 16px;*/
-/*}*/
-
-/*.feedCardAvatar img , feedCardCommentAvatar img {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*    border-radius: 50%;*/
-/*    margin-right: 16px;*/
-/*}*/
-
-/*.feedCardHeaderName , feedCardCommentHeaderName{*/
-/*    font-weight: 600;*/
-/*    font-size: 16px;*/
-/*    line-height: 20px;*/
-/*    margin-bottom: 4px;*/
-/*}*/
-
-/*.feedCardHeaderTimestamp , feedCardCommentHeaderTimestamp {*/
-/*    font-size: 12px;*/
-/*    color: #65676b;*/
-/*}*/
-
-/*.feedCardBody , .feedCardCommentBody {*/
-/*    padding: 16px;*/
-/*}*/
-
-/*.feedCardBody p , .feedCardCommentBody p{*/
-/*    font-size: 14px;*/
-/*    line-height: 20px;*/
-/*    margin-bottom: 16px;*/
-/*}*/
-
-/*.feedCardBody img , .feedCardCommentBody img {*/
-/*    width: 100%;*/
-/*    height: auto;*/
-/*    margin-bottom: 16px;*/
-/*}*/
-
-/*.feedCardActions{*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: left;*/
-/*    padding: 0px;*/
-/*    border-top: 1px solid #e6e6e6;*/
-/*    border-bottom: 1px solid #e6e6e6;*/
-/*    flex-direction: column;*/
-/*    min-height: 60px;*/
-/*    max-height: 60px;*/
-/*}*/
-/*feedCardCommentActions{*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: left;*/
-/*    padding: 16px;*/
-/*    border-top: 1px solid #e6e6e6;*/
-/*    border-bottom: 1px solid #e6e6e6;*/
-/*}*/
-
-/*.feedCardActions p , .feedCardCommentActions p {*/
-/*    font-size: 14px;*/
-/*    line-height: 20px;*/
-/*    margin-right: 16px;*/
-/*}*/
-
-/*.feedCardActions button , .feedCardCommentActions button {*/
-/*    background-color: #fff;*/
-/*    border: none;*/
-/*    font-size: 14px;*/
-/*    color: #65676b;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*.feedCardActions input , .feedCardCommentActions input {*/
-/*    width: 100%;*/
-/*    padding: 8px 16px;*/
-/*    border-radius: 40px;*/
-/*    border: 1px solid #e6e6e6;*/
-/*    margin-right: 16px;*/
-/*}*/
-
-/*@media (max-width: 768px) {*/
-/*    .newFeedContainer {*/
-/*        flex-direction: column;*/
-/*        gap: 32px;*/
-/*    }*/
-
-/*    .feedCard {*/
-/*        border-radius: 0;*/
-/*        border-left: none;*/
-/*        border-right: none;*/
-/*    }*/
-/*}*/
-
-
-/*----*/
-
-/*.comment-input {*/
-/*    width: 100%;*/
-/*}*/
-/*.comment-input textarea {*/
-/*    border-radius: 4px;*/
-/*    width: 100%;*/
-/*}*/
-
-
-/*.comment-submit {*/
-/*    flex: 0 0 2;*/
-/*}*/
-
-/*.user-comment input {*/
-/*    width: 100%;*/
-/*    padding: 8px 16px;*/
-/*    border-radius: 40px;*/
-/*    border: 1px solid #e6e6e6;*/
-/*    margin-bottom: 8px;*/
-/*}*/
-
-
-
-
-/*!*---*!*/
-
-
-/*!*.newFeedContainer {*!*/
-/*!*    max-width: 600px;*!*/
-/*!*    margin: 0 auto;*!*/
-/*!*    padding: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCard {*!*/
-/*!*    background-color: #fff;*!*/
-/*!*    border: 1px solid #dddfe2;*!*/
-/*!*    border-radius: 10px;*!*/
-/*!*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*!*/
-/*!*    margin-bottom: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardAvatar {*!*/
-/*!*    display: flex;*!*/
-/*!*    align-items: center;*!*/
-/*!*    padding: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardAvatar img {*!*/
-/*!*    width: 40px;*!*/
-/*!*    height: 40px;*!*/
-/*!*    border-radius: 50%;*!*/
-/*!*    margin-right: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardAvatar input {*!*/
-/*!*    flex: 1;*!*/
-/*!*    border: none;*!*/
-/*!*    padding: 8px 16px;*!*/
-/*!*    border-radius: 20px;*!*/
-/*!*    margin-right: 16px;*!*/
-/*!*    font-size: 16px;*!*/
-/*!*    line-height: 20px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardAvatar button {*!*/
-/*!*    background-color: #1877f2;*!*/
-/*!*    color: #fff;*!*/
-/*!*    border: none;*!*/
-/*!*    border-radius: 20px;*!*/
-/*!*    padding: 8px 16px;*!*/
-/*!*    font-size: 16px;*!*/
-/*!*    line-height: 20px;*!*/
-/*!*    cursor: pointer;*!*/
-/*!*}*!*/
-
-/*!*.feedCardHeader {*!*/
-/*!*    display: flex;*!*/
-/*!*    align-items: center;*!*/
-/*!*    padding: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardHeaderName {*!*/
-/*!*    font-size: 16px;*!*/
-/*!*    font-weight: 600;*!*/
-/*!*    margin-right: 8px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardHeaderTimestamp {*!*/
-/*!*    font-size: 12px;*!*/
-/*!*    color: #65676b;*!*/
-/*!*}*!*/
-
-/*!*.feedCardBody {*!*/
-/*!*    padding: 0 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardBody p {*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    line-height: 20px;*!*/
-/*!*    margin: 16px 0;*!*/
-/*!*}*!*/
-
-/*!*.feedCardBody img {*!*/
-/*!*    width: 100%;*!*/
-/*!*    height: auto;*!*/
-/*!*    margin-bottom: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardActions {*!*/
-/*!*    display: flex;*!*/
-/*!*    align-items: center;*!*/
-/*!*    justify-content: space-between;*!*/
-/*!*    padding: 16px;*!*/
-/*!*    border-top: 1px solid #dddfe2;*!*/
-/*!*}*!*/
-
-/*!*.feedCardActions p {*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    font-weight: 600;*!*/
-/*!*    margin-right: 8px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardActions button {*!*/
-/*!*    background-color: transparent;*!*/
-/*!*    border: none;*!*/
-/*!*    color: #65676b;*!*/
-/*!*    cursor: pointer;*!*/
-/*!*    font-size: 14px;*!*/
-/*!*}*!*/
-
-/*!*.comment-container {*!*/
-/*!*    display: flex;*!*/
-/*!*    flex-direction: column;*!*/
-/*!*    align-items: flex-start;*!*/
-/*!*    margin-top: 16px;*!*/
-/*!*}*!*/
-
-/*!*.comment-container input {*!*/
-/*!*    width: 100%;*!*/
-/*!*    padding: 8px 16px;*!*/
-/*!*    border-radius: 20px;*!*/
-/*!*    border: 1px solid #dddfe2;*!*/
-/*!*    margin-bottom: 8px;*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    line-height: 20px;*!*/
-/*!*}*!*/
-
-/*.user-comment button {*/
-/*    background-color: #e75003;*/
-/*    color: #fff;*/
-/*    border: none;*/
-/*    border-radius: 20px;*/
-/*    padding: 8px 16px;*/
-/*    font-size: 14px;*/
-/*    line-height: 20px;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*!*.feedCardComment {*!*/
-/*!*    border-top: 1px solid #dddfe2;*!*/
-/*!*    padding: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentHeader {*!*/
-/*!*    display: flex;*!*/
-/*!*    align-items: center;*!*/
-/*!*    margin-bottom: 16px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentAvatar img {*!*/
-/*!*    width: 32px;*!*/
-/*!*    height: 32px;*!*/
-/*!*    border-radius: 50%;*!*/
-/*!*    margin-right: 8px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentHeaderName {*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    font-weight: 600;*!*/
-/*!*    margin-right: 8px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentHeaderTimestamp {*!*/
-/*!*    font-size: 12px;*!*/
-/*!*    color: #65676b;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentBody p {*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    line-height: 20px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentActions {*!*/
-/*!*    display: flex;*!*/
-/*!*    align-items: center;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentActions p {*!*/
-/*!*    font-size: 14px;*!*/
-/*!*    font-weight: 600;*!*/
-/*!*    margin-right: 8px;*!*/
-/*!*}*!*/
-
-/*!*.feedCardCommentActions button {*!*/
-/*!*    background-color: transparent;*!*/
-/*!*    border: none;*!*/
-/*!*    color: #65676b;*!*/
-/*!*    cursor: pointer;*!*/
-/*!*    font-size: 14px;*!*/
-/*!*}*!*/
-
-/*.comment-container ul {*/
-/*    list-style: none;*/
-/*    padding: 0;*/
-/*    margin: 0;*/
-/*}*/
-
-/*li {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    margin-bottom: 16px;*/
-/*}*/
-
-/*.comment-container li:last-child {*/
-/*    margin-bottom: 0;*/
-/*}*/
-
-/*.comment-container img {*/
-/*    width: 32px;*/
-/*    height: 32px;*/
-/*    border-radius: 50%;*/
-/*    margin-right: 8px;*/
-/*}*/
-
-/*.comment-container h2 {*/
-/*    font-size: 14px;*/
-/*    font-weight: 600;*/
-/*    margin-right: 8px;*/
-/*}*/
-
-/*.comment-container p {*/
-/*    font-size: 14px;*/
-/*    margin-bottom: 8px;*/
-/*}*/
-
-/*.comment-container span {*/
-/*    font-size: 12px;*/
-/*    color: #65676b;*/
-/*    margin-right: 8px;*/
-/*}*/
-
-/*.comment-container button {*/
-/*    background-color: transparent;*/
-/*    border: none;*/
-/*    color: #65676b;*/
-/*    cursor: pointer;*/
-/*    font-size: 12px;*/
-/*}*/
-
-/*.comment-container button:hover {*/
-/*    text-decoration: underline;*/
-/*}*/
-
-/*.comment-container {*/
-/*    padding: 16px;*/
-/*    background-color: #f0f2f5;*/
-/*    border-radius: 4px;*/
-/*    min-width: 95%;*/
-/*}*/
-/*.comment-container-avatar {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*}*/
-
-/*.feedCardBody img {*/
-/*    max-width: 30%;*/
-/*    height: auto;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*.feedCardBody img.full-size {*/
-/*    position: fixed;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    object-fit: contain;*/
-/*    z-index: 9999;*/
-/*}*/
-
-/*!*--------------- Chỉnh phần input đăng của user*!*/
-
-/*.feedCarAvatarContainer {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-
-/*}*/
-/*.feedCardAvatar{*/
-/*    display: flex;*/
-/*    min-width: 7%;*/
-/*    max-width: 7%;*/
-/*}*/
-/*.feedCardTextarea{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    min-width: 93%;*/
-/*}*/
-
-/*.feedCardTextarea textarea{*/
-/*    min-width: 100%;*/
-
-/*    flex: 1;*/
-/*    padding: 10px;*/
-/*    box-sizing: border-box;*/
-/*    border: 1px solid #ccc;*/
-/*    border-radius: 4px;*/
-/*    margin-right: 10px;*/
-/*}*/
-
-/*.feedCardTextarea button:hover {*/
-/*    background-color: #ff6347;*/
-/*}*/
-
-/*.feedCardTextarea button {*/
-/*    padding: 10px;*/
-/*    box-sizing: border-box;*/
-/*    border: none;*/
-/*    border-radius: 25px;*/
-/*    background-color: #ff8c00;*/
-/*    color: #fff;*/
-/*    cursor: pointer;*/
-/*    width: 100%;*/
-/*    font-size: 1.1rem;*/
-/*    font-weight: bold;*/
-/*    text-transform: uppercase;*/
-/*    transition: all 0.3s ease;*/
-/*}*/
-
-
-/*.feedCardImage {*/
-/*    max-width: 100%;*/
-/*    max-height: 500px;*/
-/*    overflow: auto;*/
-/*}*/
-
-/*.feedCardImage {*/
-/*    overflow-y: scroll;*/
-/*}*/
-
-/*.feedCardImage::-webkit-scrollbar {*/
-/*    width: 8px;*/
-/*}*/
-
-/*.feedCardImage::-webkit-scrollbar-thumb {*/
-/*    background: #ffffff;*/
-/*    border-radius: 4px;*/
-/*}*/
-
-/*.feedCardImage:hover::-webkit-scrollbar-thumb {*/
-/*    background: #ffffff;*/
-/*}*/
-
-/*.feedCardImage::-webkit-scrollbar-thumb:hover {*/
-/*    background: #333;*/
-/*}*/
-
-/*.feedCardImage:hover::-webkit-scrollbar-thumb {*/
-/*    background: black;*/
-/*}*/
-
-/*.feedCardImage:hover::-webkit-scrollbar-thumb:hover {*/
-/*    background: #333;*/
-/*}*/
-
-/*.feedCardImage:hover::-webkit-scrollbar-thumb:active {*/
-/*    background: #0c0c0c;*/
-/*}*/
-
-/*.feedCardImage:not(:hover)::-webkit-scrollbar {*/
-/*    width: 8px;*/
-/*    background-color: transparent;*/
-/*}*/
-
-
-/*.feedCarAvatarContainer{*/
-/*    background-color: #ff8c00;*/
-/*    border-radius: 4px;*/
-/*    min-height: 200px;*/
-
-/*}*/
-
-/*.feedCardAvatar-wall {*/
-/*    width: 200px;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
-
-/*.avatar-wall {*/
-/*    width: 180px;*/
-/*    height: 180px;*/
-/*    border-radius: 50%;*/
-/*}*/
-
-/*.input-wall {*/
-/*    display: flex;*/
-/*    width: 100%;*/
-/*    align-content: center;*/
-/*    justify-content: center;*/
-/*}*/
-
-/*.feedCardTextarea-wall {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    width: 100%;*/
-/*    justify-content: center;*/
-/*}*/
-
-/*.feedCardTextarea-wall form {*/
-/*    display: flex;*/
-/*    width: 100%;*/
-/*}*/
-
-
-/*.feedCardTextarea-wall textarea{*/
-/*    margin-top: 5%;*/
-/*    margin-left: 5%;*/
-/*    margin-right: 5%;*/
-/*    min-width: 720px;*/
-/*    min-height: 120px;*/
-/*    border-radius: 4px;*/
-/*}*/
-
-/*.input-action-wall {*/
-/*    display: flex;*/
-/*    width: 100%;*/
-/*    justify-content: right;*/
-/*}*/
-/*.input-file-button-submit-wall {*/
-/*    border-radius: 12px;*/
-/*    margin-bottom: 2px;*/
-/*    margin-right: 40px;*/
-/*    margin-top: 2px;*/
-/*}*/
-
-/*.input-file-button{*/
-/*    width: 80%*/
-/*}*/
-
-/*.feedCardHeaderAction {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*}*/
-/*.feedCardHeaderAction-button{*/
-/*    display: flex;*/
-/*    margin-left: 480px;*/
-/*}*/
-/*.chan-view-button{*/
-/*    border-radius: 50%;*/
-/*}*/
-/*.delete-post-button :hover{*/
-/*    cursor: pointer;*/
-/*}*/
-/*.delete-post-button {*/
-/*    margin-left: 10px;*/
-/*}*/
-
-
+.feedCardHeader-wall {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.feedCardHeader-wall .feedCardAvatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.feedCardHeader-wall .feedCardHeaderInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    width: 100%;
+}
+
+.feedCardHeader-wall .feedCardHeaderName {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.feedCardHeader-wall .feedCardHeaderName span:hover {
+    text-decoration: underline;
+}
+
+.feedCardHeader-wall .feedCardHeaderAction {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.feedCardHeader-wall .feedCardHeaderAction-button {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.feedCardHeader-wall .change-view-button button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.feedCardHeader-wall .change-view-button button:hover {
+    color: #333;
+}
+
+.feedCardHeader-wall .delete-post-button span {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.feedCardHeader-wall .delete-post-button span:hover {
+    color: #333;
+}
+
+.feedCardHeader-wall .feedCardHeaderTimestamp {
+    font-size: 14px;
+    color: #999;
+    margin-top: 0px;
+}
+
+.delete-post-button {
+    flex: 4;
+    padding: 5px;
+    margin-right: 30px;
+}

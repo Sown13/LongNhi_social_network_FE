@@ -1,0 +1,35 @@
+#rest-comment {
+    display: flex;
+    justify-content: space-between;
+    justify-self: center;
+    width: 95%;
+}
+#show-all{
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+#show-more{
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+#hide-all{
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+#show-more:hover{
+    text-decoration: underline;
+}
+#hide-all:hover{
+    text-decoration: underline;
+}
+
+#show-all {
+    margin-left: 10px;
+    text-decoration: none;
+}
+#show-all:hover{
+    text-decoration: underline;
+}

@@ -25,6 +25,14 @@ export default function Header(props){
     function handleLogout() {
         localStorage.removeItem("loggedIn");
         localStorage.removeItem("user");
+        localStorage.setItem("loggedIn",false);
+        localStorage.setItem("user",JSON.stringify({
+            message: "Login to access more features",
+            userId: 0,
+            accountName: "Guest",
+            fullName: "Guest",
+            role: "GUEST"
+        }))
         window.location.reload();
     }
 

@@ -109,14 +109,64 @@ export default function UserAbout() {
                                 </MDBCard>
 
                             ) : (
-                                <MDBCard>
-                                    <MDBCard>
-                                        <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
-                                    </MDBCard>
-                                    <MDBCard>
-                                        <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
-                                    </MDBCard>
+                                <MDBCard className="mb-4 mb-lg-0">
+                                    <MDBCardBody className="p-0">
+                                        <MDBListGroup flush className="rounded-3">
+                                            <MDBListGroupItem
+                                                className="d-flex justify-content-between align-items-center p-3">
+                                                <Button
+                                                    onClick={handleOpenUpdateForm}
+                                                    style={{
+                                                        marginLeft: "30px",
+                                                        backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
+                                                        border: "1px solid white",
+                                                    }}
+                                                >
+                                                    Chỉnh sửa thông tin cá nhân
+                                                </Button>
+
+                                                {/*<i className="fas fa-pencil"></i>*/}
+                                            </MDBListGroupItem>
+                                            <MDBListGroupItem
+                                                className="d-flex justify-content-between align-items-center p-3">
+                                                <Button
+                                                    onClick={handleOpenUpdatePassForm}
+                                                    style={{
+                                                        marginLeft: "61px",
+                                                        backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
+                                                        border: "1px solid white",
+                                                    }}
+                                                >
+                                                    Thay đổi mật khẩu
+                                                </Button>
+
+                                            </MDBListGroupItem>
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>*/}
+                                            {/*    <MDBCardText>@mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>*/}
+                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>*/}
+                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                        </MDBListGroup>
+                                    </MDBCardBody>
                                 </MDBCard>
+                                // <MDBCard>
+                                //     <MDBCard>
+                                //         <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
+                                //     </MDBCard>
+                                //     <MDBCard>
+                                //         <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
+                                //     </MDBCard>
+                                // </MDBCard>
                             )
                         }
 

@@ -1,7 +1,7 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Link, redirect, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 
@@ -13,6 +13,23 @@ import './Login.css'
 import 'mdbreact/dist/css/mdb.css';
 
 export default function Login(props) {
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
     const [error, setError] = useState(null); // State to store error messages
 
     const handleLogin = (values, {setSubmitting}) => {
@@ -51,8 +68,11 @@ export default function Login(props) {
             .catch((errors) => {
                 setSubmitting(false);
             });
-
     };
+    useEffect(() => {
+        console.log(localStorage.getItem("user"));
+        console.log(localStorage.getItem("loggedIn"));
+    }, []);
 
 
     const validationSchema = Yup.object({

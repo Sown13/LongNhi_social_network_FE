@@ -154,9 +154,9 @@ export default function NewFeedTest(props) {
 
 
             // Update the likedPosts state and store it in local storage
-            if (!likedPosts.includes(postId)) {
-                setLikedPosts([...likedPosts, postId]);
-                localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
+            if (likedPosts.includes(postId)) {
+                setLikedPosts(likedPosts.filter((id) => id !== postId));
+                localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
             }
         } catch (error) {
             console.error("Error:", error);

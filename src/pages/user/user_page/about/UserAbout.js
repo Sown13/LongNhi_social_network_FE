@@ -19,6 +19,7 @@ import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
 import PasswordUserUpdate from "./UserPassUpdate";
 
+
 export default function UserAbout() {
     const {userId} = useParams()
     const [userDetail, setUserDetail] = useState({})

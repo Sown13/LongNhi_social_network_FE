@@ -685,7 +685,7 @@ export default function Wall() {
                                             </div>
                                         </div>
 
-                                        <div className="feedCardHeaderTimestamp"> {item.dateCreated.slice(0, 19)}</div>
+                                        <div className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">

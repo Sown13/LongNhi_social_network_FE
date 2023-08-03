@@ -34,9 +34,15 @@ export default function Community() {
     }, [])
 
     const search = (e) => {
-        let searchResult = userList.filter(userCom => userCom.fullName.toLowerCase().includes(e.target.value));
+        const searchTerm = e.target.value.toLowerCase(); // Chuyển đổi từ khóa tìm kiếm thành chữ thường
+
+        const searchResult = userList.filter(
+            (userCom) =>
+                userCom.fullName.toLowerCase().includes(searchTerm) // Chuyển đổi tên người dùng thành chữ thường và so sánh
+        );
+
         setDisplayUserList(searchResult);
-    }
+    };
 
 
     return (

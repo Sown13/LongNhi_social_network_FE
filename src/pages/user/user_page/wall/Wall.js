@@ -524,6 +524,26 @@ export default function Wall() {
         })
     })
 
+    const handleUpdateComment = (commentId,values) => {
+        axios.put(`http://localhost:8080/comments/${commentId}`, {
+            textContent: values.textContent
+        })
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                })
+                Swal.fire({
+                    title: 'Cập nhật bình luận thành công',
+                    icon: 'success',
+                    timer: 1000
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     return (
         <div className="newFeed">
             <div>
@@ -754,8 +774,7 @@ export default function Wall() {
                                     ) : (
                                         <div>Bạn cần kết bạn với người này để có thể tương tác</div>
                                     )}
-                                    <CommentList item={item} likedComment={likedComment}
-                                                 handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
+                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment} handleUpdateComment={handleUpdateComment} />
                                 </ul>
                             </div>
                         )

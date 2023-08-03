@@ -368,7 +368,6 @@ export default function NewFeed(props) {
     }
 
 
-    const [commentUpdated, setCommentUpdated] = useState(false)
     const handleUpdateComment = (commentId,values) => {
         axios.put(`http://localhost:8080/comments/${commentId}`, {
             textContent: values.textContent
@@ -376,7 +375,6 @@ export default function NewFeed(props) {
             .then(() => {
                 axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
                     setListPosts(response.data);
-                    setCommentUpdated(true);
                 })
                 Swal.fire({
                     title: 'Cập nhật bình luận thành công',
@@ -525,7 +523,7 @@ export default function NewFeed(props) {
                                             </div>
                                         </div>
                                     </li>
-                                    <CommentList key={commentUpdated ? "updated" : "not-updated"} item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment} handleUpdateComment={handleUpdateComment} />
+                                    <CommentList item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment} handleUpdateComment={handleUpdateComment} />
                                 </ul>
                             </div>
                         )

@@ -20,9 +20,7 @@ export default function SideBarLeft() {
                 <Link to={"/friend-request"}> <h2> Sở thích </h2> </Link>
                 <hr/>
             </div>
-            <div>
             <Footer></Footer>
-            </div>
         </div>
     )
 }

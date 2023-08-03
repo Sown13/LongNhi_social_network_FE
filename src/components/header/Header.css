@@ -75,11 +75,12 @@
 
 .header__right > div {
     margin-right: 10px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .header__right > i {
     margin-right: 10px;
+    margin-left: 20px;
 }
 
 .header__avatar {

@@ -54,7 +54,7 @@ export default function Community() {
                         </h2>
                         </div>
                     </Link>
-                        <button className={"button-send-friend-request"}> Thêm bạn </button>
+                        {/*<button className={"button-send-friend-request"}> Thêm bạn </button>*/}
                     </div>
                 )
             })}

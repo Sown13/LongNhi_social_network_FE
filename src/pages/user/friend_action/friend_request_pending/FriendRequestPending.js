@@ -26,7 +26,7 @@ export default function FriendRequestPending(){
     const [displayFriendRequestList, setDisplayFriendRequestList] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/user-friends/user/${user.userId}/friend-request-sent`).then((response) => {
+        axios.get(`http://localhost:8080/user-friends/user/${user.userId}/v2/friend-request-sent`).then((response) => {
             setFriendRequestList(response.data);
             setDisplayFriendRequestList(response.data);
         }).catch()
@@ -40,11 +40,17 @@ export default function FriendRequestPending(){
     return (
         <div className={"friendRequestList"}>
             <h1> Friend request list </h1>
-            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((friend,index) =>{
+            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((request,index) =>{
                 return (
                     <div>
                         <div>
-                            {friend.accountName}
+                            {request.targetUser.fullName}
+                        </div>
+                        <div>
+                            <p> Ngày gửi: {new Date(request.dateRequested).toLocaleDateString("vn-VN")}</p>
+                        </div>
+                        <div>
+                           <p>Chưa phản hồi</p>
                         </div>
                     </div>
                 )

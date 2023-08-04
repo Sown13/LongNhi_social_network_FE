@@ -9,7 +9,9 @@ import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import "./like-button.css"
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {storage} from "../../../firebase";
+import {storage} from "../../../firebase"; import CommentList from "../../../components/comment/CommentList";
+import EditComment from "../user_page/wall/EditComment";
+import swal from "sweetalert2";
 
 export default function NewFeed(props) {
     const [user, setUser] = useState(
@@ -60,11 +62,9 @@ export default function NewFeed(props) {
         })
     }, [])
 
-    // useEffect(() => {
-    //     console.log("danh sach cac bai dang", listPosts)
-    //     console.log("Id cua user", user.userId)
-    //     console.log("danh sách các ảnh của bài viết", postImages)
-    // }, [listPosts]);
+    useEffect(() => {
+        console.log(localStorage.getItem(user));
+    }, []);
 
     // useEffect(() => {
     //     const fetchImagesForPost = async (postId) => {
@@ -269,6 +269,7 @@ export default function NewFeed(props) {
         }
     }, []);
 
+
     const handleSubmit = async (values,) => {
         window.event.preventDefault();
 
@@ -339,6 +340,56 @@ export default function NewFeed(props) {
             alert(error);
         });
     };
+    const handleComment = async (values, {resetForm, setError}) => {
+        try {
+            await axios.post('http://localhost:8080/comments', values).then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data)
+                    // console.log("du lieu tu server", JSON.stringify(response.data))
+                })
+            });
+        } catch (error) {
+            console.log(error);
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
+        } finally {
+            resetForm();
+        }
+    };
+    const deleteComment = (commentId,userId) => {
+        axios.delete(`http://localhost:8080/comments/${commentId}`)
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data)
+                    // console.log("du lieu tu server", JSON.stringify(response.data))
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+
+    const [commentUpdated, setCommentUpdated] = useState(false)
+    const handleUpdateComment = (commentId,values) => {
+        axios.put(`http://localhost:8080/comments/${commentId}`, {
+            textContent: values.textContent
+        })
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+                    setListPosts(response.data);
+                    setCommentUpdated(true);
+                })
+                Swal.fire({
+                    title: 'Cập nhật bình luận thành công',
+                    icon: 'success',
+                    timer: 1000
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
 
     return (
         <>
@@ -346,7 +397,7 @@ export default function NewFeed(props) {
                 <div className="newFeedContainer">
                     <br/>
                     <div className={"newFeedWelcome"}>
-                        <img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>
+                        {/*<img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>*/}
                         <h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long
                             Nhi và mọi người biết
                             nhé :) </h2>
@@ -397,14 +448,12 @@ export default function NewFeed(props) {
                             </Formik>
                         </div>
                     </div>
-
-
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend").map((item, index) => {
+                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend")
+                        .map((item, index) => {
                         const images = item.postImageList || [];
                         const isPostVisible = visiblePostIds.includes(item.postId);
-
                         return (
                             <div className="feedCard">
                                 <div className="feedCardHeader">
@@ -440,7 +489,8 @@ export default function NewFeed(props) {
                                     </div>
                                     <div className={"div-comment"}>
                                         <span>{item.commentList.length} </span>
-                                        <span><label htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
+                                        <span><label
+                                            htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
                                     </div>
                                     <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
                                         <span> 20  </span>
@@ -452,44 +502,31 @@ export default function NewFeed(props) {
                                         <div className={"comment-container"}>
                                             <div>
                                                 <div className={"comment-container-avatar"}>
-                                                    <img src={"img/example-ava-2.png"} alt={"avt"}/>
+                                                    <img src={user.avatar} alt={"avt"}/>
                                                     <h2> {user.fullName} </h2>
                                                 </div>
                                                 <div className={"comment-input"}>
-                                                    <textarea id={`comment-textarea-${index}`} placeholder={"Viết bình luận.."}/>
-                                                </div>
-                                                <div>
-                                                    <button className={"comment-submit"}>Bình Luận</button>
+                                                    <Formik initialValues={{
+                                                        post: {
+                                                            postId: item.postId
+                                                        },
+                                                        user: {
+                                                            userId: user.userId
+                                                        },
+                                                        textContent: ""
+                                                    }} onSubmit={handleComment}>
+                                                        <Form>
+                                                            <Field as={"textarea"} id={`comment-textarea-${index}`}
+                                                                   name={"textContent"} placeholder={"Viết bình luận.."}
+                                                            />
+                                                            <button className={"comment-submit"}>Bình Luận</button>
+                                                        </Form>
+                                                    </Formik>
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
-                                    {item.commentList.map(comment => {
-                                        return (
-                                            <li>
-                                                <div className={"comment-container"}>
-                                                    <div>
-                                                        <div className={"comment-container-avatar"}>
-                                                            <img src={comment.user.avatar} alt={"avt"}/>
-                                                            <Link to={`/users/${comment.user.userId}`}>
-                                                                <h2> {comment.user.fullName} </h2></Link>
-                                                        </div>
-                                                        <p> {comment.textContent} </p>
-                                                    </div>
-                                                    <div>
-                                                        <span>{comment.commentReactionList.length}</span>
-                                                        <button
-                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
-                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
-                                                        >
-                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })}
-
+                                    <CommentList key={commentUpdated ? "updated" : "not-updated"} item={item} likedComment={likedComment} handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment} handleUpdateComment={handleUpdateComment} />
                                 </ul>
                             </div>
                         )

@@ -5,6 +5,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -13,8 +14,8 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
     "cdbreact": "^1.5.18",
-    "date-fns": "^2.30.0",
     "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
     "firebase": "^10.1.0",
     "formik": "^2.4.2",
     "mdb-react-ui-kit": "^6.1.0",

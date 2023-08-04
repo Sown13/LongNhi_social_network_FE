@@ -13,6 +13,7 @@ import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
 import Modal from 'react-modal';
 import EditPost from "./update_post/EditPost";
+import CommentList from "../../../../components/comment/CommentList";
 
 export default function Wall() {
 
@@ -43,13 +44,12 @@ export default function Wall() {
     const [relation, setRelation] = useState(false);
 
     const [commentList, setListComment] = useState([]);
-    const [post]=useState({})
+    const [post] = useState({})
     const [comments, setComments] = useState({
-        commentId:0,
-        textContent:""
+        commentId: 0,
+        textContent: ""
     });
 
-    const [listPosts, setListPosts] = useState([]);
     const [likedComment, setLikedComment] = useState([]);
 
 
@@ -86,22 +86,18 @@ export default function Wall() {
             })
         }
     }, [userId]);
-    const handleComment = async (values, { resetForm, setError }) => {
+    const handleComment = async (values, {resetForm, setError}) => {
         try {
-             await axios.post('http://localhost:8080/comments', values).then(()=>{
-                 axios.get(`http://localhost:8080/posts/user/${userId}`).then(res=>{
+            await axios.post('http://localhost:8080/comments', values).then(() => {
+                axios.get(`http://localhost:8080/posts/user/${userId}`).then(res => {
                     setPostList(res.data)
                     setPostListDisplay(res.data)
-            })
+                })
             });
 
-            Swal.fire({
-                icon: 'success',
-                timer: 2000
-            });
         } catch (error) {
             console.log(error);
-            setError('comment', { message: 'Có lỗi xảy ra khi thêm bình luận' });
+            setError('comment', {message: 'Có lỗi xảy ra khi thêm bình luận'});
         } finally {
             resetForm();
         }
@@ -117,8 +113,9 @@ export default function Wall() {
             const file = files[i];
             reader.onload = (e) => {
                 setImagesNewPost((prevImages) => [...prevImages, {
-                    file :file,
-                    imgUrl : e.target.result}]
+                        file: file,
+                        imgUrl: e.target.result
+                    }]
                 );
 
             };
@@ -128,7 +125,7 @@ export default function Wall() {
 
     const handleDeleteImageNewPost = async (image) => {
         setImagesNewPost(imagesNewPost.filter((item) => item !== image));
-        setImagesAddNewPost(imagesAddNewPost.filter((item)=>item !== image.file));
+        setImagesAddNewPost(imagesAddNewPost.filter((item) => item !== image.file));
         setImagesDeleteNewPost(imagesDeleteNewPost.concat(image));
 
     };
@@ -201,11 +198,11 @@ export default function Wall() {
                         })
                     })
                 }
-            ).then(()=>{
-                setImagesNewPost([]);
-                setImagesAddNewPost([]);
-                setImagesDeleteNewPost([]);
-                setImgUrlNewPost([]);
+            ).then(() => {
+                    setImagesNewPost([]);
+                    setImagesAddNewPost([]);
+                    setImagesDeleteNewPost([]);
+                    setImgUrlNewPost([]);
                 }
             );
         }).catch((error) => {
@@ -214,11 +211,11 @@ export default function Wall() {
     };
     //Id cua user khi bấm vào 1 người bất kì, hiển thị các bài post của họ
     useEffect(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    setPostList(response.data);
-                    setPostListDisplay(response.data);
-                    // console.log("Dữ liệu từ server", JSON.stringify(response.data))
-                })
+        axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+            setPostList(response.data);
+            setPostListDisplay(response.data);
+            // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+        })
 
     }, [showModalUpdate]);
 
@@ -281,7 +278,7 @@ export default function Wall() {
     const deleteComment = (commentId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then(res=>{
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res => {
                     setPostList(res.data);
                     setPostListDisplay(res.data);
                     console.log("test dang bai ---------------- " + res.data)
@@ -384,7 +381,7 @@ export default function Wall() {
         }
     };
 
-   // like comment
+    // like comment
     useEffect(() => {
         const storedLikedComment = localStorage.getItem("likedComment");
         if (storedLikedComment) {
@@ -460,7 +457,6 @@ export default function Wall() {
     };
 
 
-
     const [selectedOption, setSelectedOption] = useState(() => {
         // Get the value from localStorage or default to 'PUBLIC' if it's not available
         const storedValue = localStorage.getItem('selectedOption');
@@ -515,6 +511,19 @@ export default function Wall() {
         updateAuthorizedView(selectedPostId, selectedOption);
     }, [selectedOption]);
 
+    const [checkIsAccepted, setCheckIsAccepted] = useState(false)
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/user-friends/check-relationship/" + user.userId + "/" + userId).then((response) => {
+            if (response.status === 200) {
+                console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------",response.data)
+                setCheckIsAccepted(true)
+            } else {
+                setCheckIsAccepted(false)
+            }
+        })
+    })
+
     return (
         <div className="newFeed">
             <div>
@@ -523,18 +532,17 @@ export default function Wall() {
                         () => {
 
                             Swal.fire({
-                                title: 'Loading...',
-
-                                closeOnClickOutside : false,
+                                title: 'Ảnh đang đang được tải lên, xin hãy chờ trong giây lát..',
+                                closeOnClickOutside: false,
                                 timer: 2000
-                            }).then(()=>{
+                            }).then(() => {
                                 setShowModalUpdate(false);
                                 setUpLoadSuccess(!upLoadSuccess)
-                            }).then(()=>{
+                            }).then(() => {
                                 Swal.fire({
-                                    title: 'Done',
+                                    title: 'Cập nhật bài viết thành công',
                                     icon: "success",
-                                    closeOnClickOutside : false,
+                                    closeOnClickOutside: false,
                                     timer: 1000
                                 })
                             })
@@ -577,7 +585,7 @@ export default function Wall() {
                                         onChange={(e) => {
                                             handleAddImageNewPost(e);
                                             const files = e.currentTarget.files;
-                                            setImagesAddNewPost([...imagesAddNewPost,...files]);
+                                            setImagesAddNewPost([...imagesAddNewPost, ...files]);
                                         }}
                                         multiple
                                     />
@@ -602,18 +610,13 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
-                <Outlet></Outlet>
-                <hr/>
                 {postListDisplay.length > 0 && postListDisplay
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
-                    .reverse()
                     .map((item, index) => {
                         const images = item.postImageList || []
                         return (
-
                             <div className="feedCard">
-
-                                <div className="feedCardHeader">
+                                <div className="feedCardHeader-wall">
                                     <div className="feedCardAvatar">
                                         <img
                                             src={item.user.avatar}
@@ -625,21 +628,19 @@ export default function Wall() {
                                                 <Link
                                                     to={`/users/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
-
-
                                             {/*Nút thay đổi quyền hiển thị*/}
                                             <div className={"feedCardHeaderAction-button"}>
-                                                <div className={"change-view-button"}>
-                                                    <button style={{borderRadius: "50%", padding: "1px"}}
-                                                            onClick={() => handleShowAlert(item.postId)}>
-                                                        {selectedOption === 'public' &&
-                                                            <i className="fas fa-globe"></i>}
-                                                        {selectedOption === 'friend' &&
-                                                            <i className="fas fa-user-friends"></i>}
-                                                        {selectedOption === 'private' &&
-                                                            <i className="fas fa-user"></i>}
-                                                    </button>
-                                                </div>
+                                                {/*<div className={"change-view-button"}>*/}
+                                                {/*    <button style={{borderRadius: "50%", padding: "1px"}}*/}
+                                                {/*            onClick={() => handleShowAlert(item.postId)} >*/}
+                                                {/*        {selectedOption === 'public' &&*/}
+                                                {/*            <i className="fas fa-globe"></i>}*/}
+                                                {/*        {selectedOption === 'friend' &&*/}
+                                                {/*            <i className="fas fa-user-friends"></i>}*/}
+                                                {/*        {selectedOption === 'private' &&*/}
+                                                {/*            <i className="fas fa-user"></i>}*/}
+                                                {/*    </button>*/}
+                                                {/*</div>*/}
                                                 <div className={"delete-post-button"}>
                                                     {
                                                         Number(user.userId) !== Number(userId) ? (
@@ -663,7 +664,7 @@ export default function Wall() {
                                                                                    onClick={() => handleDeletePost(item.postId)}>
                                                                             Xoá bài viết
                                                                         </Menu.Item>
-                                                                        <Menu.Item key="1"
+                                                                        <Menu.Item key="2"
                                                                             // onClick={() => navigate(`/post/${item.postId}`) }
                                                                                    onClick={() => {
                                                                                        setShowModalUpdate(true);
@@ -672,6 +673,10 @@ export default function Wall() {
                                                                                    }
                                                                         >
                                                                             Sửa bài viết
+                                                                        </Menu.Item>
+                                                                        <Menu.Item key="3"
+                                                                                   onClick={() => handleShowAlert(item.postId)}>
+                                                                            Hiển thị
                                                                         </Menu.Item>
                                                                     </Menu>
                                                                 }
@@ -685,7 +690,8 @@ export default function Wall() {
                                             </div>
                                         </div>
 
-                                        <div className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
+                                        <div
+                                            className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
                                     </div>
                                 </div>
                                 <div className="feedCardBody">
@@ -697,80 +703,59 @@ export default function Wall() {
                                     </div>
                                 </div>
                                 <div className="feedCardActions">
-                                    <div style={{}}>
-                                        <p> {item.postReactionList.length}</p>
-                                    </div>
-                                    <div>
+                                    <div className={"div-like"}>
+                                        <span>{item.postReactionList.length}</span>
                                         <button
                                             className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
                                             onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                         </button>
-                                        <button>Chia sẻ</button>
+                                    </div>
+                                    <div className={"div-comment"}>
+                                        <span>{item.commentList.length} </span>
+                                        <span><label
+                                            htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
+                                    </div>
+                                    <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
+                                        <span> 20  </span>
+                                        <i className="fas fa-share fa-lg" style={{fontSize: "27px"}}></i>
                                     </div>
                                 </div>
                                 <ul style={{marginTop: "16px"}}>
-                                    <li style={{minWidth: "90%"}}>
-                                        <div className={"comment-container"}>
-                                            <div>
-                                                <div className={"comment-container-avatar"}>
-                                                    <img src={user.avatar} alt={"avt"}/>
-                                                    <h2> {user.fullName} </h2>
-                                                </div>
-                                                <div className={"comment-input"}>
-                                                    <Formik initialValues={{
-                                                        post: {
-                                                            postId: item.postId
-                                                        },
-                                                        user: {
-                                                            userId: user.userId
-                                                        },
-                                                        textContent: ""
-                                                    }} onSubmit={handleComment}>
-                                                        <Form>
-                                                            <Field name={"textContent"} placeholder={"Viết bình luận.."}
-                                                            />
-                                                            <button>Bình Luận</button>
-                                                        </Form>
-                                                    </Formik>
-                                                </div>
+                                    {checkIsAccepted ? (
+                                        <li style={{minWidth: "90%"}}>
+                                            <div className={"comment-container"}>
                                                 <div>
+                                                    <div className={"comment-container-avatar"}>
+                                                        <img src={user.avatar} alt={"avt"}/>
+                                                        <h2> {user.fullName} </h2>
+                                                    </div>
+                                                    <div className={"comment-input"}>
+                                                        <Formik initialValues={{
+                                                            post: {
+                                                                postId: item.postId
+                                                            },
+                                                            user: {
+                                                                userId: user.userId
+                                                            },
+                                                            textContent: ""
+                                                        }} onSubmit={handleComment}>
+                                                            <Form>
+                                                                <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                                />
+                                                                <button>Bình Luận</button>
+                                                            </Form>
+                                                        </Formik>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    {item.commentList.map(comment => {
-                                        return (
-                                            <li>
-                                                <div className={"comment-container"}>
-                                                    <div>
-                                                        <div className={"comment-container-avatar"}>
-                                                            <img src={comment.user.avatar} alt={"avt"}/>
-                                                            <h2> {comment.user.fullName} </h2>
-                                                        </div>
-                                                        <p>{comment.textContent}</p>
-                                                        <button onClick={()=>deleteComment(comment.commentId)}>
-                                                          xoa
-                                                        </button>
-
-                                                        <Link to={`edit/${comment.commentId}`}>
-                                                            Sửa
-                                                        </Link>
-                                                    </div>
-                                                    <div>
-                                                        <span>{comment.commentReactionList.length}</span>
-                                                        <button
-                                                            style={{color: likedComment.includes(comment.commentId) ? '#ff4500' : '#808080'}}
-                                                            onClick={() => handleToggleLikeComment(comment.commentId)}
-                                                        >
-                                                            {likedComment.includes(comment.commentId) ? "Like" : "Like"}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })}
+                                        </li>
+                                    ) : (
+                                        <div>Bạn cần kết bạn với người này để có thể tương tác</div>
+                                    )}
+                                    <CommentList item={item} likedComment={likedComment}
+                                                 handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
                                 </ul>
                             </div>
                         )

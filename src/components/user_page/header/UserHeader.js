@@ -71,14 +71,12 @@ export default function UserHeader() {
                     }
                 })
             }
-            console.log("relation   " + relationship)
         }).catch(null)
     }, [userId])
 
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
             setTargetUser(response.data);
-            // console.log("targetuser   " + targetUser)
         }).catch()
     }, [userId])
 

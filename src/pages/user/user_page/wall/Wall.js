@@ -560,6 +560,8 @@ export default function Wall() {
 
                             Swal.fire({
                                 title: 'Ảnh đang đang được tải lên, xin hãy chờ trong giây lát..',
+                                showCancelButton: false,
+                                showConfirmButton: false,
                                 closeOnClickOutside: false,
                                 timer: 2000
                             }).then(() => {
@@ -569,6 +571,8 @@ export default function Wall() {
                                 Swal.fire({
                                     title: 'Cập nhật bài viết thành công',
                                     icon: "success",
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
                                     closeOnClickOutside: false,
                                     timer: 1000
                                 })

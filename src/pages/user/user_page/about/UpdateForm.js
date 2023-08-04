@@ -26,12 +26,14 @@ export default function UpdateForm() {
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + userId)
             .then((response) => {
+                if( response.data.avatar === null)
+                response.data.avatar="";
+                if( response.data.background === null)
+                response.data.background="";
+                console.log(response.data)
                 setUser(response.data);
                 setAvatarDisplay(response.data.avatar)
                 setBackgroundDisplay(response.data.background)
-
-                console.log("avatar", avatarImage)
-                console.log("background", backgroundImage)
             })
             .catch((error) => {
                 console.error("Error fetching user:", error);
@@ -148,7 +150,7 @@ export default function UpdateForm() {
 
                                 <td colSpan={2} style={{ textAlign: 'left', padding: '10px', marginLeft: '200px' }}>
                                     {
-                                        !user.avatar? (
+                                        (avatarDisplay===null)? (
                                             <img
                                                 src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
                                                 className="avatar"

@@ -520,7 +520,7 @@ export default function Wall() {
 
         axios.get("http://localhost:8080/user-friends/check-relationship/" + user.userId + "/" + userId).then((response) => {
             if (response.status === 200) {
-                console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------",response.data)
+                console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------", response.data)
                 setCheckIsAccepted(true)
             } else if(response.status === 204) {
                 setCheckIsAccepted(false)
@@ -530,6 +530,26 @@ export default function Wall() {
             }
         })
     })
+
+    const handleUpdateComment = (commentId, values) => {
+        axios.put(`http://localhost:8080/comments/${commentId}`, {
+            textContent: values.textContent
+        })
+            .then(() => {
+                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
+                })
+                Swal.fire({
+                    title: 'Cập nhật bình luận thành công',
+                    icon: 'success',
+                    timer: 1000
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     return (
         <div className="newFeed">
@@ -565,58 +585,76 @@ export default function Wall() {
             <div className="newFeedContainer">
                 <br/>
                 <div className="feedCarAvatarContainer">
-                    <div className="input-wall">
-                        <Formik
-                            initialValues={{
-                                textContent: "",
-                                authorizedView: "PUBLIC",
-                            }}
-                            onSubmit={(values, {resetForm}) => {
-                                handleSubmitNewPost({
+                    <div className={"feedCarAvatarContainer-top"}>
+                        <div className="feedCardAvatar-head">
+                            <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
+                        </div>
+                        <div className="input-wall">
+                            <Formik
+                                initialValues={{
+                                    textContent: "",
+                                    authorizedView: "PUBLIC",
+                                }}
+                                onSubmit={(values, {resetForm}) => {
+                                    handleSubmitNewPost({
                                         textContent: values.textContent,
                                         price: values.authorizedView,
-                                    }
-                                );
-                                resetForm();
-                            }
-                            }
-                        >
-                            <Form className="feedCardTextarea-wall">
-                                <Field
-                                    name="textContent"
-                                    as="textarea"
-                                    placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
-                                    style={{width: "80%"}}
-                                />
-                                <div className={"input-action-wall"}>
-                                    <input
-                                        className={"input-file-button"}
-                                        type="file"
-                                        name="file"
-                                        onChange={(e) => {
-                                            handleAddImageNewPost(e);
-                                            const files = e.currentTarget.files;
-                                            setImagesAddNewPost([...imagesAddNewPost, ...files]);
-                                        }}
-                                        multiple
-                                    />
-                                    <div className="image-list">
-                                        {imagesNewPost.map((image) => (
-                                            <div key={image.id} className="image-item">
-                                                <img style={{maxWidth:"50px",maxHeight:"auto"}} src={image.imgUrl} alt=""/>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleDeleteImageNewPost(image)}>
-                                                    Xóa
-                                                </button>
+                                    });
+                                    resetForm();
+                                }}
+                            >
+                                {({submitForm, isSubmitting}) => (
+                                    <Form className="feedCardTextarea-wall">
+                                        <Field
+                                            name="textContent"
+                                            as="textarea"
+                                            placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
+                                            style={{width: "80%"}}
+                                        />
+                                        <div className={"input-action-wall"}>
+                                            <div className="image-list">
+                                                {imagesNewPost.map((image) => (
+                                                    <div key={image.id} className="image-item">
+                                                        <img src={image.imgUrl} alt=""/>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleDeleteImageNewPost(image)}
+                                                        >
+                                                            Xóa
+                                                        </button>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-
-                                    <button className={"input-file-button-submit-wall"} type="submit">Đăng</button>
-                                </div>
-                            </Form>
-                        </Formik>
+                                        </div>
+                                        {/* Removed the submit button from here */}
+                                        <div className={"feedCarAvatarContainer-bot"}>
+                                            <label className="file-input-container">
+                                                <span>Thêm ảnh</span>
+                                                <input
+                                                    type="file"
+                                                    name="file"
+                                                    onChange={(e) => {
+                                                        handleAddImageNewPost(e);
+                                                        const files = e.currentTarget.files;
+                                                        setImagesAddNewPost([...imagesAddNewPost, ...files]);
+                                                    }}
+                                                    multiple
+                                                />
+                                            </label>
+                                            {/* Added onClick handler to submit the form */}
+                                            <button
+                                                className={"input-file-button-submit-wall"}
+                                                type="button"
+                                                onClick={() => submitForm()}
+                                                disabled={isSubmitting}
+                                            >
+                                                Đăng
+                                            </button>
+                                        </div>
+                                    </Form>
+                                )}
+                            </Formik>
+                        </div>
                     </div>
                 </div>
                 <br/>
@@ -754,7 +792,9 @@ export default function Wall() {
                                                             textContent: ""
                                                         }} onSubmit={handleComment}>
                                                             <Form>
-                                                                <Field name={"textContent"} placeholder={"Viết bình luận.."}
+                                                                <Field as={"textarea"} name={"textContent"}
+                                                                       placeholder={"Viết bình luận.."}
+                                                                       id={`comment-textarea-${index}`}
                                                                 />
                                                                 <button>Bình Luận</button>
                                                             </Form>
@@ -767,7 +807,9 @@ export default function Wall() {
                                         <div>Bạn cần kết bạn với người này để có thể tương tác</div>
                                     )}
                                     <CommentList item={item} likedComment={likedComment}
-                                                 handleToggleLikeComment={handleToggleLikeComment} user={user} deleteComment={deleteComment}/>
+                                                 handleToggleLikeComment={handleToggleLikeComment} user={user}
+                                                 deleteComment={deleteComment}
+                                                 handleUpdateComment={handleUpdateComment}/>
                                 </ul>
                             </div>
                         )

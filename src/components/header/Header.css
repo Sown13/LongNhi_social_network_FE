@@ -3,7 +3,7 @@
     align-items: center;
     background-color: #ff8c00;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    height: 56px;
+    height: 75px;
     padding: 0 16px;
     position: fixed; /* Set the position to fixed */
     top: 0; /* Position the header at the top of the screen */
@@ -57,6 +57,9 @@
     margin: 0 30px;
     text-decoration: none;
 }
+.header > i{
+
+}
 
 .header__link:hover {
     text-decoration: underline;
@@ -75,11 +78,12 @@
 
 .header__right > div {
     margin-right: 10px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .header__right > i {
     margin-right: 10px;
+    margin-left: 20px;
 }
 
 .header__avatar {

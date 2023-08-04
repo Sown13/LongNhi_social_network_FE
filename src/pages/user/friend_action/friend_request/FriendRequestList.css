@@ -1,54 +1,115 @@
-.friendRequestList{
-    flex:2;
-    min-width: 60vw;
+/*.friendRequestList{*/
+/*    flex:2;*/
+/*    min-width: 60vw;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    !*justify-content: center;*!*/
+/*    background-color: #fff;*/
+/*}*/
+
+/*.friendRequestList {*/
+/*    border: 1px solid #ddd;*/
+/*    padding: 20px;*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #fff;*/
+/*    width: 400px;*/
+/*    margin: auto;*/
+/*    border-radius: 4px;*/
+/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*.friendRequestList h1 {*/
+/*    font-size: 24px;*/
+/*    margin-bottom: 10px;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.friendRequestList div {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    padding: 10px 0;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.friendRequestList div:last-child {*/
+/*    border-bottom: none;*/
+/*}*/
+
+/*.friendRequestList button {*/
+/*    background-color: #1877f2;*/
+/*    color: #fff;*/
+/*    border: none;*/
+/*    padding: 8px 16px;*/
+/*    border-radius: 4px;*/
+/*    font-size: 14px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.2s ease-in-out;*/
+/*}*/
+
+/*.friendRequestList button:hover {*/
+/*    background-color: #0e62c7;*/
+/*}*/
+
+.friendRequestList {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*justify-content: center;*/
-    background-color: #fff;
-}
-
-.friendRequestList {
-    border: 1px solid #ddd;
     padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    width: 400px;
-    margin: auto;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .friendRequestList h1 {
     font-size: 24px;
-    margin-bottom: 10px;
-    text-align: center;
+    margin-bottom: 20px;
 }
 
-.friendRequestList div {
+.friendRequestList .request-card {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 80%;
 }
 
-.friendRequestList div:last-child {
-    border-bottom: none;
+.friendRequestList .request-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
-.friendRequestList button {
-    background-color: #1877f2;
-    color: #fff;
-    border: none;
+.friendRequestList .request-card p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.friendRequestList .request-card button {
+    font-size: 16px;
     padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
     border-radius: 4px;
-    font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
 }
 
-.friendRequestList button:hover {
-    background-color: #0e62c7;
+.friendRequestList .request-card button.accept {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.friendRequestList .request-card button.reject {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.friendRequestList .no-requests {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.friendRequestList-action {
+    justify-content: end;
 }

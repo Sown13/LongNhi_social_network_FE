@@ -3,22 +3,22 @@ import { Field, Form, Formik } from "formik";
 import {createRoot} from "react-dom";
 
 export default function EditComment({ comment,divId, handleUpdateComment }) {
-    const [showForm, setShowForm] = useState(false);
+    // const [showForm, setShowForm] = useState(false);
     const initialValues = { textContent: comment.textContent };
 
     const handleSubmit = (values) => {
         handleUpdateComment(comment.commentId, values);
-        setShowForm(false);
+        // setShowForm(false);
         cancelEditComment();
     };
 
-    const handleCancel = () => {
-        setShowForm(false);
-    };
-
-    const handleClick = () => {
-        setShowForm(true);
-    };
+    // const handleCancel = () => {
+    //     setShowForm(false);
+    // };
+    //
+    // const handleClick = () => {
+    //     setShowForm(true);
+    // };
     const cancelEditComment = () => {
         const element = <p id={divId}>{comment.textContent}</p>;
         const root = createRoot(document.getElementById(divId));

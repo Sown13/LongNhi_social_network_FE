@@ -2,7 +2,9 @@ import "./FriendRequestPending.css";
 
 import {useEffect, useState} from "react";
 import axios from "axios";
-export default function FriendRequestPending(){
+import {Link} from "react-router-dom";
+
+export default function FriendRequestPending() {
 
     const [user, setUser] = useState(
         () => {
@@ -32,25 +34,28 @@ export default function FriendRequestPending(){
         }).catch()
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log("friend request list   " + displayFriendRequestList)
-    },[])
+    }, [])
 
 
     return (
         <div className={"friendRequestList"}>
-            <h1> Friend request list </h1>
-            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((request,index) =>{
+            <h1> Lời mời kết bạn đang chờ phản hồi </h1>
+            {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((request, index) => {
                 return (
-                    <div>
-                        <div>
-                            {request.targetUser.fullName}
+                    <div className={"friendRequestList-content"}>
+                        <Link to={`/users/${request.targetUser.userId}`}>
+                            <div>
+                                {request.targetUser.fullName}
+                            </div>
+                        </Link>
+                        <div className={"friendRequestList-date"}>
+                            <p> Ngày gửi:
+                                {new Date(request.dateRequested).toLocaleDateString("vn-VN")}</p>
                         </div>
-                        <div>
-                            <p> Ngày gửi: {request.dateRequested}</p>
-                        </div>
-                        <div>
-                           <p>Chưa phản hồi</p>
+                        <div className={"friendRequestList-status"}>
+                            <p>Chưa phản hồi</p>
                         </div>
                     </div>
                 )

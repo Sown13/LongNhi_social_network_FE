@@ -22,7 +22,7 @@ export default function Guest(){
     )
     return (
         <>
-            {/*<GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>*/}
+           <h1> Khách </h1> {/*<GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>*/}
         </>
     )
 }

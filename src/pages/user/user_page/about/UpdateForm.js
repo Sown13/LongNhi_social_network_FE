@@ -11,7 +11,23 @@ import {storage} from "../../../../firebase";
 export default function UpdateForm() {
 
     const {userId} = useParams();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
     const [showAvatarModal, setShowAvatarModal] = useState(false);
     const [avatarDisplay, setAvatarDisplay] = useState(null);
     const [backgroundDisplay, setBackgroundDisplay] = useState(null);
@@ -24,7 +40,7 @@ export default function UpdateForm() {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8080/users/" + userId)
+        axios.get("http://localhost:8080/users/" + user.userId)
             .then((response) => {
                 if( response.data.avatar === null)
                 response.data.avatar="";
@@ -60,7 +76,7 @@ export default function UpdateForm() {
             console.log("73", updatedBackground)
 
             if (avatarImage!=null) {
-                const avatarStorageRef = ref(storage, `avatars/${user.avatar.name}`);
+                const avatarStorageRef = ref(storage, `avatars/${user.userId}`);
                 const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarImage);
                 await avatarUploadTask;
                 const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
@@ -70,7 +86,7 @@ export default function UpdateForm() {
                 updatedAvatar = user.avatar;
             }
             if (backgroundImage !=null) {
-                const backgroundStorageRef = ref(storage, `backgrounds/${user.background.name}`);
+                const backgroundStorageRef = ref(storage, `backgrounds/${user.userId}`);
                 const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundImage);
                 await backgroundUploadTask;
                 const backgroundDownloadURL = await getDownloadURL(backgroundUploadTask.snapshot.ref);

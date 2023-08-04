@@ -44,7 +44,7 @@ const ImageList = ({ images, imagesPerRow }) => {
                         onCancel={() => setShowPictureModalIndex(-1)} // Hide the modal by resetting the index
                         footer={null}
                     >
-                        <img src={image.imgUrl} alt="User Avatar" style={{ width: '470px', height: '500px', marginTop: '20px' }} />
+                        <img src={image.imgUrl} alt="User Avatar" style={{ width: '100%', height: '100%', marginTop: '20px' }} />
                     </Modal>
                 </div>
             ))}

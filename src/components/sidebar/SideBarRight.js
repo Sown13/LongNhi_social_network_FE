@@ -29,7 +29,6 @@ export default function SideBarRight() {
         axios.get("http://localhost:8080/user-friends/users/"+ user.userId).then((response) =>{
             let result = response.data;
             let friendListResult = [];
-            console.log(result);
             for (let i = 0; i < result.length; i++) {
                 if (result[i].sourceUser.userId == user.userId) {
                     friendListResult.push(result[i].targetUser);

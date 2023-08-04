@@ -1,6 +1,12 @@
 import "./guest.css"
-import {useState} from "react";
-export default function Guest(){
+import {useEffect, useState} from "react";
+import GuestHeader from "../../components/guest_component/header/GuestHeader";
+export default function Guest(props){
+
+    useEffect(() => {
+        console.log("loggedin storage == " + localStorage.getItem("loggedIn"))
+    },[])
+
 
 
     const [user, setUser] = useState(
@@ -22,7 +28,7 @@ export default function Guest(){
     )
     return (
         <>
-           <h1> Khách </h1> {/*<GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>*/}
+            <GuestHeader setLoggedIn={props.setLoggedIn} setUser={props.setUser}></GuestHeader>
         </>
     )
 }

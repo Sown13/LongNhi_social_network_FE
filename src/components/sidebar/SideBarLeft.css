@@ -40,7 +40,7 @@
     top: 76px;
     position: sticky;
     align-self: flex-start;
-    max-height: 100vw;
+    max-height: 100vh;
 }
 .sideBarLeft-content {
     position: relative;

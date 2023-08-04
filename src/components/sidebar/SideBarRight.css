@@ -1,7 +1,7 @@
 .sideBarRight {
     position: sticky;
     top: 76px;
-    width: 300px;
+    width: 20vw;
     height: 100vh;
     display: flex;
     flex-direction: column;

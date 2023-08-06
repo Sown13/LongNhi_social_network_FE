@@ -291,7 +291,11 @@ export default function UserHeader() {
                 <Link to={`/users/${userId}/checkin`}>Check-in</Link>
             </div>
 
-            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+            <Modal visible={showUpdateForm}
+                   onCancel={() => setShowUpdateForm(false)}
+                   footer={null}
+                   centered
+                   className="custom-modal">
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>

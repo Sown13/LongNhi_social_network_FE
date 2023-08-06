@@ -84,10 +84,12 @@ const EditPost = (props) => {
 
 
                     const promises = [];
+                    const timestamp = Date.now();
 
                     for (let i = 0; i < imagesAdd.length; i++) {
                         const file = imagesAdd[i];
-                        const storageRef = ref(storage, `files/${postId}/${i}/${file.name}`);
+
+                        const storageRef = ref(storage, `files/${postId}/${i}/${timestamp}`);
                         const promise = uploadBytes(storageRef, file)
                             .then((snapshot) => {
                                 console.log("File uploaded successfully");

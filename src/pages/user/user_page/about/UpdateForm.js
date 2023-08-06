@@ -294,7 +294,7 @@ export default function UpdateForm() {
                                 </div>
                             </div>
                             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                                <button type="submit" style={{ backgroundColor: '#ff6347', fontSize: '16px' }}>Lưu</button>
+                                <button type="submit" style={{ backgroundColor: '#ff7f50', fontSize: '16px' }}>Lưu</button>
                             </div>
 
 

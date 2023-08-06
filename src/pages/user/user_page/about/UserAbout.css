@@ -95,3 +95,27 @@
 }
 
 
+/* Style cho button  */
+/* Định dạng phần tử chứa nút */
+.x1n2onr6 {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.5);
+    border: 1px solid gray;
+}
+
+/* Định dạng nút */
+.x1lliihq {
+    padding: 10px 20px;
+    background-color: gray;
+    border: 1px solid gray;
+    color: white;
+    cursor: pointer;
+}
+
+/* Hover màu xám nhạt */
+.x1lliihq:hover {
+    background-color: lightgray;
+}
+

@@ -71,7 +71,109 @@ export default function UserAbout() {
             <MDBContainer className="py-5">
 
                 <MDBRow>
-                    <MDBCol lg="4">
+
+
+                    <MDBCol lg="5">
+
+                        <MDBCard className="mb-4">
+                            <MDBCardBody>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText> <MDBCardText><i className="fa fa-user fa-lg"></i></MDBCardText>
+                                        </MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText
+                                            className="text-muted"><strong>{userDetail.fullName}</strong></MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr/>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText><i className="fa fa-envelope fa-lg"
+                                                        aria-hidden="true"></i></MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText
+                                            className="text-muted"><strong>{userDetail.email}</strong></MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr/>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText> <i className="fa fa-phone-alt fa-lg" aria-hidden={"true"}></i>
+                                        </MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText
+                                            className="text-muted"><strong>{userDetail.phone}</strong></MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr/>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText>
+                                            <i className={"fas fa-map-marker-alt fa-lg"}></i>
+                                        </MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText
+                                            className="text-muted"><strong>{userDetail.address}</strong></MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr/>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText><i className="fa fa-gamepad fa-lg"></i></MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText
+                                            className="text-muted"><strong>{userDetail.hobby}</strong></MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr/>
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText><i className="fa fa-birthday-cake fa-lg" aria-hidden="true"></i>
+                                        </MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText className="text-muted">
+                                            <strong> {new Date(userDetail.birthday).toLocaleDateString("vn-VN")}</strong>
+                                        </MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+
+
+                                {
+                                    Number(user.userId) !== Number(userId) ? (
+                                        <div></div>
+                                    ) : (
+                                        <div>
+                                            <hr/>
+                                            <Button
+                                                onClick={handleOpenUpdateForm}
+                                                style={{
+                                                    marginLeft: "61px",
+                                                    backgroundColor: "gray", // Màu xám cho nút
+                                                    border: "1px solid gray", // Viền xám cho nút
+                                                    color: "white", // Màu chữ trắng cho nút
+                                                }}
+                                            >
+                                                Chỉnh sửa thông tin cá nhân
+                                            </Button>
+                                        </div>
+
+                                    )
+                                }
+
+
+
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>
+
+                    <MDBCol lg="7">
 
 
                         {
@@ -125,7 +227,6 @@ export default function UserAbout() {
                                                     Chỉnh sửa thông tin cá nhân
                                                 </Button>
 
-                                                {/*<i className="fas fa-pencil"></i>*/}
                                             </MDBListGroupItem>
                                             <MDBListGroupItem
                                                 className="d-flex justify-content-between align-items-center p-3">
@@ -141,118 +242,13 @@ export default function UserAbout() {
                                                 </Button>
 
                                             </MDBListGroupItem>
-                                            {/*<MDBListGroupItem*/}
-                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
-                                            {/*    <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>*/}
-                                            {/*    <MDBCardText>@mdbootstrap</MDBCardText>*/}
-                                            {/*</MDBListGroupItem>*/}
-                                            {/*<MDBListGroupItem*/}
-                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
-                                            {/*    <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>*/}
-                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
-                                            {/*</MDBListGroupItem>*/}
-                                            {/*<MDBListGroupItem*/}
-                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
-                                            {/*    <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>*/}
-                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
-                                            {/*</MDBListGroupItem>*/}
                                         </MDBListGroup>
                                     </MDBCardBody>
                                 </MDBCard>
-                                // <MDBCard>
-                                //     <MDBCard>
-                                //         <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
-                                //     </MDBCard>
-                                //     <MDBCard>
-                                //         <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
-                                //     </MDBCard>
-                                // </MDBCard>
                             )
                         }
 
 
-                    </MDBCol>
-                    <MDBCol lg="8">
-
-                        <MDBCard className="mb-4">
-                            <MDBCardBody>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Họ và tên</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.fullName}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Tên tài khoản</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.accountName}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Email</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.email}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Số điện thoại</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.phone}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Địa chỉ</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.address}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Sở thích</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.hobby}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Sinh nhật</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">
-                                            {new Date(userDetail.birthday).toLocaleDateString("vn-VN")}
-                                        </MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <MDBCardText>Địa chỉ</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{userDetail.address}</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
-
-
-                            </MDBCardBody>
-                        </MDBCard>
                     </MDBCol>
 
                 </MDBRow>
@@ -260,10 +256,9 @@ export default function UserAbout() {
             </MDBContainer>
 
 
-            <Modal visible={showUpdateForm} onCancel={() =>
-            {
+            <Modal visible={showUpdateForm} onCancel={() => {
                 setShowUpdateForm(false);
-                    navigate(`/users/${userId}`)
+                navigate(`/users/${userId}`)
             }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>

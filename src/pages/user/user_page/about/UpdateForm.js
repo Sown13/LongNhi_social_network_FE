@@ -269,7 +269,8 @@ export default function UpdateForm() {
                 onCancel={() => setShowAvatarModal(false)}
                 footer={null}
             >
-                <img src={user.avatar} alt="User Avatar" style={{width: '470px', height: '500px', marginTop: '20px'}}/>
+                {/*<img src={user.avatar} alt="User Avatar" style={{width: '470px', height: '500px', marginTop: '20px'}}/>*/}
+                <img src={user.avatar} className='img-fluid shadow-4' alt='...' />
             </Modal>
             <Modal
 
@@ -277,8 +278,9 @@ export default function UpdateForm() {
                 onCancel={() => setShowBackgroundModal(false)}
                 footer={null}
             >
-                <img src={user.background} alt="User Avatar"
-                     style={{width: '470px', height: '500px', marginTop: '20px'}}/>
+                {/*<img src={user.background} alt="User Avatar"*/}
+                {/*     style={{width: '470px', height: '500px', marginTop: '20px'}}/>*/}
+                <img src={user.background} className='img-fluid hover-shadow' alt='...' />
             </Modal>
         </>
     );

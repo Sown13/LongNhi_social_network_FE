@@ -28,6 +28,7 @@ import FriendAction from "./pages/user/friend_action/FriendAction";
 import NewFeedTest from "./pages/user/home/NewFeedTest";
 import EditComment from "./pages/user/user_page/wall/EditComment";
 import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
+import ChatDemo from "./pages/user/user_page/chat/ChatDemo";
 
 
 
@@ -89,6 +90,7 @@ function App() {
     return (
         <div>
             <Routes>
+                <Route path={"/chat"} element={<ChatDemo/>}/>
                 <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>

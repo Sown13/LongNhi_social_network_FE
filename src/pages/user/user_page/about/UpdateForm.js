@@ -11,7 +11,23 @@ import {storage} from "../../../../firebase";
 export default function UpdateForm() {
 
     const {userId} = useParams();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
     const [showAvatarModal, setShowAvatarModal] = useState(false);
     const [avatarDisplay, setAvatarDisplay] = useState(null);
     const [backgroundDisplay, setBackgroundDisplay] = useState(null);
@@ -24,13 +40,12 @@ export default function UpdateForm() {
 
 
     useEffect(() => {
-        axios.get("http://localhost:8080/users/" + userId)
+        axios.get("http://localhost:8080/users/" + user.userId)
             .then((response) => {
                 if( response.data.avatar === null)
                 response.data.avatar="";
                 if( response.data.background === null)
                 response.data.background="";
-                console.log(response.data)
                 setUser(response.data);
                 setAvatarDisplay(response.data.avatar)
                 setBackgroundDisplay(response.data.background)
@@ -54,28 +69,27 @@ export default function UpdateForm() {
 
     const handleUpdateUser = async (values) => {
         try {
-            let updatedAvatar = user.avatar;
-            let updatedBackground = user.background;
-            console.log("72", updatedAvatar)
-            console.log("73", updatedBackground)
+
+            let updatedAvatar ;
+            let updatedBackground ;
 
             if (avatarImage!=null) {
-                const avatarStorageRef = ref(storage, `avatars/${user.avatar.name}`);
+                const timestamp = Date.now();
+                const avatarStorageRef = ref(storage, `avatars/${user.userId}/${timestamp}`);
                 const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarImage);
                 await avatarUploadTask;
                 const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
                 updatedAvatar = avatarDownloadURL;
-                console.log("avatar - 80", avatarImage)
             }else{
                 updatedAvatar = user.avatar;
             }
             if (backgroundImage !=null) {
-                const backgroundStorageRef = ref(storage, `backgrounds/${user.background.name}`);
+                const timestamp = Date.now();
+                const backgroundStorageRef = ref(storage, `backgrounds/${user.userId}/${timestamp}`);
                 const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundImage);
                 await backgroundUploadTask;
                 const backgroundDownloadURL = await getDownloadURL(backgroundUploadTask.snapshot.ref);
                 updatedBackground = backgroundDownloadURL;
-                console.log("background - 89", backgroundImage)
             } else {
                 updatedBackground =  user.background;
             }
@@ -86,10 +100,11 @@ export default function UpdateForm() {
                 background: updatedBackground,
             };
 
-            await axios.put(`http://localhost:8080/users/${userId}`, updatedUser);
 
-            console.log("values up ảnh - 1", avatarImage);
-            console.log("values up ảnh background - 2", backgroundImage);
+            await axios.put(`http://localhost:8080/users/${user.userId}`, updatedUser).then((res)=>{
+
+            });
+
             setUser(updatedUser);
             await Swal.fire({
                 icon: "success",

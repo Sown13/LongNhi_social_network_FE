@@ -119,3 +119,10 @@
     background-color: lightgray;
 }
 
+/* UserAbout.css */
+.custom-modal .ant-modal-content {
+    width: 700px; /* Đặt chiều rộng tùy ý */
+    margin: 0 auto; /* Căn giữa theo chiều ngang */
+    transform: translateX(-23%); /* Dịch chuyển Modal -50% chiều ngang để căn giữa hoàn toàn */
+}
+

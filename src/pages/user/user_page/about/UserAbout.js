@@ -168,7 +168,6 @@ export default function UserAbout() {
                                 }
 
 
-
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
@@ -258,8 +257,9 @@ export default function UserAbout() {
 
             <Modal visible={showUpdateForm} onCancel={() => {
                 setShowUpdateForm(false);
-                navigate(`/users/${userId}`)
-            }} footer={null} centered>
+                // navigate(`/users/${userId}`)
+            }} footer={null} centered
+                   className="custom-modal">
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>

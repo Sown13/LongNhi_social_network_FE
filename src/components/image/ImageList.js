@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from "react";
-import {Modal} from "antd";
-import "./Images.css"
+import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
+import styles from "./ImageList.module.css"; // Import CSS module
 
-const ImageList = ({images, imagesPerRow}) => {
+const ImageList = ({ images, imagesPerRow }) => {
     const [containerWidth, setContainerWidth] = useState(0);
     const imageWidth = containerWidth / imagesPerRow;
 
     const [showPictureModal, setShowPictureModal] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Index of the currently displayed image
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Chỉ số của hình ảnh hiện tại đang được hiển thị
 
     useEffect(() => {
         const handleResize = () => {
@@ -48,11 +48,12 @@ const ImageList = ({images, imagesPerRow}) => {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "space-between",
-                marginLeft: "10px"
+                marginLeft: "10px",
             }}
+            className={styles["image-list-container"]} // Sử dụng tên lớp CSS từ file ImageList.module.css
         >
             {images.map((image, index) => (
-                <div key={index} style={{width: `${imageWidth}px`, marginTop: "1px"}}>
+                <div key={index} style={{ width: `${imageWidth}px`, marginTop: "1px" }}>
                     <img
                         style={{
                             maxWidth: "100%",
@@ -61,7 +62,7 @@ const ImageList = ({images, imagesPerRow}) => {
                         }}
                         src={image.imgUrl}
                         alt={`ảnh ${index}`}
-                        onClick={() => openPictureModal(index)} // Store the index of the clicked image
+                        onClick={() => openPictureModal(index)} // Lưu chỉ số của hình ảnh khi bấm vào
                     />
                 </div>
             ))}
@@ -71,16 +72,17 @@ const ImageList = ({images, imagesPerRow}) => {
                 footer={null}
                 centered // Để căn giữa modal
                 width={"80%"}
-                bodyStyle={{padding: 0}}
-                style={{top: 0}}
-
+                bodyStyle={{ padding: 0 }}
+                style={{ top: 0 }}
             >
-                <div style={{
-                    paddingBottom: "20px",
-                    maxWidth: "940px",
-                    marginLeft: "300px", // Căn giữa theo chiều ngang
-                }}
-                     className={"ant-modal-body"}>
+                <div
+                    style={{
+                        paddingBottom: "20px",
+                        maxWidth: "940px",
+                        marginLeft: "300px", // Căn giữa theo chiều ngang
+                    }}
+                    className={styles["ant-modal-body"]} // Sử dụng tên lớp CSS từ file ImageList.module.css
+                >
                     {shouldShowButtons && (
                         <>
                             <button

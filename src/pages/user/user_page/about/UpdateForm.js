@@ -38,14 +38,13 @@ export default function UpdateForm() {
     const [backgroundImage, setBackgroundImage] = useState(null);
 
 
-
     useEffect(() => {
         axios.get("http://localhost:8080/users/" + user.userId)
             .then((response) => {
-                if( response.data.avatar === null)
-                response.data.avatar="";
-                if( response.data.background === null)
-                response.data.background="";
+                if (response.data.avatar === null)
+                    response.data.avatar = "";
+                if (response.data.background === null)
+                    response.data.background = "";
                 setUser(response.data);
                 setAvatarDisplay(response.data.avatar)
                 setBackgroundDisplay(response.data.background)
@@ -70,20 +69,20 @@ export default function UpdateForm() {
     const handleUpdateUser = async (values) => {
         try {
 
-            let updatedAvatar ;
-            let updatedBackground ;
+            let updatedAvatar;
+            let updatedBackground;
 
-            if (avatarImage!=null) {
+            if (avatarImage != null) {
                 const timestamp = Date.now();
                 const avatarStorageRef = ref(storage, `avatars/${user.userId}/${timestamp}`);
                 const avatarUploadTask = uploadBytesResumable(avatarStorageRef, avatarImage);
                 await avatarUploadTask;
                 const avatarDownloadURL = await getDownloadURL(avatarUploadTask.snapshot.ref);
                 updatedAvatar = avatarDownloadURL;
-            }else{
+            } else {
                 updatedAvatar = user.avatar;
             }
-            if (backgroundImage !=null) {
+            if (backgroundImage != null) {
                 const timestamp = Date.now();
                 const backgroundStorageRef = ref(storage, `backgrounds/${user.userId}/${timestamp}`);
                 const backgroundUploadTask = uploadBytesResumable(backgroundStorageRef, backgroundImage);
@@ -132,149 +131,175 @@ export default function UpdateForm() {
                     <Form>
                         <table>
                             <tbody>
-                            <tr><td></td></tr>
-                            <tr>
-                                <td style={{textAlign: 'left'}}>
-                                    <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Ảnh đại diện</strong>
-                                </td>
-                                <td style={{textAlign: 'right'}}>
-                                    <Dropdown
-                                        overlay={
-                                            <Menu>
-                                                <Menu.Item key="1">
-                                                    <td>Thay đổi ảnh đại diện</td>
-                                                    <input
-                                                        type="file"
-                                                        name="avatar"
-                                                        onChange={handleAvatarChange}
+
+                            <div style={{display: 'flex', alignItems: 'flex-start'}}>
+                                <div style={{flex: 1, marginRight: '20px'}}>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{textAlign: 'left'}}>
+                                            <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Ảnh đại diện</strong>
+                                        </td>
+                                        <td style={{textAlign: 'right'}}>
+                                            <Dropdown
+                                                overlay={
+                                                    <Menu>
+                                                        <Menu.Item key="1">
+                                                            <td>Thay đổi ảnh đại diện</td>
+                                                            <input
+                                                                type="file"
+                                                                name="avatar"
+                                                                onChange={handleAvatarChange}
+                                                            />
+                                                        </Menu.Item>
+                                                        <Menu.Item key="2" onClick={() => setShowAvatarModal(true)}>
+                                                            Xem ảnh đại diện
+                                                        </Menu.Item>
+                                                    </Menu>
+                                                }
+                                                trigger={["click"]}
+                                            >
+                                                <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Chỉnh
+                                                    sửa</strong>
+                                            </Dropdown>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+
+                                        <td colSpan={2}
+                                            style={{textAlign: 'left', padding: '10px', marginLeft: '200px'}}>
+                                            {
+                                                (avatarDisplay === null) ? (
+                                                    <img
+                                                        src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
+                                                        className="avatar"
+                                                        style={{
+                                                            marginRight: '100px',
+                                                            width: '190px',
+                                                            height: '190px'
+                                                        }}
+                                                        alt="Default Avatar"
                                                     />
-                                                </Menu.Item>
-                                                <Menu.Item key="2" onClick={() => setShowAvatarModal(true)}>
-                                                    Xem ảnh đại diện
-                                                </Menu.Item>
-                                            </Menu>
-                                        }
-                                        trigger={["click"]}
-                                    >
-                                        <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Chỉnh sửa</strong>
-                                    </Dropdown>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                            </tr>
-                            <tr>
-
-                                <td colSpan={2} style={{ textAlign: 'left', padding: '10px', marginLeft: '200px' }}>
-                                    {
-                                        (avatarDisplay===null)? (
-                                            <img
-                                                src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
-                                                className="avatar"
-                                                style={{ textAlign: 'center', marginLeft: '130px', width: '190px', height: '190px' }}
-                                                alt="Default Avatar"
-                                            />
-                                        ) : (
-                                            <img
-                                                src={avatarDisplay}
-                                                className="avatar"
-                                                style={{ textAlign: 'center', marginLeft: '130px', width: '190px', height: '190px' }}
-                                                alt="User Avatar"
-                                            />
-                                        )
-                                    }
-                                </td>
-
-
-                            </tr>
-                            <tr>
-                                <td colSpan={2} style={{borderBottom: '1px solid #ccc'}}></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style={{textAlign: 'left'}}>
-                                    <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Ảnh bìa</strong>
-                                </td>
-                                <td style={{textAlign: 'right'}}>
-                                    <Dropdown
-                                        overlay={
-                                            <Menu>
-                                                <Menu.Item key="1">
-                                                    <td>Thay đổi ảnh bìa</td>
-                                                    <input
-                                                        type="file"
-                                                        name="avatar"
-                                                        onChange={handleBackgroundChange}
+                                                ) : (
+                                                    <img
+                                                        src={avatarDisplay}
+                                                        className="avatar"
+                                                        style={{
+                                                            width: '190px',
+                                                            height: '190px',
+                                                            objectFit: 'cover',
+                                                            borderRadius: '50%',
+                                                            marginLeft: "50px"
+                                                        }}
+                                                        alt="User Avatar"
                                                     />
-                                                </Menu.Item>
-                                                <Menu.Item key="2" onClick={() => setShowBackgroundModal(true)}>
-                                                    Xem ảnh đại diện
-                                                </Menu.Item>
-                                            </Menu>
-                                        }
-                                        trigger={["click"]}
-                                    >
-                                        <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Chỉnh sửa</strong>
-                                    </Dropdown>
-                                    <tr><td></td></tr>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={2}>
-                                        <img
-                                            src={backgroundDisplay}
-                                            style={{fontSize: '20px', fontWeight: '50px'}}
-                                            className="cover-photo"
-                                        ></img>
-                                </td>
+                                                )
+                                            }
+                                        </td>
 
-                            </tr>
 
-                            <tr>
-                                <td colSpan={2} style={{borderBottom: '1px solid #ccc'}}></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                            </tr>
+                                    </tr>
+                                    {/*<tr>*/}
+                                    {/*    <td colSpan={2} style={{borderBottom: '1px solid #ccc'}}></td>*/}
+                                    {/*</tr>*/}
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{textAlign: 'left'}}>
+                                            <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Ảnh bìa</strong>
+                                        </td>
+                                        <td style={{textAlign: 'right'}}>
+                                            <Dropdown
+                                                overlay={
+                                                    <Menu>
+                                                        <Menu.Item key="1">
+                                                            <td>Thay đổi ảnh bìa</td>
+                                                            <input
+                                                                type="file"
+                                                                name="avatar"
+                                                                onChange={handleBackgroundChange}
+                                                            />
+                                                        </Menu.Item>
+                                                        <Menu.Item key="2" onClick={() => setShowBackgroundModal(true)}>
+                                                            Xem ảnh đại diện
+                                                        </Menu.Item>
+                                                    </Menu>
+                                                }
+                                                trigger={["click"]}
+                                            >
+                                                <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Chỉnh
+                                                    sửa</strong>
+                                            </Dropdown>
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={2}>
+                                            <img
+                                                src={backgroundDisplay}
+                                                style={{fontSize: '20px', fontWeight: '50px'}}
+                                                className="cover-photo"
+                                            ></img>
+                                        </td>
 
-                            <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Thông tin cá nhân</strong>
-                            <tr><td></td></tr>
+                                    </tr>
+                                    {/*<tr>*/}
+                                    {/*    <td colSpan={2} style={{borderBottom: '1px solid #ccc'}}></td>*/}
+                                    {/*</tr>*/}
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </div>
 
-                            <tr>
-                                <td><strong>Tên tài khoản</strong></td>
-                                <Field type="text" name="accountName"/>
-                            </tr>
-                            <tr>
-                                <td><strong>Email</strong></td>
-                                <Field type="text" name={"email"}></Field>
-                            </tr>
-                            <tr>
-                                <td><strong>Họ tên</strong></td>
-                                <Field type="text" name={"fullName"}></Field>
-                            </tr>
-                            <tr>
-                                <td><strong>Số điện thoại</strong></td>
-                                <Field type="text" name={"phone"}></Field>
-                            </tr>
-                            <tr>
-                                <td><strong>Sinh nhật</strong></td>
-                                <Field name={"birthday"} type="date"></Field>
-                            </tr>
-                            <tr>
-                                <td><strong>Sở thích</strong></td>
-                                <Field type="text" name={"hobby"}></Field>
-                            </tr>
-                            <tr>
-                                <td><strong>Địa chỉ</strong></td>
-                                <Field type="text" name={"address"} v></Field>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">
-                                    <button type="submit" style={{backgroundColor: '#ff6347'}}>Lưu</button>
-                                </td>
-                            </tr>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    {/* Personal information */}
+                                    <br></br>
+                                    <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                                        <strong style={{ fontSize: '18px', fontWeight: 'bold' }}>Thông tin cá nhân</strong>
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Tên tài khoản</strong>
+                                        <Field type="text" name="accountName" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Email</strong>
+                                        <Field type="text" name="email" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Họ tên</strong>
+                                        <Field type="text" name="fullName" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Số điện thoại</strong>
+                                        <Field type="text" name="phone" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Sinh nhật</strong>
+                                        <Field name="birthday" type="date" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Sở thích</strong>
+                                        <Field type="text" name="hobby" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
+                                        <strong style={{ fontSize: '16px' }}>Địa chỉ</strong>
+                                        <Field type="text" name="address" style={{ width: '100%', fontSize: '16px' }} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                                <button type="submit" style={{ backgroundColor: '#ff7f50', fontSize: '16px' }}>Lưu</button>
+                            </div>
+
+
                             </tbody>
                         </table>
                     </Form>
@@ -285,18 +310,60 @@ export default function UpdateForm() {
                 visible={showAvatarModal}
                 onCancel={() => setShowAvatarModal(false)}
                 footer={null}
+                width="100%"
+                bodyStyle={{padding: 0}}
+                style={{top: 0}}
             >
-                <img src={user.avatar} alt="User Avatar" style={{width: '470px', height: '500px', marginTop: '20px'}}/>
+  <span
+      onClick={() => setShowAvatarModal(false)}
+      style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontSize: "24px",
+          cursor: "pointer",
+          color: "#fff",
+          zIndex: 1,
+      }}
+  >
+    &times;
+  </span>
+                <img
+                    src={user.avatar}
+                    alt="User Avatar"
+                    style={{width: "100%", height: "100vh", objectFit: "contain"}}
+                />
             </Modal>
-            <Modal
 
+            <Modal
                 visible={showBackgroundModal}
                 onCancel={() => setShowBackgroundModal(false)}
                 footer={null}
+                width="100%"
+                bodyStyle={{padding: 0}}
+                style={{top: 0}}
             >
-                <img src={user.background} alt="User Avatar"
-                     style={{width: '470px', height: '500px', marginTop: '20px'}}/>
+  <span
+      onClick={() => setShowBackgroundModal(false)}
+      style={{
+          position: "absolute",
+          top: "30px",
+          right: "10px",
+          fontSize: "24px",
+          cursor: "pointer",
+          color: "#fff",
+          zIndex: 1,
+      }}
+  >
+    &times;
+  </span>
+                <img
+                    src={user.background}
+                    alt="User Background"
+                    style={{width: "100%", height: "100vh", objectFit: "cover"}}
+                />
             </Modal>
+
         </>
     );
 };

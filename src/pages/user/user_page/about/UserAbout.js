@@ -73,7 +73,7 @@ export default function UserAbout() {
                 <MDBRow>
 
 
-                    <MDBCol lg="5">
+                    <MDBCol lg="6">
 
                         <MDBCard className="mb-4">
                             <MDBCardBody>
@@ -144,35 +144,35 @@ export default function UserAbout() {
                                     </MDBCol>
                                 </MDBRow>
 
+                                
+                                {/*{*/}
+                                {/*    Number(user.userId) !== Number(userId) ? (*/}
+                                {/*        <div></div>*/}
+                                {/*    ) : (*/}
+                                {/*        <div>*/}
+                                {/*            <hr/>*/}
+                                {/*            <Button*/}
+                                {/*                onClick={handleOpenUpdateForm}*/}
+                                {/*                style={{*/}
+                                {/*                    marginLeft: "61px",*/}
+                                {/*                    backgroundColor: "gray", // Màu xám cho nút*/}
+                                {/*                    border: "1px solid gray", // Viền xám cho nút*/}
+                                {/*                    color: "white", // Màu chữ trắng cho nút*/}
+                                {/*                }}*/}
+                                {/*            >*/}
+                                {/*                Chỉnh sửa thông tin cá nhân*/}
+                                {/*            </Button>*/}
+                                {/*        </div>*/}
 
-                                {
-                                    Number(user.userId) !== Number(userId) ? (
-                                        <div></div>
-                                    ) : (
-                                        <div>
-                                            <hr/>
-                                            <Button
-                                                onClick={handleOpenUpdateForm}
-                                                style={{
-                                                    marginLeft: "61px",
-                                                    backgroundColor: "gray", // Màu xám cho nút
-                                                    border: "1px solid gray", // Viền xám cho nút
-                                                    color: "white", // Màu chữ trắng cho nút
-                                                }}
-                                            >
-                                                Chỉnh sửa thông tin cá nhân
-                                            </Button>
-                                        </div>
-
-                                    )
-                                }
+                                {/*    )*/}
+                                {/*}*/}
 
 
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
 
-                    <MDBCol lg="7">
+                    <MDBCol lg="6">
 
 
                         {
@@ -218,12 +218,12 @@ export default function UserAbout() {
                                                 <Button
                                                     onClick={handleOpenUpdateForm}
                                                     style={{
-                                                        marginLeft: "30px",
+                                                        marginLeft: "85px",
                                                         backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
                                                         border: "1px solid white",
                                                     }}
                                                 >
-                                                    Chỉnh sửa thông tin cá nhân
+                                                  <strong>  Chỉnh sửa thông tin cá nhân</strong>
                                                 </Button>
 
                                             </MDBListGroupItem>
@@ -232,12 +232,13 @@ export default function UserAbout() {
                                                 <Button
                                                     onClick={handleOpenUpdatePassForm}
                                                     style={{
-                                                        marginLeft: "61px",
+                                                        marginLeft: "120px",
                                                         backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
                                                         border: "1px solid white",
                                                     }}
+
                                                 >
-                                                    Thay đổi mật khẩu
+                                                    <strong>Thay đổi mật khẩu</strong>
                                                 </Button>
 
                                             </MDBListGroupItem>

@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import "./UserHeader.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import UserAction from "./UserAction";
@@ -10,6 +10,9 @@ import {ModalTitle} from "react-bootstrap";
 import UpdateForm from "../../../pages/user/user_page/about/UpdateForm";
 
 export default function UserHeader() {
+    const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [showBackgroundModal, setShowBackgroundModal] = useState(false);
+
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const {userId} = useParams();
     const [user, setUser] = useState(
@@ -240,11 +243,13 @@ export default function UserHeader() {
     return (
         <div className={"user-header"}>
             <div className={"user-background-img"}>
-                <img src={targetUser.background} alt={"back ground"}/>
+                <img src={targetUser.background} style={{cursor: "pointer"}}
+                     onClick={() => setShowBackgroundModal(true)} alt={"back ground"}/>
             </div>
             <div className={"user-info"}>
                 <div className={"user-avatar"}>
-                    <img src={targetUser.avatar} alt={"avatar"}/>
+                    <img src={targetUser.avatar} style={{cursor: "pointer"}} alt={"avatar"}
+                         onClick={() => setShowAvatarModal(true)}/>
                 </div>
                 <div className={"user-full-name"}>
                     <h2>  {targetUser.fullName} </h2>
@@ -303,6 +308,64 @@ export default function UserHeader() {
                     <UpdateForm></UpdateForm>
                 </ModalBody>
                 <ModalFooter></ModalFooter>
+            </Modal>
+
+            <Modal
+                visible={showAvatarModal}
+                onCancel={() => setShowAvatarModal(false)}
+                footer={null}
+                width="100%"
+                bodyStyle={{padding: 0}}
+                style={{top: 0}}
+            >
+  <span
+      onClick={() => setShowAvatarModal(false)}
+      style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          fontSize: "24px",
+          cursor: "pointer",
+          color: "#fff",
+          zIndex: 1,
+      }}
+  >
+    &times;
+  </span>
+                <img
+                    src={targetUser.avatar}
+                    alt="User Avatar"
+                    style={{width: "100%", height: "100vh", objectFit: "contain"}}
+                />
+            </Modal>
+
+            <Modal
+                visible={showBackgroundModal}
+                onCancel={() => setShowBackgroundModal(false)}
+                footer={null}
+                width="100%"
+                bodyStyle={{padding: 0}}
+                style={{top: 0}}
+            >
+  <span
+      onClick={() => setShowBackgroundModal(false)}
+      style={{
+          position: "absolute",
+          top: "30px",
+          right: "10px",
+          fontSize: "24px",
+          cursor: "pointer",
+          color: "#fff",
+          zIndex: 1,
+      }}
+  >
+    &times;
+  </span>
+                <img
+                    src={user.background}
+                    alt="User Background"
+                    style={{width: "100%", height: "100vh", objectFit: "cover"}}
+                />
             </Modal>
         </div>
     )

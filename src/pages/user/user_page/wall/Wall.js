@@ -153,6 +153,9 @@ export default function Wall() {
                     console.log("test dang bai ---------------- " + response.data)
                     Swal.fire({
                         icon: 'success',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        closeOnClickOutside: false,
                         timer: 2000
                     })
                 })
@@ -161,10 +164,11 @@ export default function Wall() {
         }
 
         const promises = [];
+        const timestamp = Date.now();
 
         for (let i = 0; i < imagesAddNewPost.length; i++) {
             const file = imagesAddNewPost[i];
-            const storageRef = ref(storage, `files/${file.name}`);
+            const storageRef = ref(storage, `files/${i}/${timestamp}`);
             const promise = uploadBytes(storageRef, file)
                 .then((snapshot) => {
                     console.log("File uploaded successfully");
@@ -196,6 +200,9 @@ export default function Wall() {
                         console.log("test dang bai ---------------- " + response.data)
                         Swal.fire({
                             icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            closeOnClickOutside: false,
                             timer: 2000
                         })
                     })

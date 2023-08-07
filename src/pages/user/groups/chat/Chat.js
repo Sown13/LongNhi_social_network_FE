@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
-import "./ChatDemo.css"
+import "./Chat.css"
 import axios from "axios";
 
 
@@ -92,10 +92,6 @@ const Chat = () => {
         });
     }, [selectedGroupId]);
 
-    //
-    // useEffect(() => {
-    //     console.log(selectedGroup)
-    // }, [])
 
     const selectGroup = (groupId) => {
         setSelectedGroupId(groupId);
@@ -117,7 +113,6 @@ const Chat = () => {
         });
     }
 
-    const [testMessage, setTestMessage] = useState("");
     const onPrivateMessage = (payload) => {
         console.log("payload received ---", payload.body);
         const payloadData = JSON.parse(payload.body);
@@ -163,26 +158,28 @@ const Chat = () => {
     };
 
     return (
-        <div className="groups">
-            <ul>
-                {userGroupMessageList.map((group, index) => {
-                    return (
+        <div className="groups-manage">
+            <div className="groups-list">
+                <div> Nhóm </div>
+                <ul>
+                    {userGroupMessageList.map((group, index) => (
                         <li key={index} onClick={() => selectGroup(group.groupId)}>
-                            <button>
-                                {group.groupName}
-                            </button>
+                            <button>{group.groupName}</button>
                         </li>
-                    )
-                })}
-            </ul>
-            <div className="chat-content">
-                <ul className="chat-messages">
-                    {selectedGroup && selectedGroup.messages && selectedGroup.messages.map((message, index) => (
-                        <li key={index}>1 - {message.textContent}</li>
                     ))}
-                    {/*{<li> {testMessage.textContent}</li>}*/}
                 </ul>
-
+            </div>
+            <div className="chat-content">
+                <div className={"chat-box"}>
+                    <div>$ Tên nhóm</div>
+                    <ul className="chat-messages">
+                        {selectedGroup &&
+                            selectedGroup.messages &&
+                            selectedGroup.messages.map((message, index) => (
+                                <li key={index}>1 - {message.textContent}</li>
+                            ))}
+                    </ul>
+                </div>
                 <div className="send-message">
                     <input
                         type="text"
@@ -201,7 +198,6 @@ const Chat = () => {
                 </div>
             </div>
         </div>
-
     )
 }
 

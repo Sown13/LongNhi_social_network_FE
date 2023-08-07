@@ -108,7 +108,7 @@ function App() {
                                                        setUser={setUser}></PrivateRoute>}>
                     <Route path={""} element={<NewFeed></NewFeed>}></Route>
                     <Route path={"/friend"} element={<FriendAction></FriendAction>}>
-                        <Route path={"friend-request"} element={<FriendRequestList></FriendRequestList>}></Route>
+                        <Route path={""} element={<FriendRequestList></FriendRequestList>}></Route>
                         <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     </Route>
                     <Route path={"community"} element={<Community></Community>}></Route>

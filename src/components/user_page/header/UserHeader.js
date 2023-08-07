@@ -256,7 +256,6 @@ export default function UserHeader() {
                         user.userId == userId ?
                             <div>
                                 <button onClick={() => handleOpenUpdateForm()}> Chỉnh sửa trang cá nhân</button>
-                                <button> Nhắn tin</button>
                             </div>
                             : <div>
                                 <button onClick={() => sendFriendRequest()}> Thêm bạn</button>

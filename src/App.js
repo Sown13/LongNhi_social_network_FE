@@ -28,7 +28,8 @@ import FriendAction from "./pages/user/friend_action/FriendAction";
 import NewFeedTest from "./pages/user/home/NewFeedTest";
 import EditComment from "./pages/user/user_page/wall/EditComment";
 import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
-import ChatDemo from "./pages/user/user_page/chat/ChatDemo";
+import ChatDemo from "./pages/user/groups/chat/ChatDemo";
+import Chat from "./pages/user/groups/chat/Chat";
 
 
 
@@ -90,7 +91,6 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path={"/chat"} element={<ChatDemo/>}/>
                 <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
@@ -112,7 +112,9 @@ function App() {
                         <Route path={"friend-request-pending"} element={<FriendRequestPending></FriendRequestPending>}></Route>
                     </Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
-                    <Route path={"groups"} element={<Group></Group>}></Route>
+                    <Route path={"groups"} element={<Group></Group>}>
+                        <Route path={"chat"} element={<Chat></Chat>}></Route>
+                    </Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>

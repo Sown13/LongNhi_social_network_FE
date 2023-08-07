@@ -48,7 +48,7 @@ export default function SideBarRight() {
             <div className="sideBarRight-content">
                 <h1> Bạn bè </h1>
                 {friendList.map((friend, index) => (
-                    <div className={"friend-list"}>
+                    <div className={"friend-list"} key={friend.userId}>
                         <div className={"friend-avatar"}>
                             <img src={friend.avatar} alt={"icon"}/>
                         </div>

@@ -100,9 +100,11 @@ export default function UpdateForm() {
                 background: updatedBackground,
             };
 
-
             await axios.put(`http://localhost:8080/users/${user.userId}`, updatedUser).then((res)=>{
-
+                const user = JSON.parse(localStorage.getItem('user'));
+                user.avatar = res.data.avatar;
+                user.background = res.data.background;
+                localStorage.setItem('user', JSON.stringify(user));
             });
 
             setUser(updatedUser);

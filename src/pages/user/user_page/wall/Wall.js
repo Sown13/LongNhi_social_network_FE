@@ -238,7 +238,7 @@ export default function Wall() {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
             setUserInformationWall(response.data);
         })
-    }, [userId])
+    }, [userId,user])
 
     //Thông tin của vài thứ có trong trang này
     // useEffect(() => {

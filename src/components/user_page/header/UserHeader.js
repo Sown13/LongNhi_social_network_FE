@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import "./UserHeader.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -8,10 +8,13 @@ import {Modal} from "antd";
 import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
 import UpdateForm from "../../../pages/user/user_page/about/UpdateForm";
+import Swal from "sweetalert2";
 
 export default function UserHeader() {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const {userId} = useParams();
+    const navigate = useNavigate();
+
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -278,8 +281,6 @@ export default function UserHeader() {
                                     <button> Nhắn tin</button>
                                 </div>
                     }
-
-
                 </div>
             </div>
             <div className={`user-navbar`}>
@@ -291,7 +292,20 @@ export default function UserHeader() {
                 <Link to={`/users/${userId}/checkin`}>Check-in</Link>
             </div>
 
-            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+            <Modal visible={showUpdateForm} onCancel={() => {
+                setShowUpdateForm(false);
+                Swal.fire({
+                    title: "Đang cập nhật trang cá nhân",
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    closeOnClickOutside: false,
+                    timer: 2000
+                })
+                window.location.reload();
+            }
+
+            } footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>

@@ -263,7 +263,7 @@ export default function UserAbout() {
             <Modal visible={showUpdateForm} onCancel={() =>
             {
                 setShowUpdateForm(false);
-                    navigate(`/users/${userId}`)
+
             }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>

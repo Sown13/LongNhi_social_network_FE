@@ -4,12 +4,23 @@ import SockJS from 'sockjs-client';
 import "./ChatDemo.css"
 import axios from "axios";
 
+
 let stompClient = null;
 const Chat = () => {
-    const [groupMessages, setGroupMessages] = useState(new Map());
+    const [groupIdList, setGroupIdList] = useState([]);
+
+    const [selectedGroup, setSelectedGroup] = useState({
+        dateCreated: "",
+        groupId: 0,
+        groupMember: [],
+        groupName: "",
+        messages: [],
+        owner: ""
+    });
     const [selectedGroupId, setSelectedGroupId] = useState(0);
-    const [loggingUserGroupList, setLoggingUserGroupList] = useState(new Map([
-        [0, {
+
+    const [userGroupMessageList, setUserGroupMessageList] = useState(
+        [{
             dateCreated: "",
             groupId: 0,
             groupMember: [],
@@ -17,7 +28,7 @@ const Chat = () => {
             messages: [],
             owner: ""
         }]
-    ]));
+    );
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -48,60 +59,81 @@ const Chat = () => {
 
     useEffect(() => {
         axios.get("http://localhost:8080/groups/user/" + user.userId).then(res => {
-            let listGroup = new Map([
-                [0, {
+            setUserGroupMessageList(res.data);
+            let targetGroup = res.data.filter(group => group.groupId === selectedGroupId);
+
+            if (targetGroup !== null) {
+                if (selectedGroup && selectedGroup.messages && selectedGroup.messages.length !== 0) {
+                    let targetMessages = [...selectedGroup.messages];
+                    targetGroup[0].messages = [targetMessages, ...targetGroup[0].messages];
+                    setSelectedGroup(targetGroup[0]);
+                } else {
+                    setSelectedGroup(targetGroup[0]);
+                }
+            } else {
+                setSelectedGroup({
                     dateCreated: "",
-                    groupId: "0",
+                    groupId: 0,
                     groupMember: [],
                     groupName: "",
                     messages: [],
                     owner: ""
-                }]
-            ]);
-            let groupMessagesTemp = new Map();
-            console.log(res.data)
-            res.data.forEach(group => {
-                listGroup.set(group.groupId, group);
-                groupMessagesTemp.set(group.groupId, group.messages);
-            });
-            setLoggingUserGroupList(listGroup);
-            setGroupMessages(groupMessagesTemp);
+                });
+            }
+            const onConnected = () => {
+                setMessageDTO({...messageDTO, "connected": true});
+                for (let i = 0; i < res.data.length; i++) {
+                    const privateSubscription = stompClient.subscribe('/user/' + res.data[i].groupId + '/private', onPrivateMessage);
+                }
+            }
+            let Sock = new SockJS('http://localhost:8080/ws');
+            stompClient = over(Sock);
+            stompClient.connect({}, onConnected, onError);
         });
-    }, []);
+    }, [selectedGroupId]);
 
-
-    useEffect(() => {
-        connect();
-        console.log("logging message" + JSON.stringify(loggingUserGroupList));
-        console.log("gr message" + JSON.stringify(groupMessages));
-    }, [selectedGroupId])
-
-    const connect = () => {
-        let Sock = new SockJS('http://localhost:8080/ws');
-        stompClient = over(Sock);
-        stompClient.connect({}, onConnected, onError);
-    }
-
-    const onConnected = () => {
-        setMessageDTO({...messageDTO, "connected": true});
-        loggingUserGroupList.forEach(group => {
-            const privateSubscription = stompClient.subscribe('/group/' + group.groupId + '/private', onPrivateMessage);
-            console.log("subcribed to :" + '/group/' + group.groupId + '/private')
-        })
-    }
+    //
+    // useEffect(() => {
+    //     console.log(selectedGroup)
+    // }, [])
 
     const selectGroup = (groupId) => {
         setSelectedGroupId(groupId);
+        axios.get("http://localhost:8080/groups/user/" + user.userId).then(res => {
+            setUserGroupMessageList(res.data);
+            let targetGroup = res.data.filter(group => group.groupId === selectedGroupId);
+            if (targetGroup !== null) {
+                setSelectedGroup(targetGroup[0]);
+            } else {
+                setSelectedGroup({
+                    dateCreated: "",
+                    groupId: 0,
+                    groupMember: [],
+                    groupName: "",
+                    messages: [],
+                    owner: ""
+                })
+            }
+        });
     }
 
+    const [testMessage, setTestMessage] = useState("");
     const onPrivateMessage = (payload) => {
-        console.log("payload received ---", payload);
+        console.log("payload received ---", payload.body);
         const payloadData = JSON.parse(payload.body);
-        const updatedGroupMessages = new Map(groupMessages);
-        const groupMessageList = updatedGroupMessages.get(payloadData.groupId);
-        groupMessageList.push(payloadData);
-        setGroupMessages(updatedGroupMessages);
+        let selectedGroupTemp = {...selectedGroup};
+        console.log(selectedGroupTemp);
+        if (typeof selectedGroupTemp !== 'undefined' && selectedGroupTemp.messages) {
+            selectedGroupTemp.messages.push(payloadData);
+            setSelectedGroup(selectedGroupTemp);
+        }
+        console.log("----------------------");
+        console.log("temp" + selectedGroupTemp);
+        console.log(selectedGroup);
+        console.log(payloadData.groupId);
+        console.log("----------------------");
     };
+
     const onError = (err) => {
         console.log(err);
     }
@@ -120,17 +152,9 @@ const Chat = () => {
                 groupId: selectedGroupId,
             };
 
-            const updatedGroupMessages = new Map(groupMessages);
-
-            const selectedGroupMessages = updatedGroupMessages.get(selectedGroupId);
-
-            if (selectedGroupMessages) {
-                selectedGroupMessages.push(chatMessage);
-            } else {
-                updatedGroupMessages.set(selectedGroupId.toString(), [chatMessage]);
-            }
-
-            setGroupMessages(updatedGroupMessages);
+            // const updatedSelectedGroup = {...selectedGroup};
+            // updatedSelectedGroup.messages.push(chatMessage);
+            // setSelectedGroup(updatedSelectedGroup);
 
             stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
             setMessageDTO({...messageDTO, textContent: ""});
@@ -141,27 +165,22 @@ const Chat = () => {
     return (
         <div className="groups">
             <ul>
-                {[...loggingUserGroupList].map((group, index) => {
-                    // console.log(JSON.stringify(group) + index)
-                    if (group[0] !== 0) {
-                        return (
-                            <li onClick={() => selectGroup(group[0])}>
-                                <button>
-                                    {group[1].groupName}
-                                </button>
-                            </li>
-                        )
-                    }
+                {userGroupMessageList.map((group, index) => {
+                    return (
+                        <li key={index} onClick={() => selectGroup(group.groupId)}>
+                            <button>
+                                {group.groupName}
+                            </button>
+                        </li>
+                    )
                 })}
             </ul>
             <div className="chat-content">
                 <ul className="chat-messages">
-                    {/*{loggingUserGroupList.get(selectedGroupId)?.messages?.map((message, index) => (*/}
-                    {/*    <li key={index}>1 - {message.textContent}</li>*/}
-                    {/*))}*/}
-                    {groupMessages.get(selectedGroupId)?.map((message, index) => (
+                    {selectedGroup && selectedGroup.messages && selectedGroup.messages.map((message, index) => (
                         <li key={index}>1 - {message.textContent}</li>
                     ))}
+                    {/*{<li> {testMessage.textContent}</li>}*/}
                 </ul>
 
                 <div className="send-message">

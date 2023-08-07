@@ -1,9 +1,13 @@
 import "./Header.css"
-// import "./logo-longnhi.png"
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {over} from 'stompjs';
+import SockJS from 'sockjs-client';
+let stompClient = null;
 
-export default function Header(props){
+export default function Header(props) {
+
+    const [notification, setNotification] = useState([]);
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -22,11 +26,35 @@ export default function Header(props){
         }
     )
 
+    useEffect(()=>{
+        connect();
+    },[])
+    const connect = () => {
+        let Sock = new SockJS('http://localhost:8080/ws');
+        stompClient = over(Sock);
+        stompClient.connect({}, onConnected, onError);
+    }
+
+    const onConnected = () => {
+        const notificationSubscription = stompClient.subscribe('/user/' + user.userId + '/notification', onPrivateMessage);
+        console.log( console.log('/user/' + user.userId + '/notification'))
+    }
+    const onPrivateMessage = (payload) => {
+        console.log("payload received ---", payload);
+        const payloadData = JSON.parse(payload.body);
+        setNotification(payloadData);
+    };
+    const onError = (err) => {
+        console.log(err);
+    }
+
+
+
     function handleLogout() {
         localStorage.removeItem("loggedIn");
         localStorage.removeItem("user");
-        localStorage.setItem("loggedIn",false);
-        localStorage.setItem("user",JSON.stringify({
+        localStorage.setItem("loggedIn", false);
+        localStorage.setItem("user", JSON.stringify({
             message: "Login to access more features",
             userId: 0,
             accountName: "Guest",
@@ -38,12 +66,17 @@ export default function Header(props){
 
     return (
         <header className="header">
+            <div>
+                {notification.content}
+            </div>
             <div className="header__left">
-                <img src="https://firebasestorage.googleapis.com/v0/b/social-network-8069e.appspot.com/o/files%2Fz4571349268185_63e46a2f09a248cd5efb4607ee106980.jpg?alt=media&token=dc190175-5e88-4850-8e9c-78be495fec7f" alt="LN" className="header__logo"/>
-                    <div className="header__search">
-                        <input type="text" placeholder="Search Long Nhi" className="header__search-input"/>
-                            <i className="fas fa-search header__search-icon"></i>
-                    </div>
+                <img
+                    src="https://firebasestorage.googleapis.com/v0/b/social-network-8069e.appspot.com/o/files%2Fz4571349268185_63e46a2f09a248cd5efb4607ee106980.jpg?alt=media&token=dc190175-5e88-4850-8e9c-78be495fec7f"
+                    alt="LN" className="header__logo"/>
+                <div className="header__search">
+                    <input type="text" placeholder="Search Long Nhi" className="header__search-input"/>
+                    <i className="fas fa-search header__search-icon"></i>
+                </div>
             </div>
             <div className="header__center">
                 <div className="header__item">
@@ -85,7 +118,6 @@ export default function Header(props){
                         </div>
                     </div>
                 </div>
-
             </div>
         </header>
     )

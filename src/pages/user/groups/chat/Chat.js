@@ -6,9 +6,6 @@ import axios from "axios";
 
 let stompClient = null;
 const Chat = () => {
-
-    const [testList,setTestList] = useState([]);
-
     const [groupMessages, setGroupMessages] = useState(new Map());
     const [selectedGroupId, setSelectedGroupId] = useState(0);
     const [loggingUserGroupList, setLoggingUserGroupList] = useState(new Map([

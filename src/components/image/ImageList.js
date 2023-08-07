@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Modal } from "antd";
+import React, {useState, useEffect} from "react";
+import {Modal} from "antd";
 import "./Images.css"
 
-const ImageList = ({ images, imagesPerRow }) => {
+const ImageList = ({images, imagesPerRow}) => {
     const [containerWidth, setContainerWidth] = useState(0);
     const imageWidth = containerWidth / imagesPerRow;
 
@@ -48,10 +48,11 @@ const ImageList = ({ images, imagesPerRow }) => {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "space-between",
+                marginLeft: "10px"
             }}
         >
             {images.map((image, index) => (
-                <div key={index} style={{ width: `${imageWidth}px`, marginTop: "1px" }}>
+                <div key={index} style={{width: `${imageWidth}px`, marginTop: "1px"}}>
                     <img
                         style={{
                             maxWidth: "100%",
@@ -69,9 +70,17 @@ const ImageList = ({ images, imagesPerRow }) => {
                 onCancel={() => setShowPictureModal(false)}
                 footer={null}
                 centered // Để căn giữa modal
+                width={"80%"}
+                bodyStyle={{padding: 0}}
+                style={{top: 0}}
 
             >
-                <div style={{ position: "relative", paddingBottom: "20px" }} className={"ant-modal-body"}>
+                <div style={{
+                    paddingBottom: "20px",
+                    maxWidth: "940px",
+                    marginLeft: "300px", // Căn giữa theo chiều ngang
+                }}
+                     className={"ant-modal-body"}>
                     {shouldShowButtons && (
                         <>
                             <button
@@ -113,7 +122,7 @@ const ImageList = ({ images, imagesPerRow }) => {
                         alt={`ảnh ${currentImageIndex}`}
                         style={{
                             width: "470px",
-                            height: "500px",
+                            height: "700px",
                             marginTop: "20px",
                             objectFit: "contain",
                         }}

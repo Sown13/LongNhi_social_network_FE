@@ -1,32 +1,35 @@
-/* Images.css */
-.ant-modal-body {
-    background: black; /* Đặt màu nền cho phần nội dung của Modal */
-}
+    /*!* Images.css *!*/
+    /*.ant-modal-body {*/
+    /*    background: black; !* Đặt màu nền cho phần nội dung của Modal *!*/
+    /*    margin-right: 200px;*/
+    /*}*/
 
-.ant-modal-content {
-    background-color: black; /* Đặt màu nền cho toàn bộ Modal */
-}
+    /*.ant-modal-content {*/
+    /*    background-color: black; !* Đặt màu nền cho toàn bộ Modal *!*/
+    /*    width: 1200px;*/
+    /*    margin-right: 100px;*/
+    /*}*/
 
-/* Để bôi đen các phần tử khác trong modal */
-.ant-modal-header,
-.ant-modal-footer {
-    background: transparent; /* Thiết lập nền trong suốt cho tiêu đề và chân modal */
-}
+    /*!* Để bôi đen các phần tử khác trong modal *!*/
+    /*.ant-modal-header,*/
+    /*.ant-modal-footer {*/
+    /*    background: transparent; !* Thiết lập nền trong suốt cho tiêu đề và chân modal *!*/
+    /*}*/
 
-.ant-modal-close-x {
-    color: white; /* Đặt màu chữ cho nút đóng modal */
-}
+    /*.ant-modal-close-x {*/
+    /*    color: white; !* Đặt màu chữ cho nút đóng modal *!*/
+    /*}*/
 
-/* Bôi đen nền khi modal được mở */
-.ant-modal-wrap {
-    background-color: rgba(0, 0, 0, 0.6); /* Đặt màu nền với độ mờ */
-}
+    /*!* Bôi đen nền khi modal được mở *!*/
+    /*.ant-modal-wrap {*/
+    /*    background-color: rgba(0, 0, 0, 0.6); !* Đặt màu nền với độ mờ *!*/
+    /*}*/
 
-/* Điều chỉnh màu chữ của các nút trái/phải */
-.ant-modal-wrap button {
-    color: white;
-}
+    /*!* Điều chỉnh màu chữ của các nút trái/phải *!*/
+    /*.ant-modal-wrap button {*/
+    /*    color: white;*/
+    /*}*/
 
-.ant-modal .ant-modal-content {
-    background-color: black;
-}
+    /*.ant-modal .ant-modal-content {*/
+    /*    background-color: black;*/
+    /*}*/

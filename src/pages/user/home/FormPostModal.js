@@ -1,25 +1,12 @@
-import {Link, useParams} from "react-router-dom";
-import "./NewFeed.css"
-import React, {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import ImageList from "../../../components/image/ImageList";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
-import "./like-button.css"
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../../../firebase";
-import CommentList from "../../../components/comment/CommentList";
-import EditComment from "../user_page/wall/EditComment";
-import swal from "sweetalert2";
-import {Modal} from "antd";
-import {ModalBody, ModalHeader} from "reactstrap";
-import {ModalTitle} from "react-bootstrap";
-import FormPostModal from "./FormPostModal";
+import {useParams} from "react-router-dom";
 
-export default function NewFeed(props) {
-
+export default function FormPostModal() {
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -53,9 +40,6 @@ export default function NewFeed(props) {
 
     const [listPosts, setListPosts] = useState([]);
 
-    const [loadedPosts, setLoadedPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -71,48 +55,6 @@ export default function NewFeed(props) {
     const [postList, setPostList] = useState([]);
 
     const [likedComment, setLikedComment] = useState([]);
-
-    const [showPostForm, setShowPostForm] = useState(false)
-
-    const handleOpenPostForm = () => {
-        setShowPostForm(true);
-    }
-    useEffect(() => {
-        // Load initial posts
-        const initialPosts = listPosts.slice(0, 5);
-        setLoadedPosts(initialPosts);
-    }, [listPosts]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const {scrollTop, clientHeight, scrollHeight} = document.documentElement;
-            if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
-                loadMorePosts();
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [isLoading]);
-
-    useEffect(() => {
-        // Load initial posts
-        loadMorePosts();
-    }, []);
-
-    const loadMorePosts = () => {
-        setIsLoading(true);
-
-        // Simulate an API call to fetch more posts
-        setTimeout(() => {
-            const remainingPosts = listPosts.slice(loadedPosts.length);
-            const nextPosts = remainingPosts.slice(0, 5);
-            setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
-            setIsLoading(false);
-        }, 1000);
-    };
 
 
     useEffect(() => {
@@ -156,6 +98,12 @@ export default function NewFeed(props) {
             });
     }, [user.userId]);
 
+
+    const [showPostForm, setShowPostForm] = useState(false)
+
+    const handleOpenPostForm = () => {
+        setShowPostForm(true);
+    }
 
     const isPostLikedByUser = (postId) => {
         return isLiked.includes(postId);
@@ -350,7 +298,8 @@ export default function NewFeed(props) {
                     Swal.fire({
                         title: "Đăng bài viết mới thành công",
                         icon: 'success',
-                        timer: 2000
+                        timer: 1000,
+                        showConfirmButton:false
                     })
                 })
             });
@@ -394,8 +343,11 @@ export default function NewFeed(props) {
                         Swal.fire({
                             title: "Đăng bài viết mới thành công",
                             icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            closeOnClickOutside: false,
                             timer: 2000
-                        })
+                        });
                     })
                 }
             ).then(() => {
@@ -486,194 +438,79 @@ export default function NewFeed(props) {
 
     return (
         <>
-            <div className={"newFeed"}>
-                <div className="newFeedContainer">
-                    <br/>
-                    <div className={"newFeedWelcome"}>
-                        {/*<img className={"banner"} src={"./img/logo-longnhi.png"} alt={"LONG NHI"}/>*/}
-                        {/*<h2 style={{margin: "30px"}}> Chào {user.fullName}, ngày hôm nay của bạn thế nào? Hãy cho Long*/}
-                        {/*    Nhi và mọi người biết*/}
-                        {/*    nhé :) </h2>*/}
-                    </div>
+            <Formik
+                initialValues={{
+                    textContent: "",
+                    authorizedView: "PUBLIC",
+                }}
+                onSubmit={(values, {resetForm}) => {
+                    handleSubmitNewPost({
+                        textContent: values.textContent,
+                        price: values.authorizedView,
+                    });
+                    resetForm();
+                }}
+            >
+                {({submitForm, isSubmitting, values}) => (
+                    <Form className="feedCardTextarea-wall">
+                        <Field
+                            name="textContent"
+                            as="textarea"
+                            placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
+                            style={{width: "80%"}}
+                            onClick={handleOpenPostForm}
+
+                        />
+                        <div className={"input-action-wall"}>
+                            <div className="image-list">
+                                {imagesNewPost.map((image) => (
+                                    <div key={image.id} className="image-item">
+                                        <img src={image.imgUrl} alt=""/>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteImageNewPost(image)}
+                                        >
+                                            Xóa
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
 
 
-                    <div className="feedCard">
-                        <div className={"feedCarAvatarContainer-top"}>
-                            <div className="feedCardAvatar-head">
-                                <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
-                            </div>
-                            <div className="input-wall">
-                                <Formik
-                                    initialValues={{
-                                        textContent: "",
-                                        authorizedView: "PUBLIC",
-                                    }}
-                                    onSubmit={(values, {resetForm}) => {
-                                        handleSubmitNewPost({
-                                            textContent: values.textContent,
-                                            price: values.authorizedView,
-                                        });
-                                        resetForm();
-                                    }}
-                                >
-                                    {({submitForm, isSubmitting}) => (
-                                        <Form className="feedCardTextarea-wall">
-                                            <Field
-                                                name="textContent"
-                                                as="textarea"
-                                                placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
-                                                style={{width: "80%", cursor: "pointer"}}
-                                                onClick={handleOpenPostForm}
-                                            />
-                                            <div className={"input-action-wall"}>
-                                                {/*<div className="image-list">*/}
-                                                {imagesNewPost.map((image) => (
-                                                    <div key={image.id} className="image-item">
-                                                        <img src={image.imgUrl} alt=""/>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleDeleteImageNewPost(image)}
-                                                        >
-                                                            Xóa
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                                {/*</div>*/}
-                                            </div>
-                                            {/* Removed the submit button from here */}
-                                            {/*<div className={"feedCarAvatarContainer-bot"}>*/}
-                                            {/*    <label className="file-input-container">*/}
-                                            {/*        <span>Thêm ảnh</span>*/}
-                                            {/*        <input*/}
-                                            {/*            type="file"*/}
-                                            {/*            name="file"*/}
-                                            {/*            onChange={(e) => {*/}
-                                            {/*                handleAddImageNewPost(e);*/}
-                                            {/*                const files = e.currentTarget.files;*/}
-                                            {/*                setImagesAddNewPost([...imagesAddNewPost, ...files]);*/}
-                                            {/*            }}*/}
-                                            {/*            multiple*/}
-                                            {/*        />*/}
-                                            {/*    </label>*/}
-                                            {/*    /!* Added onClick handler to submit the form *!/*/}
-                                            {/*    <button*/}
-                                            {/*        className={"input-file-button-submit-wall"}*/}
-                                            {/*        type="button"*/}
-                                            {/*        onClick={() => submitForm()}*/}
-                                            {/*        disabled={isSubmitting}*/}
-                                            {/*    >*/}
-                                            {/*        Đăng*/}
-                                            {/*    </button>*/}
-                                            {/*</div>*/}
-                                        </Form>
-                                    )}
-                                </Formik>
-                            </div>
                         </div>
-                    </div>
-                    <br/>
-                    <hr/>
-                    {loadedPosts.length > 0 && loadedPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend")
-                        .map((item, index) => {
-                            const images = item.postImageList || [];
-                            const isPostVisible = visiblePostIds.includes(item.postId);
-                            return (
-                                <div className="feedCard">
-                                    <div className="feedCardHeader">
-                                        <div className="feedCardAvatar">
-                                            <img src={item.user.avatar} alt={"Avatar"}/>
-                                        </div>
-                                        <div className="feedCardHeaderInfo">
-                                            <div className="feedCardHeaderName">
-                                                <Link
-                                                    to={`/users/${item.user.userId}`}><span> {item.user.fullName} </span></Link>
-                                            </div>
-                                            <div
-                                                className="feedCardHeaderTimestamp"> {new Date(item.dateCreated).toLocaleDateString("vn-VN")}</div>
-                                        </div>
-                                    </div>
-                                    <div className="feedCardBody">
-                                        <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
-                                            <p>{item.textContent}</p>
-                                        </div>
-                                        <div className={"feedCardImage"}>
-                                            {/*{console.log("list ảnh" + JSON.stringify(item))}*/}
-                                            {images.length > 0 && <ImageList images={item.postImageList}/>}
-                                        </div>
-                                    </div>
-                                    <div className="feedCardActions">
-                                        <div className={"div-like"}>
-                                            <span>{item.postReactionList.length}</span>
-                                            <button
-                                                className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
-                                                onClick={() => handleToggleLike(item.postId)}
-                                            >
-                                                <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
-                                                {isPostVisible ? '' : ''}
-                                            </button>
-                                        </div>
-                                        <div className={"div-comment"}>
-                                            <span>{item.commentList.length} </span>
-                                            <span><label
-                                                htmlFor={`comment-textarea-${index}`}><a>Bình luận</a></label></span>
-                                        </div>
-                                        <div className={"div-share"} style={{justifySelf: "center", display: "flex"}}>
-                                            <span> 20  </span>
-                                            <i className="fas fa-share fa-lg" style={{fontSize: "27px"}}></i>
-                                        </div>
-                                    </div>
-                                    <ul style={{marginTop: "16px"}}>
-                                        <li style={{minWidth: "90%"}}>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={user.avatar} alt={"avt"}/>
-                                                        <h2> {user.fullName} </h2>
-                                                    </div>
-                                                    <div className={"comment-input"}>
-                                                        <Formik initialValues={{
-                                                            post: {
-                                                                postId: item.postId
-                                                            },
-                                                            user: {
-                                                                userId: user.userId
-                                                            },
-                                                            textContent: ""
-                                                        }} onSubmit={handleComment}>
-                                                            <Form>
-                                                                <Field as={"textarea"} id={`comment-textarea-${index}`}
-                                                                       name={"textContent"}
-                                                                       placeholder={"Viết bình luận.."}
-                                                                />
-                                                                <button className={"comment-submit"}>Bình Luận</button>
-                                                            </Form>
-                                                        </Formik>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <CommentList item={item} likedComment={likedComment}
-                                                     handleToggleLikeComment={handleToggleLikeComment} user={user}
-                                                     deleteComment={deleteComment}
-                                                     handleUpdateComment={handleUpdateComment}/>
-                                    </ul>
-                                </div>
-                            )
-                        })}
-                    {isLoading && <div style={{fontWeight: "bold", textAlign: "center", fontSize: "26px"}}>Loading more
-                        posts...</div>}
-                </div>
-            </div>
-            <Modal visible={showPostForm} onCancel={() => {
-                setShowPostForm(false)
-            }} footer={null} centered>
-                <ModalHeader closeButton>
-                    <ModalTitle>Tạo bài viết</ModalTitle>
-                </ModalHeader>
-                <ModalBody>
-                    <FormPostModal></FormPostModal>
-                </ModalBody>
-            </Modal>
+                        {/* Removed the submit button from here */}
+                        <div className={"feedCarAvatarContainer-bot"}>
+                            <label className="file-input-container">
+                                <i className="fa fa fa-image fa-lg" style={{cursor: "pointer"}}></i>
+                                <input
+                                    type="file"
+                                    name="file"
+                                    onChange={(e) => {
+                                        handleAddImageNewPost(e);
+                                        const files = e.currentTarget.files;
+                                        setImagesAddNewPost([...imagesAddNewPost, ...files]);
+                                    }}
+                                    multiple
+                                />
+                            </label>
+                            {/* Added onClick handler to submit the form */}
+                            <button
+                                className={"input-file-button-submit-wall"}
+                                type="button"
+                                onClick={() => {
+                                    // Kiểm tra giá trị của trường textContent và có ít nhất một ảnh trước khi đăng
+                                    if (values.textContent.trim() !== "" || imagesAddNewPost.length > 0) {
+                                        submitForm();
+                                    }
+                                }}
+                                disabled={isSubmitting || (values.textContent.trim() === "" && imagesAddNewPost.length === 0)}
+                            >
+                                Đăng
+                            </button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
         </>
     )
 }

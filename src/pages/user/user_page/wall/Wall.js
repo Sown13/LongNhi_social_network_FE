@@ -870,7 +870,7 @@ export default function Wall() {
                             </div>
                         )
                     })}
-                {isLoading && <div>Loading more posts...</div>}
+                {isLoading && <div style={{fontWeight: "bold", textAlign: "center", fontSize: "26px"}}>Đang tải thêm bài viết...</div>}
             </div>
         </div>
 

@@ -3,11 +3,22 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
+import {Modal} from "antd";
+
 let stompClient = null;
 
 export default function Header(props) {
 
-    const [notification, setNotification] = useState([]);
+    const [notification, setNotification] = useState([
+        {
+            type: "",
+            content: "",
+            dateCreated: "",
+            userId: "",
+            status: "",
+            groupId: 0
+        }
+    ]);
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -26,9 +37,9 @@ export default function Header(props) {
         }
     )
 
-    useEffect(()=>{
+    useEffect(() => {
         connect();
-    },[])
+    }, [])
     const connect = () => {
         let Sock = new SockJS('http://localhost:8080/ws');
         stompClient = over(Sock);
@@ -37,7 +48,7 @@ export default function Header(props) {
 
     const onConnected = () => {
         const notificationSubscription = stompClient.subscribe('/user/' + user.userId + '/notification', onPrivateMessage);
-        console.log( console.log('/user/' + user.userId + '/notification'))
+        console.log(console.log('/user/' + user.userId + '/notification'))
     }
     const onPrivateMessage = (payload) => {
         console.log("payload received ---", payload);
@@ -47,7 +58,6 @@ export default function Header(props) {
     const onError = (err) => {
         console.log(err);
     }
-
 
 
     function handleLogout() {
@@ -64,10 +74,28 @@ export default function Header(props) {
         window.location.reload();
     }
 
+    const closeModal = () => {
+        setNotification(null);
+    };
+
     return (
         <header className="header">
             <div>
-                {notification.content}
+                <Modal
+                    visible={!!notification}
+                    title="Notification"
+                    onCancel={closeModal}
+                    footer={[
+                        <button key="close" onClick={closeModal}>
+                            Close
+                        </button>
+                    ]}
+                >
+                    {/*<Link to={`/groups/chat/${notification.groupId}`}>{notification?.content}</Link>*/}
+                    <p><Link to={`/groups/chat/0`}>{notification?.content}</Link></p> {/* Access the 'content' property */}
+                    <p>{notification?.dateCreated}</p> {/* Access the 'dateCreated' property */}
+                    {/* Render other properties as needed */}
+                </Modal>
             </div>
             <div className="header__left">
 
@@ -120,3 +148,4 @@ export default function Header(props) {
         </header>
     )
 }
+

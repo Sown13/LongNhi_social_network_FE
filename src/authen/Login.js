@@ -130,14 +130,14 @@ export default function Login(props) {
             >
                 <Form>
                     <div className="col-12" style={{
-                        backgroundColor: "#FF8C00",
+                        backgroundColor: "#FFB6C1",
                         width: "100%",
                     }}>
                         <CDBContainer id={"container"}>
 
                             <CDBCard>
                                 <Link to="/guest" style={{position: "absolute", top: "-46px"}}>
-                                    <button>Trang chủ</button>
+                                    <button className={"guest-button-home"}>Trang chủ</button>
                                 </Link>
 
                                 <GoogleLogin

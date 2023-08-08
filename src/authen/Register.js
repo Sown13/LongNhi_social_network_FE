@@ -58,7 +58,7 @@ export default function Register() {
     }
 
     return (
-        <div className="col-12" style={{backgroundColor: '#FF8C00'}}>
+        <div className="col-12" style={{backgroundColor: '#FFB6C1'}}>
             <Container id="container">
                 <Card>
                     <CardBody className="mx-4">

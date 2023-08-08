@@ -11,9 +11,9 @@ import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
-import Modal from 'react-modal';
 import EditPost from "./update_post/EditPost";
 import CommentList from "../../../../components/comment/CommentList";
+import {Modal} from "antd";
 import {ModalBody, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
 import FormPostModal from "../../home/FormPostModal";
@@ -52,6 +52,7 @@ export default function Wall() {
         commentId: 0,
         textContent: ""
     });
+
     const [showPostForm, setShowPostForm] = useState(false)
 
     const handleOpenPostForm = () => {
@@ -207,11 +208,10 @@ export default function Wall() {
                         setPostListDisplay(response.data);
                         console.log("test dang bai ---------------- " + response.data)
                         Swal.fire({
+                            title: "Đăng bài viết mới thành công",
                             icon: 'success',
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                            closeOnClickOutside: false,
-                            timer: 2000
+                            timer: 1000,
+                            showConfirmButton:false
                         })
                     })
                 }
@@ -624,13 +624,12 @@ export default function Wall() {
                                             name="textContent"
                                             as="textarea"
                                             placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
-                                            style={{width: "80%"}}
+                                            className="input-field" // Thêm lớp CSS này
                                             onClick={handleOpenPostForm}
 
                                         />
 
                                         <div className={"input-action-wall"}>
-                                            <div className="image-list">
                                                 {imagesNewPost.map((image) => (
                                                     <div key={image.id} className="image-item">
                                                         <img src={image.imgUrl} alt=""/>
@@ -642,32 +641,6 @@ export default function Wall() {
                                                         </button>
                                                     </div>
                                                 ))}
-                                            </div>
-                                        </div>
-                                        {/* Removed the submit button from here */}
-                                        <div className={"feedCarAvatarContainer-bot"}>
-                                            <label className="file-input-container">
-                                                <span>Thêm ảnh</span>
-                                                <input
-                                                    type="file"
-                                                    name="file"
-                                                    onChange={(e) => {
-                                                        handleAddImageNewPost(e);
-                                                        const files = e.currentTarget.files;
-                                                        setImagesAddNewPost([...imagesAddNewPost, ...files]);
-                                                    }}
-                                                    multiple
-                                                />
-                                            </label>
-                                            {/* Added onClick handler to submit the form */}
-                                            <button
-                                                className={"input-file-button-submit-wall"}
-                                                type="button"
-                                                onClick={() => submitForm()}
-                                                disabled={isSubmitting}
-                                            >
-                                                Đăng
-                                            </button>
                                         </div>
                                     </Form>
                                 )}

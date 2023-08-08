@@ -56,7 +56,6 @@ export default function FormPostModal() {
 
     const [likedComment, setLikedComment] = useState([]);
 
-    const [showPostForm, setShowPostForm] = useState(false)
 
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
@@ -98,6 +97,9 @@ export default function FormPostModal() {
                 console.error("Error fetching user information:", error);
             });
     }, [user.userId]);
+
+
+    const [showPostForm, setShowPostForm] = useState(false)
 
     const handleOpenPostForm = () => {
         setShowPostForm(true);

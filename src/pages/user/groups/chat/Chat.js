@@ -162,8 +162,8 @@ const Chat = () => {
                                     <div key={index}
                                         className={user.userId == (typeof message.user != "undefined" ? message.user.userId : message.userId) ? "sender-self" : "sender-other"}>
                                         <div>
-                                            <p style={{textAlign:"right"}}>  {((typeof message.user != "undefined") && (typeof message.user.fullName != "undefined") ? message.user.fullName : message.fullName)}</p>
-                                            <p style={{textAlign:"left"}}>{message.textContent}</p>
+                                            <p >  {((typeof message.user != "undefined") && (typeof message.user.fullName != "undefined") ? message.user.fullName : message.fullName)}</p>
+                                            <p >{message.textContent}</p>
                                         </div>
                                     </div>)
                             })}

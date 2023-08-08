@@ -77,10 +77,9 @@ export default function Wall() {
     }, [postListDisplay]);
 
 
-
     useEffect(() => {
         const handleScroll = () => {
-            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            const {scrollTop, clientHeight, scrollHeight} = document.documentElement;
             if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
                 loadMorePosts();
             }
@@ -108,7 +107,6 @@ export default function Wall() {
             setIsLoading(false);
         }, 1000);
     };
-
 
 
     const [user, setUser] = useState(() => {
@@ -207,7 +205,7 @@ export default function Wall() {
                         showCancelButton: false,
                         closeOnClickOutside: false,
                         timer: 1000,
-                        showConfirmButton:false
+                        showConfirmButton: false
                     })
                 })
             });
@@ -253,7 +251,7 @@ export default function Wall() {
                             title: "Đăng bài viết mới thành công",
                             icon: 'success',
                             timer: 1000,
-                            showConfirmButton:false
+                            showConfirmButton: false
                         })
                     })
                 }
@@ -295,7 +293,7 @@ export default function Wall() {
         axios.get("http://localhost:8080/users/" + userId).then((response) => {
             setUserInformationWall(response.data);
         })
-    }, [userId,user])
+    }, [userId, user])
 
     //Thông tin của vài thứ có trong trang này
     // useEffect(() => {
@@ -571,7 +569,6 @@ export default function Wall() {
     }, [selectedOption]);
 
 
-
     useEffect(() => {
         console.log("sau khi vào trang cá nhân của 1 người - 519", checkIsAccepted)
 
@@ -579,10 +576,9 @@ export default function Wall() {
             if (response.status === 200) {
                 console.log("du lieu cua 2 thang de kiem tra xem thang kia co du tu cach de comment khong -------------", response.data)
                 setCheckIsAccepted(true)
-            } else if(response.status === 204) {
+            } else if (response.status === 204) {
                 setCheckIsAccepted(false)
-            }
-            else {
+            } else {
                 setCheckIsAccepted(false)
             }
         })
@@ -642,9 +638,10 @@ export default function Wall() {
             <div className="newFeedContainer">
                 <br/>
                 {/*<div className="feedCarAvatarContainer">*/}
+                <div className="feedCard">
                     <div className={"feedCarAvatarContainer-top"}>
                         <div className="feedCardAvatar-head">
-                            <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
+                            <img className={"avatar-head"} src={user.avatar} alt="Avatar" style={{width:'100px', height:"100px"}}/>
                         </div>
                         <div className="input-wall">
                             <Formik
@@ -672,23 +669,24 @@ export default function Wall() {
                                         />
 
                                         <div className={"input-action-wall"}>
-                                                {imagesNewPost.map((image) => (
-                                                    <div key={image.id} className="image-item">
-                                                        <img src={image.imgUrl} alt=""/>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleDeleteImageNewPost(image)}
-                                                        >
-                                                            Xóa
-                                                        </button>
-                                                    </div>
-                                                ))}
+                                            {imagesNewPost.map((image) => (
+                                                <div key={image.id} className="image-item">
+                                                    <img src={image.imgUrl} alt=""/>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDeleteImageNewPost(image)}
+                                                    >
+                                                        Xóa
+                                                    </button>
+                                                </div>
+                                            ))}
                                         </div>
                                     </Form>
                                 )}
                             </Formik>
                         </div>
                     </div>
+                </div>
                 {/*</div>*/}
                 <br/>
                 <hr/>

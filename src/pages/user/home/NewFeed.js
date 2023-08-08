@@ -649,7 +649,7 @@ export default function NewFeed(props) {
                                                             <Form>
                                                                 <Field as={"textarea"} id={`comment-textarea-${index}`}
                                                                        name={"textContent"}
-                                                                       placeholder={"Viết bình luận.."}
+                                                                       placeholder={"Viết bình luận ....."}
                                                                 />
                                                                 <button className={"comment-submit"}>Bình Luận</button>
                                                             </Form>

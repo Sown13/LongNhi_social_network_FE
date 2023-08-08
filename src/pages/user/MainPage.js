@@ -5,6 +5,7 @@ import "./MainPage.css"
 import "../../components/sidebar/SideBarLeft.css"
 import Header from "../../components/header/Header";
 import {useEffect} from "react";
+import Footer from "../../components/footer/Footer";
 
 export default function MainPage(props) {
 
@@ -22,6 +23,7 @@ export default function MainPage(props) {
                 </div>
                 <SideBarRight></SideBarRight>
             </div>
+            <Footer></Footer>
         </>
     )
 }

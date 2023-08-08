@@ -92,6 +92,9 @@
 }
 
 .friend-list:hover {
-    background-color: #ddd;
+    background-color: #FFB6C1;
     cursor: pointer;
+}
+.sideBarLeft a:hover h3 {
+    color: white;
 }

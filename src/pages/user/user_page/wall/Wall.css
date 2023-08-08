@@ -27,7 +27,9 @@
 .feedCardHeader-wall .feedCardHeaderName span:hover {
     text-decoration: underline;
 }
-
+.feedCardHeaderName a{
+    color: #FF69B4;
+}
 .feedCardHeader-wall .feedCardHeaderAction {
     display: flex;
     align-items: center;
@@ -70,7 +72,7 @@
 .feedCardHeader-wall .feedCardHeaderTimestamp {
     font-size: 14px;
     color: #999;
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .delete-post-button {
@@ -144,6 +146,9 @@
     font-size: 1rem;
     cursor: pointer;
 }
+.input-file-label:hover{
+    cursor: pointer;
+}
 
 .image-list {
     display: flex;
@@ -185,7 +190,7 @@
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 0.5rem;
-    background-color: #007bff;
+    background-color: #e80073;
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
@@ -194,7 +199,7 @@
 }
 
 .input-file-button-submit-wall:hover {
-    background-color: #0069d9;
+    background-color: #FF69B4;
 }
 
 .file-input-container {
@@ -203,7 +208,7 @@
     cursor: pointer;
     font-size: 1rem;
     padding: 0.5rem 1rem;
-    background-color: #007bff;
+    background-color: #e80073;
     color: #fff;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
@@ -211,7 +216,8 @@
 }
 
 .file-input-container:hover {
-    background-color: #0069d9;
+    background-color: #FF69B4;
+    cursor: pointer;
 }
 
 .file-input-container input[type="file"] {

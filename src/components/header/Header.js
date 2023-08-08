@@ -70,9 +70,7 @@ export default function Header(props) {
                 {notification.content}
             </div>
             <div className="header__left">
-                <img
-                    src="https://firebasestorage.googleapis.com/v0/b/social-network-8069e.appspot.com/o/files%2Fz4571349268185_63e46a2f09a248cd5efb4607ee106980.jpg?alt=media&token=dc190175-5e88-4850-8e9c-78be495fec7f"
-                    alt="LN" className="header__logo"/>
+
                 <div className="header__search">
                     <input type="text" placeholder="Search Long Nhi" className="header__search-input"/>
                     <i className="fas fa-search header__search-icon"></i>

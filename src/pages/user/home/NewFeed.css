@@ -14,6 +14,8 @@
     flex: 0 0 60%;
     max-width: 60vw;
     min-width: 60vw;
+    min-height: calc(100vh - 76px);
+    /*max-height: calc(100vh - 76px);*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -331,6 +333,9 @@ feedCardCommentActions{
     font-weight: bold;
     margin-left: 12px;
 }
+.feedCardHeaderName a:hover{
+    color: #e70276;
+}
 
 .comment-container button:hover {
     text-decoration: underline;
@@ -406,7 +411,7 @@ feedCardCommentActions{
     box-sizing: border-box;
     border: none;
     border-radius: 25px;
-    background-color: #ff8c00;
+    background-color: #FFB6C1;
     color: #fff;
     cursor: pointer;
     width: 100%;
@@ -466,7 +471,7 @@ feedCardCommentActions{
 
 
 .feedCarAvatarContainer{
-    background-color: #ff8c00;
+    background-color: #FFB6C1;
     border-radius: 4px;
     min-height: 200px;
     /*background-color: #fff;*/
@@ -547,7 +552,7 @@ feedCardCommentActions{
 }
 
 .banner {
-background-color: #ff8c00;
+background-color: #FFB6C1;
     border-radius: 4px;
 }
 

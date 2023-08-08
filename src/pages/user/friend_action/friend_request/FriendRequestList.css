@@ -58,6 +58,8 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 76px);;
 }
 
 .friendRequestList h1 {

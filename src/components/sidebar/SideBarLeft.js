@@ -1,11 +1,29 @@
 import {Link} from "react-router-dom";
 import Footer from "../footer/Footer";
+import {useState} from "react";
 
 export default function SideBarLeft() {
+    const [user, setUser] = useState(
+        () => {
+            let loggedInUser = localStorage.getItem("user");
+            if (loggedInUser === null || loggedInUser === "undefined") {
+                loggedInUser = {
+                    message: "Login to access more features",
+                    userId: 0,
+                    accountName: "Guest",
+                    fullName: "Guest",
+                    role: "GUEST"
+                };
+            } else {
+                loggedInUser = JSON.parse(loggedInUser);
+            }
+            return loggedInUser;
+        }
+    )
     return (
         <div className="sideBarLeft">
             <div className="sideBarLeft-content">
-                <Link to={"/admin"}><img src={"https://vapa.vn/wp-content/uploads/2022/12/anh-3d-thien-nhien-010.jpg"}/> <h2> Admin Demo </h2></Link>
+                <Link to={`/users/${user.userId}`}><img src={user.avatar}/> <h2> {user.fullName} </h2></Link>
                 <hr/>
                 <Link to={"/friend"}> <h2> Kết nối bạn bè </h2> </Link>
                 <hr/>

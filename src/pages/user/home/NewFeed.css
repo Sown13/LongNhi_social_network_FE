@@ -18,7 +18,7 @@
     flex-direction: column;
     align-items: center;
     /*justify-content: center;*/
-    /*background-color: #fff;*/
+    background-color: #fff;
     scroll-margin-left: 100px;
     scroll-margin-right: 100px;
 }
@@ -44,8 +44,8 @@
     text-align: start;
     margin-left: 20px;
     margin-right: 20px;
-    min-width: 85%;
-    max-width: 85%;
+    min-width: 93%;
+    max-width: 93%;
     align-self: center;
 }
 
@@ -436,7 +436,7 @@ feedCardCommentActions{
 
 .feedCardImage::-webkit-scrollbar-thumb {
     background: #ffffff;
-    border-radius: 4px;
+    border-radius: 20px;
 }
 
 .feedCardImage:hover::-webkit-scrollbar-thumb {

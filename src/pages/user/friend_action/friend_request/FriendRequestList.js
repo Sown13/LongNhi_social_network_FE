@@ -91,6 +91,7 @@ export default function FriendRequestList() {
                     <div>
                         <Link to={`/users/${request.sourceUser.userId}`}>
                             <div>
+                                <img src={request.sourceUser.avatar}/>
                                 {request.sourceUser.fullName}
                             </div>
                         </Link>

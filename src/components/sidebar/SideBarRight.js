@@ -46,16 +46,16 @@ export default function SideBarRight() {
     return (
         <div className="sideBarRight">
             <div className="sideBarRight-content">
-                <h1> Bạn bè </h1>
+                <h1 style={{paddingTop:"20px",paddingLeft:"5px",fontSize:"20px"}}> Bạn bè </h1>
                 {friendList.map((friend, index) => (
-                    <div className={"friend-list"}>
+                    <div className={"friend-list"} key={friend.userId}>
                         <div className={"friend-avatar"}>
                             <img src={friend.avatar} alt={"icon"}/>
                         </div>
                         <div className={"friend-details"}>
                             <Link to={`/users/${friend.userId}`}><h3> {friend.fullName} </h3></Link>
                         </div>
-                        <div className={"friend-status-online"}> on</div>
+                        <div className={"friend-status-online"}></div>
                     </div>
                 ))}
             </div>

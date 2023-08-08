@@ -28,7 +28,6 @@ export default function SideBarRight() {
         axios.get("http://localhost:8080/user-friends/users/"+ user.userId).then((response) =>{
             let result = response.data;
             let friendListResult = [];
-            console.log(result);
             for (let i = 0; i < result.length; i++) {
                 if (result[i].sourceUser.userId == user.userId) {
                     friendListResult.push(result[i].targetUser);
@@ -54,9 +53,9 @@ export default function SideBarRight() {
     return (
         <div className="sideBarRight">
             <div className="sideBarRight-content">
-                <h1> Bạn bè </h1>
+                <h1 style={{paddingTop:"20px",paddingLeft:"5px",fontSize:"20px"}}> Bạn bè </h1>
                 {friendList.map((friend, index) => (
-                    <div key={index} className="friend-list" onClick={() => handleFriendClick(friend)}>
+                    <div key={index} className="friend-list"  onClick={() => handleFriendClick(friend)}>
                         <div className="friend-avatar">
                             <img src={friend.avatar} alt="icon" />
                         </div>

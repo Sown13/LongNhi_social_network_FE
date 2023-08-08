@@ -47,6 +47,7 @@ export default function FriendRequestPending() {
                     <div className={"friendRequestList-content"}>
                         <Link to={`/users/${request.targetUser.userId}`}>
                             <div>
+                                <img src={request.targetUser.avatar}/>
                                 {request.targetUser.fullName}
                             </div>
                         </Link>

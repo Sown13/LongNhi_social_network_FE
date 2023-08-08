@@ -84,10 +84,12 @@ const EditPost = (props) => {
 
 
                     const promises = [];
+                    const timestamp = Date.now();
 
                     for (let i = 0; i < imagesAdd.length; i++) {
                         const file = imagesAdd[i];
-                        const storageRef = ref(storage, `files/${file.name}`);
+
+                        const storageRef = ref(storage, `files/${postId}/${i}/${timestamp}`);
                         const promise = uploadBytes(storageRef, file)
                             .then((snapshot) => {
                                 console.log("File uploaded successfully");
@@ -102,6 +104,7 @@ const EditPost = (props) => {
                     Promise.all(promises).then((downloadURLs) => {
                         setImgUrlAdd(downloadURLs);
                         const imageData = downloadURLs.map((imgUrl) => ({imgUrl: imgUrl, post: post}));
+                        console.log(imageData);
                         axios.post("http://localhost:8080/post-images/list", imageData)
                     }).catch((error) => {
                         alert(error);
@@ -113,8 +116,7 @@ const EditPost = (props) => {
                 setImagesAdd([]);
                 setImagesDelete([]);
                 setImgUrlAdd([]);
-                props.onClose()
-            })
+            }).then(  props.onClose())
         } catch (err) {
             console.error("Error submitting form:", err);
         }

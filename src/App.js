@@ -30,6 +30,7 @@ import EditComment from "./pages/user/user_page/wall/EditComment";
 import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 import ChatDemo from "./pages/user/groups/chat/ChatDemo";
 import Chat from "./pages/user/groups/chat/Chat";
+import Developing from "./pages/user/developing/Developing";
 
 
 
@@ -119,6 +120,7 @@ function App() {
                     <Route path={"memory"} element={<Memory></Memory>}></Route>
                     <Route path={"game"} element={<Game/>}></Route>
                     <Route path={"favorite"} element={<Favorite/>}></Route>
+                    <Route path={"developing"} element={<Developing/>}></Route>
                     <Route path={"post/:postId"} element={<EditPost></EditPost>}></Route>
                     <Route path={"users/:userId"} element={<UserPage></UserPage>}>
                         <Route path={""} element={<Wall/>}></Route>

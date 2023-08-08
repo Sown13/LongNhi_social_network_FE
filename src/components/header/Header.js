@@ -102,7 +102,7 @@ export default function Header(props) {
             </div>
             <div className="header__right">
                 <div>
-                    <Link> <i className="fa fa-comment header__icon"></i> </Link>
+                    <Link to="/groups/chat"> <i className="fa fa-comment header__icon"></i> </Link>
                 </div>
                 <i className="fas fa-bell header__icon"></i>
                 <div className="dropdown">

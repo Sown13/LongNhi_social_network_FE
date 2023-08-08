@@ -3,10 +3,12 @@ import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
 import "./Chat.css"
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
 
 let stompClient = null;
 const Chat = () => {
+    const {groupId} = useParams();
     const [groupIdList, setGroupIdList] = useState([]);
 
     const [selectedGroup, setSelectedGroup] = useState({
@@ -95,38 +97,38 @@ const Chat = () => {
 
     const selectGroup = (groupId) => {
         setSelectedGroupId(groupId);
-        axios.get("http://localhost:8080/groups/user/" + user.userId).then(res => {
-            setUserGroupMessageList(res.data);
-            let targetGroup = res.data.filter(group => group.groupId === selectedGroupId);
-            if (targetGroup !== null) {
-                setSelectedGroup(targetGroup[0]);
-            } else {
-                setSelectedGroup({
-                    dateCreated: "",
-                    groupId: 0,
-                    groupMember: [],
-                    groupName: "",
-                    messages: [],
-                    owner: ""
-                })
-            }
-        });
+        // axios.get("http://localhost:8080/groups/user/" + user.userId).then(res => {
+        //     setUserGroupMessageList(res.data);
+        //     let targetGroup = res.data.filter(group => group.groupId === selectedGroupId);
+        //     if (targetGroup !== null) {
+        //         setSelectedGroup(targetGroup[0]);
+        //     } else {
+        //         setSelectedGroup({
+        //             dateCreated: "",
+        //             groupId: 0,
+        //             groupMember: [],
+        //             groupName: "",
+        //             messages: [],
+        //             owner: ""
+        //         })
+        //     }
+        // });
     }
 
     const onPrivateMessage = (payload) => {
         console.log("payload received ---", payload.body);
         const payloadData = JSON.parse(payload.body);
         let selectedGroupTemp = {...selectedGroup};
-        console.log(selectedGroupTemp);
+        // console.log(selectedGroupTemp);
         if (typeof selectedGroupTemp !== 'undefined' && selectedGroupTemp.messages) {
             selectedGroupTemp.messages.push(payloadData);
-            setSelectedGroup(selectedGroupTemp);
+            setSelectedGroup({...selectedGroupTemp});
         }
-        console.log("----------------------");
-        console.log("temp" + selectedGroupTemp);
-        console.log(selectedGroup);
-        console.log(payloadData.groupId);
-        console.log("----------------------");
+        // console.log("----------------------");
+        // console.log("temp" + selectedGroupTemp);
+        // console.log(selectedGroup);
+        // console.log(payloadData.groupId);
+        // console.log("----------------------");
     };
 
     const onError = (err) => {

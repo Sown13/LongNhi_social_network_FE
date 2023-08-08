@@ -27,15 +27,15 @@ export default function SideBarLeft() {
                 <hr/>
                 <Link to={"/friend"}> <h2> Kết nối bạn bè </h2> </Link>
                 <hr/>
-                <Link to={"/memory"}> <h2> Kỷ niệm </h2> </Link>
+                <Link to={"/developing"}> <h2> Kỷ niệm </h2> </Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Tin tức </h2> </Link>
+                <Link to={"/developing"}> <h2> Tin tức </h2> </Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Hot </h2> </Link>
+                <Link to={"/developing"}> <h2> Hot </h2> </Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Trò chơi </h2> </Link>
+                <Link to={"/developing"}> <h2> Trò chơi </h2> </Link>
                 <hr/>
-                <Link to={"/friend-request"}> <h2> Sở thích </h2> </Link>
+                <Link to={"/developing"}> <h2> Sở thích </h2> </Link>
                 <hr/>
             </div>
             <Footer></Footer>

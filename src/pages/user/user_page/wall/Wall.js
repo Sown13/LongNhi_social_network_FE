@@ -328,9 +328,12 @@ export default function Wall() {
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                setPostList(response.data);
-                setPostListDisplay(response.data);
-                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
+                setPostList(sortedPosts);
+                setPostListDisplay(sortedPosts);
+                // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
             })
             if (!likedPosts.includes(postId)) {
                 setLikedPosts([...likedPosts, postId]);
@@ -364,9 +367,12 @@ export default function Wall() {
             // Update the local state to reflect the new like status
             setIsLiked((prevState) => !prevState);
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                setPostList(response.data);
-                setPostListDisplay(response.data);
-                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
+                setPostList(sortedPosts);
+                setPostListDisplay(sortedPosts);
+                // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
             })
             if (likedPosts.includes(postId)) {
                 setLikedPosts(likedPosts.filter((id) => id !== postId));
@@ -405,9 +411,12 @@ export default function Wall() {
             await axios.post(apiUrl);
             setIsLiked(true);
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                setPostList(response.data);
-                setPostListDisplay(response.data);
-                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
+                setPostList(sortedPosts);
+                setPostListDisplay(sortedPosts);
+                // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
             })
             if (!likedComment.includes(commentId)) {
                 setLikedComment([...likedComment, commentId]);
@@ -431,9 +440,12 @@ export default function Wall() {
             // Update the local state to reflect the new like status
             setIsLiked(false);
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                setPostList(response.data);
-                setPostListDisplay(response.data);
-                // console.log("Dữ liệu từ server", JSON.stringify(response.data))
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
+                setPostList(sortedPosts);
+                setPostListDisplay(sortedPosts);
+                // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
             })
 
             if (likedComment.includes(commentId)) {
@@ -557,6 +569,19 @@ export default function Wall() {
                 console.log(error);
             });
     };
+
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
+            // Sắp xếp danh sách bài viết theo thời gian giảm dần
+            const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
+            setPostList(sortedPosts);
+            setPostListDisplay(sortedPosts);
+            // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
+        })
+    }, [showModalUpdate]);
+
 
     return (
         <div className="newFeed">

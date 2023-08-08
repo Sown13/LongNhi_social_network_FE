@@ -66,9 +66,12 @@ export default function NewFeed(props) {
 
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-            setListPosts(response.data)
-            // console.log("du lieu tu server", JSON.stringify(response.data))
-        })
+            // Sắp xếp danh sách bài viết theo thời gian giảm dần
+            const sortedListPosts = response.data.sort(
+                (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+            );
+            setListPosts(sortedListPosts);
+        });
     }, [])
 
     useEffect(() => {
@@ -91,6 +94,16 @@ export default function NewFeed(props) {
     //     });
     // }, [listPosts]);
 
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
+            // Sắp xếp danh sách bài viết theo thời gian giảm dần
+            const sortedListPosts = response.data.sort(
+                (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+            );
+            setListPosts(sortedListPosts);
+        });
+    }, [user.userId]);
 
     useEffect(() => {
         // Call the API to get user information based on userId
@@ -135,9 +148,12 @@ export default function NewFeed(props) {
             // Update the local state to reflect the new like status
             setIsLiked(true);
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                setListPosts(response.data)
-                // console.log("du lieu tu server", JSON.stringify(response.data))
-            })
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedListPosts = response.data.sort(
+                    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                );
+                setListPosts(sortedListPosts);
+            });
             if (!likedPosts.includes(postId)) {
                 setLikedPosts([...likedPosts, postId]);
                 localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]));
@@ -169,8 +185,12 @@ export default function NewFeed(props) {
             // Update the local state to reflect the new like status
             setIsLiked(false);
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                setListPosts(response.data)
-            })
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedListPosts = response.data.sort(
+                    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                );
+                setListPosts(sortedListPosts);
+            });
             if (likedPosts.includes(postId)) {
                 setLikedPosts(likedPosts.filter((id) => id !== postId));
                 localStorage.setItem("likedPosts", JSON.stringify(likedPosts.filter((id) => id !== postId)));
@@ -208,8 +228,12 @@ export default function NewFeed(props) {
             await axios.post(apiUrl);
             setIsLiked(true);
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                setListPosts(response.data)
-            })
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedListPosts = response.data.sort(
+                    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                );
+                setListPosts(sortedListPosts);
+            });
             if (!likedComment.includes(commentId)) {
                 setLikedComment([...likedComment, commentId]);
                 localStorage.setItem("likedComment", JSON.stringify([...likedComment, commentId]));
@@ -232,8 +256,12 @@ export default function NewFeed(props) {
             // Update the local state to reflect the new like status
             setIsLiked(false);
             axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                setListPosts(response.data)
-            })
+                // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                const sortedListPosts = response.data.sort(
+                    (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                );
+                setListPosts(sortedListPosts);
+            });
 
             if (likedComment.includes(commentId)) {
                 setLikedComment(likedPosts.filter((id) => id !== commentId));
@@ -388,9 +416,12 @@ export default function NewFeed(props) {
         try {
             await axios.post('http://localhost:8080/comments', values).then(() => {
                 axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                    setListPosts(response.data)
-                    // console.log("du lieu tu server", JSON.stringify(response.data))
-                })
+                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                    const sortedListPosts = response.data.sort(
+                        (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                    );
+                    setListPosts(sortedListPosts);
+                });
             });
         } catch (error) {
             console.log(error);
@@ -403,9 +434,12 @@ export default function NewFeed(props) {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
                 axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                    setListPosts(response.data)
-                    // console.log("du lieu tu server", JSON.stringify(response.data))
-                })
+                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                    const sortedListPosts = response.data.sort(
+                        (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                    );
+                    setListPosts(sortedListPosts);
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -420,9 +454,12 @@ export default function NewFeed(props) {
         })
             .then(() => {
                 axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
-                    setListPosts(response.data);
-                    setCommentUpdated(true);
-                })
+                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
+                    const sortedListPosts = response.data.sort(
+                        (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
+                    );
+                    setListPosts(sortedListPosts);
+                });
                 Swal.fire({
                     title: 'Cập nhật bình luận thành công',
                     icon: 'success',

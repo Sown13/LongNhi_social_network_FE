@@ -145,29 +145,54 @@ export default function UserHeader() {
     }
 
     const cancelRequest = (relationship) => {
-        if (window.confirm("Bạn có chắc muốn hủy lời mời này?")) {
-            axios.delete(`http://localhost:8080/user-friends/${relationship.userFriendId}`).then((response) => {
-                axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
-                    if (response.data != null) {
-                        setRelationShip(response.data);
-                    } else {
-                        setRelationShip({
-                            accepted: false,
-                            friendType: "",
-                            sourceUser: {
-                                userId: 0
-                            },
-                            targetUser: {
-                                userId: 0
-                            }
-                        })
-                    }
-                    console.log("relation   " + relationship)
-                })
-            })
-        }
-    }
-
+        Swal.fire({
+            title: 'Bạn có chắc muốn hủy lời mời này?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xác Nhận',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:8080/user-friends/${relationship.userFriendId}`)
+                    .then((response) => {
+                        axios.get(`http://localhost:8080/user-friends/relationship/${user.userId}/${userId}`)
+                            .then((response) => {
+                                if (response.data != null) {
+                                    setRelationShip(response.data);
+                                } else {
+                                    setRelationShip({
+                                        accepted: false,
+                                        friendType: "",
+                                        sourceUser: {
+                                            userId: 0
+                                        },
+                                        targetUser: {
+                                            userId: 0
+                                        }
+                                    });
+                                }
+                                console.log("relation   " + relationship);
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred while canceling the request.',
+                                    icon: 'error'
+                                });
+                            });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while canceling the request.',
+                            icon: 'error'
+                        });
+                    });
+            }
+        });
+    };
     const acceptRequest = (relationship) => {
         axios.put(`http://localhost:8080/user-friends/${relationship.userFriendId}`).then(() => {
             axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
@@ -212,28 +237,46 @@ export default function UserHeader() {
     }
 
     const deleteFriend = (relationship) => {
-        if (window.confirm("Bạn có chắc muốn xóa kết bạn với người này không?")) {
-            axios.delete("http://localhost:8080/user-friends/" + relationship.userFriendId)
-                .then(response => {
-                    axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId).then((response) => {
-                        if (response.data != null) {
-                            setRelationShip(response.data);
-                        } else {
-                            setRelationShip({
-                                accepted: false,
-                                friendType: "",
-                                sourceUser: {
-                                    userId: 0
-                                },
-                                targetUser: {
-                                    userId: 0
+        Swal.fire({
+            title: 'Bạn có chắc muốn xóa kết bạn với người này không?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Chấp Nhận',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete("http://localhost:8080/user-friends/" + relationship.userFriendId)
+                    .then(response => {
+                        axios.get("http://localhost:8080/user-friends/relationship/" + user.userId + "/" + userId)
+                            .then((response) => {
+                                if (response.data != null) {
+                                    setRelationShip(response.data);
+                                } else {
+                                    setRelationShip({
+                                        accepted: false,
+                                        friendType: "",
+                                        sourceUser: {
+                                            userId: 0
+                                        },
+                                        targetUser: {
+                                            userId: 0
+                                        }
+                                    });
                                 }
-                            })
-                        }
+                            });
                     })
-                })
-        }
-    }
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while deleting the friend.',
+                            icon: 'error'
+                        });
+                    });
+            }
+        });
+    };
 
 
     const handleOpenUpdateForm = () => {

@@ -124,20 +124,18 @@ const Chat = () => {
             <div className="groups-list">
                 <div className={"groups-list-header"}>
                     <h1>Nhóm</h1>
+                    <i style={{fontSize:"30px"}} className="fa fa-plus-square" aria-hidden="true"></i>
                     <input className={"group-list-search"} placeholder={"tìm kiếm"}/>
-                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                 </div>
                 <div className={"groups-list-list"}>
                     {userGroupMessageList.map((group, index) =>
                         (
-
                             <div>
-
-                                <button onClick={() => {
+                                <div onClick={() => {
                                     setSelectedGroup(group);
                                     cleanupWebSocketConnections();
                                 }}><Link to={`/groups/chat/${group.groupId}`} key={index}>{group.groupName}</Link>
-                                </button>
+                                </div>
 
                                 <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                             </div>

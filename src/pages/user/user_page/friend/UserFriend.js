@@ -59,12 +59,9 @@ export default function UserFriend() {
                     setFriendList(friendListResult);
                     setDisplayFriendList(friendListResult);
                 })
-
             }
-
-
         })
-    }, [])
+    }, []);
 
 
     const search = (e) => {

@@ -199,7 +199,6 @@ export default function NewFeed(props) {
             console.error("Error:", error);
         }
     };
-
     const handleToggleLike = (postId) => {
         if (likedPosts.includes(postId)) {
             // Bài đăng đã được thích trước đó, nên ta muốn unlike nó

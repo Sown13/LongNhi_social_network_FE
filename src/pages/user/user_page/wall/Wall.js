@@ -575,7 +575,6 @@ export default function Wall() {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
             // Sắp xếp danh sách bài viết theo thời gian giảm dần
             const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-
             setPostList(sortedPosts);
             setPostListDisplay(sortedPosts);
             // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))

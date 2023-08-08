@@ -63,14 +63,20 @@
     min-height: 6%;
     max-height: 6%;
 }
+
 .chat-box {
     overflow-y: auto;
-    max-height: 95%;
     max-width: 100%;
     border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    max-height: 85%;
+    min-height: 85%;
+}
+.send-message{
+    max-height: 9%;
+    min-height: 9%;
 }
 .chat-box{
-    max-width: 100%;
     padding-left: 0;
 }
 .chat-messages{

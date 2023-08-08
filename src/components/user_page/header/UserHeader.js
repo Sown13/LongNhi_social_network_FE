@@ -242,6 +242,13 @@ export default function UserHeader() {
 
     const [showPictureModalIndex, setShowPictureModalIndex] = useState(-1); // -1 means no modal is shown
 
+    const createChatRoom = () => {
+        axios.post("http://localhost:8080/groups/user/" + user.userId + "/" + userId).then((res)=>{
+            const chatRoomId = res.data.groupId;
+            console.log(chatRoomId)
+            navigate("/groups/chat/"+chatRoomId);
+        })
+    }
 
     return (
         <div className={"user-header"}>
@@ -267,22 +274,22 @@ export default function UserHeader() {
                             </div>
                             : <div>
                                 <button onClick={() => sendFriendRequest()}> Thêm bạn</button>
-                                <button> Nhắn tin</button>
+                                <button onClick={createChatRoom}> Nhắn tin</button>
                             </div>
                         : relationship.accepted === true ?
                             <div>
                                 <button onClick={() => deleteFriend(relationship)}> Xóa Bạn</button>
-                                <button> Nhắn tin</button>
+                                <button onClick={createChatRoom}> Nhắn tin</button>
                             </div>
                             : relationship.sourceUser.userId === user.userId ?
                                 <div>
                                     <button onClick={() => cancelRequest(relationship)}> Hủy lời mời</button>
-                                    <button> Nhắn tin</button>
+                                    <button onClick={createChatRoom}> Nhắn tin</button>
                                 </div>
                                 : <div>
                                     <button onClick={() => acceptRequest(relationship)}> Đồng ý</button>
                                     <button onClick={() => rejectRequest(relationship)}> Từ chối</button>
-                                    <button> Nhắn tin</button>
+                                    <button onClick={createChatRoom}> Nhắn tin</button>
                                 </div>
                     }
 

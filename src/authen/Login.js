@@ -4,13 +4,14 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
-
+import { GoogleLogin } from '@react-oauth/google';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import {CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer} from 'cdbreact';
 import './Login.css'
 import 'mdbreact/dist/css/mdb.css';
+
 
 export default function Login(props) {
     const [user, setUser] = useState(
@@ -31,6 +32,42 @@ export default function Login(props) {
         }
     )
     const [error, setError] = useState(null); // State to store error messages
+
+
+    const handleLoginSuccess = (response) => {
+        console.log(response.credential);
+        axios.post("http://localhost:8080/longin_oauth2", response.credential)
+            .then((response) => {
+                // Successful login
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đăng nhập thành công',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setError(null);
+                props.setUser(response.data);
+                props.setLoggedIn(true);
+
+                localStorage.setItem("loggedIn", true);
+                localStorage.setItem("user", JSON.stringify(response.data));
+                console.log(localStorage.getItem("user"));
+            })
+            .catch((error) => {
+                // Error case
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Sai tài khoản hoặc mật khẩu',
+                });
+                setError("Sai tài khoản hoặc mật khẩu");
+            });
+
+    };
+
+    const handleLoginFailure = (response) => {
+        alert("đăng nhập thất bại")
+    };
 
     const handleLogin = (values, {setSubmitting}) => {
         validationSchema
@@ -102,6 +139,14 @@ export default function Login(props) {
                                 <Link to="/guest" style={{position: "absolute", top: "-46px"}}>
                                     <button>Trang chủ</button>
                                 </Link>
+
+                                <GoogleLogin
+                                    buttonText="Login with Google"
+                                    onSuccess={handleLoginSuccess}
+                                    onFailure={handleLoginFailure}
+                                    cookiePolicy={'single_host_origin'}
+                                    isSignnedIn={true}
+                                />
 
                                 <CDBCardBody className="mx-4" style={{
                                     height: "281px",

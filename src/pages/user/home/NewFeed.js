@@ -53,6 +53,9 @@ export default function NewFeed(props) {
 
     const [listPosts, setListPosts] = useState([]);
 
+    const [loadedPosts, setLoadedPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [visiblePostIds, setVisiblePostIds] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -70,6 +73,47 @@ export default function NewFeed(props) {
     const [likedComment, setLikedComment] = useState([]);
 
     const [showPostForm, setShowPostForm] = useState(false)
+
+    useEffect(() => {
+        // Load initial posts
+        const initialPosts = listPosts.slice(0, 5);
+        setLoadedPosts(initialPosts);
+    }, [listPosts]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+                loadMorePosts();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isLoading]);
+
+    useEffect(() => {
+        // Load initial posts
+        loadMorePosts();
+    }, []);
+
+    const loadMorePosts = () => {
+        setIsLoading(true);
+
+        // Simulate an API call to fetch more posts
+        setTimeout(() => {
+            const remainingPosts = listPosts.slice(loadedPosts.length);
+            const nextPosts = remainingPosts.slice(0, 5);
+            setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
+            setIsLoading(false);
+        }, 1000);
+    };
+
+
+
+
 
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user-source/" + user.userId).then((response) => {
@@ -484,7 +528,7 @@ export default function NewFeed(props) {
                                                 placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
                                                 className="input-field" // Thêm lớp CSS này
                                                 onClick={handleOpenPostForm}
-
+                                                style={{width: "80%"}}
                                             />
 
                                             <div className={"input-action-wall"}>
@@ -535,7 +579,7 @@ export default function NewFeed(props) {
                     </div>
                     <br/>
                     <hr/>
-                    {listPosts.length > 0 && listPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend")
+                    {loadedPosts.length > 0 && loadedPosts.filter(post => post.authorizedView === "public" || post.authorizedView === "friend")
                         .map((item, index) => {
                             const images = item.postImageList || [];
                             const isPostVisible = visiblePostIds.includes(item.postId);

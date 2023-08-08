@@ -38,6 +38,9 @@ export default function Wall() {
 
     const [postList, setPostList] = useState([]);
 
+    const [loadedPosts, setLoadedPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [postListDisplay, setPostListDisplay] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -66,6 +69,46 @@ export default function Wall() {
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [upLoadSuccess, setUpLoadSuccess] = useState(false);
     const [idEditPost, setIdEditPost] = useState(null);
+
+    useEffect(() => {
+        // Load initial posts
+        const initialPosts = postListDisplay.slice(0, 1);
+        setLoadedPosts(initialPosts);
+    }, [postListDisplay]);
+
+
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+                loadMorePosts();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isLoading]);
+
+    useEffect(() => {
+        // Load initial posts
+        loadMorePosts();
+    }, []);
+
+    const loadMorePosts = () => {
+        setIsLoading(true);
+
+        // Simulate an API call to fetch more posts
+        setTimeout(() => {
+            const remainingPosts = postListDisplay.slice(loadedPosts.length);
+            const nextPosts = remainingPosts.slice(0, 1);
+            setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
+            setIsLoading(false);
+        }, 1000);
+    };
+
 
 
     const [user, setUser] = useState(() => {
@@ -117,7 +160,6 @@ export default function Wall() {
 
     const handleAddImageNewPost = (e) => {
         const files = e.target.files;
-
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -650,7 +692,7 @@ export default function Wall() {
                 {/*</div>*/}
                 <br/>
                 <hr/>
-                {postListDisplay.length > 0 && postListDisplay
+                {loadedPosts.length > 0 && loadedPosts
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
                     .map((item, index) => {
                         const images = item.postImageList || []
@@ -805,7 +847,7 @@ export default function Wall() {
                             </div>
                         )
                     })}
-
+                {isLoading && <div>Loading more posts...</div>}
             </div>
             <Modal visible={showPostForm} onCancel={() => {
                 setShowPostForm(false)

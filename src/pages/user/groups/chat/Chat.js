@@ -123,49 +123,45 @@ const Chat = () => {
         <div className="groups-manage">
             <div className="groups-list">
                 <div className={"groups-list-header"}>
-                    <h1>Nhóm</h1>
-                    <i style={{fontSize:"30px"}} className="fa fa-plus-square" aria-hidden="true"></i>
+                    <h1 style={{fontWeight:"bold"}}>Nhóm</h1>
+                    <i style={{fontSize: "30px"}} className="fa fa-plus-square" aria-hidden="true"></i>
                     <input className={"group-list-search"} placeholder={"tìm kiếm"}/>
                 </div>
-                <div className={"groups-list-list"}>
-                    {userGroupMessageList.map((group, index) =>
-                        (
-                            <div>
-                                <div onClick={() => {
-                                    setSelectedGroup(group);
-                                    cleanupWebSocketConnections();
-                                }}><Link to={`/groups/chat/${group.groupId}`} key={index}>{group.groupName}</Link>
-                                </div>
-
-                                <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                <hr/>
+                {userGroupMessageList.map((group, index) =>
+                    (
+                        <div className={"groups-list-list"}>
+                            <div onClick={() => {
+                                setSelectedGroup(group);
+                                cleanupWebSocketConnections();
+                            }}><Link to={`/groups/chat/${group.groupId}`} key={index}>{group.groupName}</Link>
                             </div>
 
-                        )
-                    )}
-                </div>
+                            <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </div>
+                    )
+                )}
             </div>
-            {groupId == 0 ? <div className="chat-content"
-                                 style={{display: "flex", justifyContent: "center", alignContent: "center"}}>
+            {groupId == 0 ?
+                <div className="chat-content" style={{display: "flex", justifyContent: "center", alignContent: "center"}}>
                     <h3 style={{textAlign: "center", fontWeight: "bold"}}> Hãy chọn một nhóm hoặc tạo một nhóm mới </h3>
                 </div>
                 :
                 <div className="chat-content">
-                    <div className={"chat-content-header"}>{selectedGroup.groupName}</div>
+                    <div className={"chat-content-header"} style={{fontWeight:"bold",fontSize:"20px"}}>{selectedGroup.groupName}</div>
                     <div className={"chat-box"}>
-                        <div className="chat-messages">
+                        {/*<div className="chat-messages">*/}
                             {selectedGroup.messages.map((message, index) => {
                                 // console.log(selectedGroup.messages)
                                 console.log(message)
                                 return (
                                     <div key={index}
-                                        className={user.userId == (typeof message.user != "undefined" ? message.user.userId : message.userId) ? "sender-self" : "sender-other"}>
-                                        <div>
-                                            <p >  {((typeof message.user != "undefined") && (typeof message.user.fullName != "undefined") ? message.user.fullName : message.fullName)}</p>
-                                            <p >{message.textContent}</p>
-                                        </div>
+                                         className={user.userId == (typeof message.user != "undefined" ? message.user.userId : message.userId) ? "sender-self" : "sender-other"}>
+                                            <div className={"chat-message-name"}>  {((typeof message.user != "undefined") && (typeof message.user.fullName != "undefined") ? message.user.fullName : message.fullName)}</div>
+                                            <div className={"chat-message-content"}>{message.textContent}</div>
                                     </div>)
                             })}
-                        </div>
+                        {/*</div>*/}
                     </div>
                     <div className="send-message">
                         <input

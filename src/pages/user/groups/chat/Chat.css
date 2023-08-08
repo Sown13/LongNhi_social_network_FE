@@ -58,13 +58,16 @@
 
 }
 
-.chat-content > div:first-child {
+.chat-content-header {
     font-weight: bold;
+    min-height: 6%;
+    max-height: 6%;
 }
 .chat-box {
     overflow-y: auto;
     max-height: 95%;
     max-width: 100%;
+    border-top: 1px solid #e0e0e0;
 }
 .chat-box{
     max-width: 100%;
@@ -72,21 +75,42 @@
 }
 .chat-messages{
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .sender-self {
+    align-self: flex-end;
     border-radius: 8px;
-    /*background-color: #ff8c00;*/
+    background-color: #ff8c00;
     padding: 5px;
+    max-width: 80%;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    text-align: right;
 }
-.sender-self p {
-    max-width: 100%;
+
+.chat-box{
+    display: flex;
+    flex-direction: column;
 }
 .sender-other {
     border-radius: 8px;
-    /*background-color: #ff8c00;*/
+    background-color: #58a1ef;
     padding: 5px;
+    max-width: 80%;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-self: flex-start;
 }
+.sender-self > .chat-message-name {
+
+}
+
 /*.chat-messages {*/
 /*    flex: 1 1 auto;*/
 /*    overflow-y: scroll;*/
@@ -178,27 +202,6 @@
 /*    padding: 5px;*/
 /*    border-radius: 4px;*/
 /*}*/
-.sender-self > div {
-    background-color: #ff8c00;
-    color: #fff;
-    padding: 5px;
-    border-radius: 4px;
-    max-width: 80%;
-}
-
-/*li.sender-other > div {*/
-/*    background-color: #a19f9f;*/
-/*    color: #fff;*/
-/*    padding: 5px;*/
-/*    border-radius: 4px;*/
-/*}*/
-.sender-other > div {
-    background-color: #58a1ef;
-    color: #fff;
-    padding: 5px;
-    border-radius: 4px;
-    max-width: 80%;
-}
 
 /*.chat-content {*/
 /*    max-width: 70%;*/
@@ -220,6 +223,7 @@
 .chat-content {
     min-width: 70%;
     max-width: 70%;
+    justify-content: space-between;
 }
 
 
@@ -250,12 +254,15 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
-
-.groups-list-list div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.groups-list-list div {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
 }
 
 .groups-list-header i:hover{

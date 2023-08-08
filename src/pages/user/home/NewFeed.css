@@ -552,3 +552,12 @@ background-color: #ff8c00;
 }
 
 
+.input-field {
+    width: 80%;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out; /* Thêm hiệu ứng chuyển đổi màu */
+}
+
+.input-field:hover {
+    background-color: #f0f0f0; /* Thay đổi màu khi di chuột vào */
+}

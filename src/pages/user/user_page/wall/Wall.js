@@ -14,6 +14,9 @@ import ImageList from "../../../../components/image/ImageList";
 import Modal from 'react-modal';
 import EditPost from "./update_post/EditPost";
 import CommentList from "../../../../components/comment/CommentList";
+import {ModalBody, ModalHeader} from "reactstrap";
+import {ModalTitle} from "react-bootstrap";
+import FormPostModal from "../../home/FormPostModal";
 
 export default function Wall() {
     const [checkIsAccepted, setCheckIsAccepted] = useState(false)
@@ -49,6 +52,11 @@ export default function Wall() {
         commentId: 0,
         textContent: ""
     });
+    const [showPostForm, setShowPostForm] = useState(false)
+
+    const handleOpenPostForm = () => {
+        setShowPostForm(true);
+    }
 
     const [likedComment, setLikedComment] = useState([]);
 
@@ -154,9 +162,9 @@ export default function Wall() {
                     Swal.fire({
                         icon: 'success',
                         showCancelButton: false,
-                        showConfirmButton: false,
                         closeOnClickOutside: false,
-                        timer: 2000
+                        timer: 1000,
+                        showConfirmButton:false
                     })
                 })
             });
@@ -591,7 +599,7 @@ export default function Wall() {
             </div>
             <div className="newFeedContainer">
                 <br/>
-                <div className="feedCarAvatarContainer">
+                {/*<div className="feedCarAvatarContainer">*/}
                     <div className={"feedCarAvatarContainer-top"}>
                         <div className="feedCardAvatar-head">
                             <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
@@ -617,7 +625,10 @@ export default function Wall() {
                                             as="textarea"
                                             placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
                                             style={{width: "80%"}}
+                                            onClick={handleOpenPostForm}
+
                                         />
+
                                         <div className={"input-action-wall"}>
                                             <div className="image-list">
                                                 {imagesNewPost.map((image) => (
@@ -663,7 +674,7 @@ export default function Wall() {
                             </Formik>
                         </div>
                     </div>
-                </div>
+                {/*</div>*/}
                 <br/>
                 <hr/>
                 {postListDisplay.length > 0 && postListDisplay
@@ -823,6 +834,16 @@ export default function Wall() {
                     })}
 
             </div>
+            <Modal visible={showPostForm} onCancel={() => {
+                setShowPostForm(false)
+            }} footer={null} centered>
+                <ModalHeader closeButton>
+                    <ModalTitle>Tạo bài viết</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <FormPostModal></FormPostModal>
+                </ModalBody>
+            </Modal>
         </div>
 
     )

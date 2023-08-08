@@ -162,7 +162,7 @@ const Chat = () => {
                     <div>{selectedGroup.groupName}</div>
                     <ul className="chat-messages">
                         {selectedGroup.messages.map((message, index) => {
-                            console.log(selectedGroup)
+                            // console.log(selectedGroup)
                             return (
                             <li key={index}>{message.textContent}</li>
                         )})}

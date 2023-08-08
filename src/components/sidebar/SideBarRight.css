@@ -75,7 +75,7 @@
     text-transform: uppercase;
     padding: 5px 5px;
     border-radius: 50%;
-    background-color: #58b44e;
+    background-color: #FF69B4;
 }
 
 .sideBarRight-content::-webkit-scrollbar {
@@ -87,7 +87,7 @@
 }
 
 .sideBarRight-content::-webkit-scrollbar-thumb {
-    background-color: #ccc;
+    background-color: #FFB6C1;
     border-radius: 4px;
 }
 

@@ -3,7 +3,7 @@
     width: 60%;
 }
 
-button {
+.group-manager-group-list button {
     background-color: #FFB6C1;
     color: white;
     padding: 10px 20px;
@@ -12,7 +12,24 @@ button {
     cursor: pointer;
     font-size: 16px;
 }
-
+.group-manager-group-list{
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-between;*/
+}
 /*button:hover {*/
 /*    background-color: #FF69B4;*/
 /*}*/
+
+.group-manager-display-content > div {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #FFB6C1;
+    border-radius: 12px;
+}
+
+.group-manager-display-content > div > div:first-child {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

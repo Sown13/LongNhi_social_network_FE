@@ -440,12 +440,12 @@ feedCardCommentActions{
 }
 
 .feedCardImage::-webkit-scrollbar-thumb {
-    background: #ffffff;
+    background: #FFB6C1;
     border-radius: 20px;
 }
 
 .feedCardImage:hover::-webkit-scrollbar-thumb {
-    background: #ffffff;
+    background:#FF69B4;
 }
 
 .feedCardImage::-webkit-scrollbar-thumb:hover {
@@ -453,7 +453,7 @@ feedCardCommentActions{
 }
 
 .feedCardImage:hover::-webkit-scrollbar-thumb {
-    background: black;
+    background: #FF69B4;
 }
 
 .feedCardImage:hover::-webkit-scrollbar-thumb:hover {
@@ -461,7 +461,7 @@ feedCardCommentActions{
 }
 
 .feedCardImage:hover::-webkit-scrollbar-thumb:active {
-    background: #0c0c0c;
+    background: #FF69B4;
 }
 
 .feedCardImage:not(:hover)::-webkit-scrollbar {

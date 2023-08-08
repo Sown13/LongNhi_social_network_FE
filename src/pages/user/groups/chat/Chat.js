@@ -5,11 +5,15 @@ import "./Chat.css";
 import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 import {Dropdown, Menu} from "antd";
+import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 let stompClient = null;
 
 const Chat = () => {
     const {groupId} = useParams();
+
+    // const [actionChoice,setActionChoice] = useState("nothing");
 
     const [webSocketMessages, setWebSocketMessages] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState({
@@ -120,6 +124,44 @@ const Chat = () => {
         }
     };
 
+    const checkMember = () => {
+
+    }
+    const addMember = () => {
+
+    }
+
+    const removeMember = () => {
+
+    }
+
+    const changeName = () => {
+
+    }
+
+    const removeGroup = (groupId) => {
+        Swal.fire({
+            icon: 'question',
+            title: 'Bạn có chắc muốn xoá không',
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: "Không",
+            allowOutsideClick: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete("http://localhost:8080/groups/" + groupId).then((res) => {
+                    if (res.status === 200) {
+                        setUserGroupMessageList(userGroupMessageList.filter(group => group.groupId !== groupId));
+                        Swal.fire({
+                            icon: 'success',
+                            timer: 1000
+                        })
+                    }
+                })
+            }
+        })
+    }
+
     return (
         <div className="groups-manage">
             <div className="groups-list">
@@ -132,7 +174,7 @@ const Chat = () => {
                 {userGroupMessageList.map((group, index) =>
                     (
                         <div className={"groups-list-list"}>
-                            <div onClick={() => {
+                            <div className={"group-list-list-group-name"} onClick={() => {
                                 setSelectedGroup(group);
                                 cleanupWebSocketConnections();
                             }}><Link to={`/groups/chat/${group.groupId}`} key={index}>{group.groupName}</Link>
@@ -147,7 +189,7 @@ const Chat = () => {
                                             <Menu.Item key="2">
                                                 Thêm thành viên
                                             </Menu.Item>
-                                            <Menu.Item key="1">
+                                            <Menu.Item key="1" onClick={() => removeGroup(group.groupId)}>
                                                 Xoá Nhóm
                                             </Menu.Item>
                                         </Menu>

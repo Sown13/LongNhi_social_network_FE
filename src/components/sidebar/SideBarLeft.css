@@ -37,6 +37,7 @@
 .sideBarLeft {
     flex: 1;
     max-width: 20vw;
+    min-width: 20vw;
     top: 76px;
     position: sticky;
     align-self: flex-start;

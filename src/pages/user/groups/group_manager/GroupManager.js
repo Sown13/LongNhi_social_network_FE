@@ -67,7 +67,7 @@ export default function GroupManager() {
             </div>
             {groupListDisplay.map(group => {
                 return (
-                    <div>
+                    <div className={"group-manager-group-list"}>
                         <div> {group.groupName}</div>
                         <button> Xem thành viên</button>
                         <button> Thêm thành viên </button>

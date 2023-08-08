@@ -244,7 +244,7 @@ export default function UpdateForm() {
                                         <td colSpan={2}>
                                             {(backgroundDisplay === "") ? (
                                                 <img
-                                                    src={"https://vn-live-01.slatic.net/p/7fc8d89d0fbe22433ab65ad13cb77dd8.png"}
+                                                    src={"https://kynguyenlamdep.com/wp-content/uploads/2020/04/hinh-anh-trang-dep.jpg"}
                                                     style={{fontSize: '20px', fontWeight: '50px'}}
                                                     className="cover-photo"
                                                 ></img>

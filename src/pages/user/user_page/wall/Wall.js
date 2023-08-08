@@ -246,7 +246,8 @@ export default function Wall() {
                             showConfirmButton: false,
                             closeOnClickOutside: false,
                             timer: 2000
-                        })
+                        }).then(window.location.reload())
+
                     })
                 }
             ).then(() => {
@@ -317,7 +318,10 @@ export default function Wall() {
                         setPostList(postList.filter((s) => s.id !== postId));
                         Swal.fire({
                             icon: 'success',
-                            timer: 1000
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            closeOnClickOutside: false,
+                            timer: 2000
                         })
                     }
                 })

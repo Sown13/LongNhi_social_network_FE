@@ -343,6 +343,9 @@ export default function NewFeed(props) {
                     Swal.fire({
                         title: "Đăng bài viết mới thành công",
                         icon: 'success',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        closeOnClickOutside: false,
                         timer: 2000
                     })
                 })
@@ -387,8 +390,12 @@ export default function NewFeed(props) {
                     Swal.fire({
                         title: "Đăng bài viết mới thành công",
                         icon: 'success',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        closeOnClickOutside: false,
                         timer: 2000
-                    })
+                    }).then(window.location.reload())
+
                 })
                 }
             ).then(() => {

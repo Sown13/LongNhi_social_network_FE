@@ -63,7 +63,7 @@ export default function Wall() {
 
     useEffect(() => {
         // Load initial posts
-        const initialPosts = postListDisplay.slice(0, 1);
+        const initialPosts = postListDisplay.slice(0, 3);
         setLoadedPosts(initialPosts);
     }, [postListDisplay]);
 
@@ -94,7 +94,7 @@ export default function Wall() {
         // Simulate an API call to fetch more posts
         setTimeout(() => {
             const remainingPosts = postListDisplay.slice(loadedPosts.length);
-            const nextPosts = remainingPosts.slice(0, 1);
+            const nextPosts = remainingPosts.slice(0, 3);
             setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
             setIsLoading(false);
         }, 1000);
@@ -596,6 +596,9 @@ export default function Wall() {
                 Swal.fire({
                     title: 'Cập nhật bình luận thành công',
                     icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    closeOnClickOutside: false,
                     timer: 1000
                 })
             })

@@ -40,7 +40,8 @@
     top: 76px;
     position: sticky;
     align-self: flex-start;
-    max-height: 100vw;
+    max-height: calc(100vh - 76px);
+    min-height: calc(100vh - 76px);
 }
 .sideBarLeft-content {
     position: relative;
@@ -53,7 +54,6 @@
     border-radius: 4px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /*min-height: 10vw;*/
 }
 
 .sideBarLeft-content {

@@ -58,7 +58,6 @@
     text-decoration: none;
 }
 .header > i{
-
 }
 
 .header__link:hover {
@@ -106,7 +105,7 @@
 
 .header__icon {
     color: #1c1e21;
-    font-size: 24px;
+    font-size: 180%;
     margin-right: 16px;
 }
 
@@ -129,11 +128,12 @@
 }
 
 .avatar-img {
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
+    object-fit: cover;
 }
 
 .dropdown-content {

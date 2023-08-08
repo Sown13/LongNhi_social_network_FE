@@ -87,8 +87,8 @@ export default function UserFriend() {
                         console.log("user" + friend)
                         return (
                             <div>
-
-                                <Link to={`/users/${friend.userId}`}>
+                                <Link to={`/users/${friend.userId}`} style={{display:"flex",alignItems:"center",width:"100%"}}>
+                                    <img src={friend.avatar} alt={friend.fullName + "avatar"}/>
                                     <div key={friend.userId}><h2> {friend.fullName} </h2></div>
                                 </Link>
 

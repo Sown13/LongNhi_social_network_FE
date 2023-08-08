@@ -1,0 +1,159 @@
+.groups-manage{
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    justify-self: center;
+    align-self: center;
+}
+
+.groups-list{
+    min-width: 20%;
+    max-width: 20%;
+}
+.chat-content{
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.groups-manage {
+    display: flex;
+    height:  calc(100vh - 105px);
+}
+
+.groups-list {
+    flex: 0 0 auto;
+    width: 30%;
+    overflow-y: auto;
+    max-height:  calc(100vh - 76px);
+}
+
+.chat-content {
+    flex: 1 1 auto;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    max-height:  calc(100vh - 120px);
+}
+/*.send-message {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-top: 10px; !* adjust as needed *!*/
+/*}*/
+
+.input-message {
+    flex: 1;
+    padding: 5px;
+}
+
+.send-button {
+    margin-left: 10px; /* adjust as needed */
+}
+
+
+/*-------------*/
+
+.groups-manage {
+    display: flex;
+    height: 100vh;
+}
+
+.groups-list {
+    flex: 0 0 auto;
+    width: 30%;
+    background: #f0f2f5;
+    padding: 20px;
+    overflow-y: auto;
+    max-height:  calc(100vh - 76px);
+}
+
+.groups-list > div {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.groups-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.groups-list li {
+    margin-bottom: 10px;
+}
+
+.groups-list button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.chat-content {
+    flex: 1 1 auto;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 20px;
+}
+
+.chat-content > div:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.chat-messages {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chat-messages li {
+    margin-bottom: 10px;
+}
+
+.send-message {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.input-message {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.send-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #4267B2;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background: #3b5998;
+}
+
+.chat-box{
+    border: 1px solid;
+    min-height: calc(100vh - 200px);
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+}

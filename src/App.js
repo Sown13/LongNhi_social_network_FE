@@ -114,7 +114,7 @@ function App() {
                     </Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}>
-                        <Route path={"chat"} element={<Chat></Chat>}></Route>
+                        <Route path={"chat/:groupId"} element={<Chat></Chat>}></Route>
                     </Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>
                     <Route path={"memory"} element={<Memory></Memory>}></Route>

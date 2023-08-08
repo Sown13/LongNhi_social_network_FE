@@ -3,7 +3,7 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import "./Chat.css";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 let stompClient = null;
 
@@ -11,7 +11,6 @@ const Chat = () => {
     const { groupId } = useParams();
 
     const [webSocketMessages, setWebSocketMessages] = useState([]);
-
     const [selectedGroup, setSelectedGroup] = useState({
         dateCreated: "",
         groupId: 0,
@@ -20,7 +19,6 @@ const Chat = () => {
         messages: [],
         owner: "",
     });
-
     const [userGroupMessageList, setUserGroupMessageList] = useState([
         {
             dateCreated: "",
@@ -31,7 +29,6 @@ const Chat = () => {
             owner: "",
         },
     ]);
-
     const [user, setUser] = useState(() => {
         let loggedInUser = localStorage.getItem("user");
         if (loggedInUser === null || loggedInUser === "undefined") {
@@ -47,7 +44,6 @@ const Chat = () => {
         }
         return loggedInUser;
     });
-
     const [messageDTO, setMessageDTO] = useState({
         textContent: "",
         userId: "",
@@ -60,7 +56,9 @@ const Chat = () => {
     useEffect(() => {
         axios.get("http://localhost:8080/groups/user/" + user.userId).then((res) => {
             setUserGroupMessageList(res.data);
-            let targetGroup = res.data.filter((group) => group.groupId === parseInt(groupId));
+            let targetGroup = res.data.filter(
+                (group) => group.groupId === parseInt(groupId)
+            );
             if (targetGroup.length > 0) {
                 setSelectedGroup(targetGroup[0]);
             } else {
@@ -87,12 +85,35 @@ const Chat = () => {
             let Sock = new SockJS("http://localhost:8080/ws");
             stompClient = over(Sock);
             stompClient.connect({}, onConnected, onError);
+
+            // Cleanup function
+            return () => {
+                if (stompClient) {
+                    stompClient.disconnect(null, {});
+                    stompClient = null;
+                }
+            };
         });
     }, [groupId]);
+    const cleanupWebSocketConnections = () => {
+        if (stompClient) {
+            stompClient.disconnect(null, {});
+            stompClient = null;
+        }
+    };
 
     const onPrivateMessage = (payload) => {
         const payloadData = JSON.parse(payload.body);
         setWebSocketMessages((prevMessages) => [...prevMessages, payloadData]);
+
+        setSelectedGroup((prevGroup) => {
+            if (prevGroup.groupId === payloadData.groupId) {
+                // Update the messages array of the selected group with the new message
+                const updatedMessages = [...prevGroup.messages, payloadData];
+                return { ...prevGroup, messages: updatedMessages };
+            }
+            return prevGroup;
+        });
     };
 
     const onError = (err) => {
@@ -124,9 +145,15 @@ const Chat = () => {
                 <div> Nhóm </div>
                 <ul>
                     {userGroupMessageList.map((group, index) => (
-                        <li key={index} onClick={() => setSelectedGroup(group)}>
-                            <button>{group.groupName}</button>
-                        </li>
+                        <Link to={`/groups/chat/${group.groupId}`} key={index}>
+                            <li onClick={() => {
+                                setSelectedGroup(group);
+                                cleanupWebSocketConnections();
+                            }
+                            }>
+                                <button>{group.groupName}</button>
+                            </li>
+                        </Link>
                     ))}
                 </ul>
             </div>
@@ -134,25 +161,35 @@ const Chat = () => {
                 <div className={"chat-box"}>
                     <div>{selectedGroup.groupName}</div>
                     <ul className="chat-messages">
-                        {selectedGroup.messages.map((message, index) => (
+                        {selectedGroup.messages.map((message, index) => {
+                            console.log(selectedGroup)
+                            return (
                             <li key={index}>{message.textContent}</li>
-                        ))}
-                        {webSocketMessages
-                            .filter((message) => message.groupId === selectedGroup.groupId)
-                            .map((message, index) => (
-                                <li key={index}>{message.textContent}</li>
-                            ))}
+                        )})}
                     </ul>
+                    {/*<ul className="chat-messages">*/}
+                    {/*    {webSocketMessages*/}
+                    {/*        .filter((message) => message.groupId === selectedGroup.groupId)*/}
+                    {/*        .map((message, index) => {*/}
+                    {/*            console.log(webSocketMessages)*/}
+                    {/*            return (*/}
+                    {/*            <li key={index}>{message.textContent}</li>*/}
+                    {/*        )})}*/}
+                    {/*</ul>*/}
                 </div>
                 <div className="send-message">
                     <input
                         type="text"
                         className="input-message"
-                        placeholder="enter themessage"
+                        placeholder="enter the message"
                         value={messageDTO.textContent}
                         onChange={handleMessage}
                     />
-                    <button type="button" className="send-button" onClick={sendPrivateValue}>
+                    <button
+                        type="button"
+                        className="send-button"
+                        onClick={sendPrivateValue}
+                    >
                         send message
                     </button>
                 </div>

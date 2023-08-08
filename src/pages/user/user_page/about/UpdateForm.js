@@ -48,6 +48,7 @@ export default function UpdateForm() {
                 setUser(response.data);
                 setAvatarDisplay(response.data.avatar)
                 setBackgroundDisplay(response.data.background)
+                console.log("avatarDisplay-123123", avatarDisplay)
             })
             .catch((error) => {
                 console.error("Error fetching user:", error);
@@ -90,7 +91,7 @@ export default function UpdateForm() {
                 const backgroundDownloadURL = await getDownloadURL(backgroundUploadTask.snapshot.ref);
                 updatedBackground = backgroundDownloadURL;
             } else {
-                updatedBackground =  user.background;
+                updatedBackground = user.background;
             }
 
             const updatedUser = {
@@ -99,7 +100,7 @@ export default function UpdateForm() {
                 background: updatedBackground,
             };
 
-            await axios.put(`http://localhost:8080/users/${user.userId}`, updatedUser).then((res)=>{
+            await axios.put(`http://localhost:8080/users/${user.userId}`, updatedUser).then((res) => {
                 const user = JSON.parse(localStorage.getItem('user'));
                 user.avatar = res.data.avatar;
                 user.background = res.data.background;
@@ -173,7 +174,7 @@ export default function UpdateForm() {
                                         <td colSpan={2}
                                             style={{textAlign: 'left', padding: '10px', marginLeft: '200px'}}>
                                             {
-                                                (avatarDisplay === null) ? (
+                                                (avatarDisplay === "") ? (
                                                     <img
                                                         src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
                                                         className="avatar"
@@ -182,7 +183,6 @@ export default function UpdateForm() {
                                                             width: '190px',
                                                             height: '190px'
                                                         }}
-                                                        alt="Default Avatar"
                                                     />
                                                 ) : (
                                                     <img
@@ -242,11 +242,20 @@ export default function UpdateForm() {
                                     </tr>
                                     <tr>
                                         <td colSpan={2}>
-                                            <img
-                                                src={backgroundDisplay}
-                                                style={{fontSize: '20px', fontWeight: '50px'}}
-                                                className="cover-photo"
-                                            ></img>
+                                            {(backgroundDisplay === "") ? (
+                                                <img
+                                                    src={"https://vn-live-01.slatic.net/p/7fc8d89d0fbe22433ab65ad13cb77dd8.png"}
+                                                    style={{fontSize: '20px', fontWeight: '50px'}}
+                                                    className="cover-photo"
+                                                ></img>
+                                            ):(
+                                                <img
+                                                    src={backgroundDisplay}
+                                                    style={{fontSize: '20px', fontWeight: '50px'}}
+                                                    className="cover-photo"
+                                                ></img>
+                                            )}
+
                                         </td>
 
                                     </tr>
@@ -259,44 +268,47 @@ export default function UpdateForm() {
                                 </div>
 
 
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                     {/* Personal information */}
                                     <br></br>
-                                    <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-                                        <strong style={{ fontSize: '18px', fontWeight: 'bold' }}>Thông tin cá nhân</strong>
+                                    <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                                        <strong style={{fontSize: '18px', fontWeight: 'bold'}}>Thông tin cá
+                                            nhân</strong>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Tên tài khoản</strong>
-                                        <Field type="text" name="accountName" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Tên tài khoản</strong>
+                                        <Field type="text" name="accountName"
+                                               style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Email</strong>
-                                        <Field type="text" name="email" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Email</strong>
+                                        <Field type="text" name="email" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Họ tên</strong>
-                                        <Field type="text" name="fullName" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Họ tên</strong>
+                                        <Field type="text" name="fullName" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Số điện thoại</strong>
-                                        <Field type="text" name="phone" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Số điện thoại</strong>
+                                        <Field type="text" name="phone" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Sinh nhật</strong>
-                                        <Field name="birthday" type="date" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Sinh nhật</strong>
+                                        <Field name="birthday" type="date" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Sở thích</strong>
-                                        <Field type="text" name="hobby" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Sở thích</strong>
+                                        <Field type="text" name="hobby" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
-                                    <div style={{ textAlign: 'left', marginBottom: '10px', width: '100%' }}>
-                                        <strong style={{ fontSize: '16px' }}>Địa chỉ</strong>
-                                        <Field type="text" name="address" style={{ width: '100%', fontSize: '16px' }} />
+                                    <div style={{textAlign: 'left', marginBottom: '10px', width: '100%'}}>
+                                        <strong style={{fontSize: '16px'}}>Địa chỉ</strong>
+                                        <Field type="text" name="address" style={{width: '100%', fontSize: '16px'}}/>
                                     </div>
                                 </div>
                             </div>
-                            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                                <button type="submit" style={{ backgroundColor: '#ff7f50', fontSize: '16px' }}>Lưu</button>
+                            <div style={{textAlign: 'center', marginTop: '20px'}}>
+                                <button type="submit" style={{backgroundColor: '#ff7f50', fontSize: '16px'}}>Lưu
+                                </button>
                             </div>
 
 

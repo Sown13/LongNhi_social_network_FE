@@ -31,6 +31,7 @@ import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 import ChatDemo from "./pages/user/groups/chat/ChatDemo";
 import Chat from "./pages/user/groups/chat/Chat";
 import Developing from "./pages/user/developing/Developing";
+import ChatWelcome from "./pages/user/groups/chat_welcome/ChatWelcome";
 
 
 
@@ -114,6 +115,7 @@ function App() {
                     </Route>
                     <Route path={"community"} element={<Community></Community>}></Route>
                     <Route path={"groups"} element={<Group></Group>}>
+                        {/*<Route path={"chat"} element={<ChatWelcome></ChatWelcome>}></Route>*/}
                         <Route path={"chat/:groupId"} element={<Chat></Chat>}></Route>
                     </Route>
                     <Route path={"videos"} element={<UserVideo></UserVideo>}></Route>

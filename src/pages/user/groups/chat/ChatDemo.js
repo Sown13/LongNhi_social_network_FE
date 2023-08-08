@@ -145,7 +145,7 @@ const ChatDemo = () => {
 
     const handleUsername=(event)=>{
         const {value}=event.target;
-        setUserData({...userData,"username": value});
+        setUserData({...userData,"fullName": value});
     }
 
     const registerUser=()=>{

@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { over } from "stompjs";
+import React, {useEffect, useState} from "react";
+import {over} from "stompjs";
 import SockJS from "sockjs-client";
 import "./Chat.css";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 let stompClient = null;
 
 const Chat = () => {
-    const { groupId } = useParams();
+    const {groupId} = useParams();
 
     const [webSocketMessages, setWebSocketMessages] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState({
-        dateCreated: "",
-        groupId: 0,
-        groupMember: [],
-        groupName: "",
-        messages: [],
-        owner: "",
+        dateCreated: "", groupId: 0, groupMember: [], groupName: "", messages: [{
+            user: {
+                fullName: ""
+            }
+        }], owner: "",
     });
-    const [userGroupMessageList, setUserGroupMessageList] = useState([
-        {
-            dateCreated: "",
-            groupId: 0,
-            groupMember: [],
-            groupName: "",
-            messages: [],
-            owner: "",
-        },
-    ]);
+    const [userGroupMessageList, setUserGroupMessageList] = useState([{
+        dateCreated: "", groupId: 0, groupMember: [], groupName: "", messages: [{
+            user: {
+                fullName: ""
+            }
+        }], owner: "",
+    },]);
     const [user, setUser] = useState(() => {
         let loggedInUser = localStorage.getItem("user");
         if (loggedInUser === null || loggedInUser === "undefined") {
@@ -45,40 +41,25 @@ const Chat = () => {
         return loggedInUser;
     });
     const [messageDTO, setMessageDTO] = useState({
-        textContent: "",
-        userId: "",
-        username: user.fullName,
-        groupId: "",
-        groupName: "",
-        connected: false,
+        textContent: "", userId: "", fullName: user.fullName, groupId: "", groupName: "", connected: false,
     });
 
     useEffect(() => {
         axios.get("http://localhost:8080/groups/user/" + user.userId).then((res) => {
             setUserGroupMessageList(res.data);
-            let targetGroup = res.data.filter(
-                (group) => group.groupId === parseInt(groupId)
-            );
+            let targetGroup = res.data.filter((group) => group.groupId === parseInt(groupId));
             if (targetGroup.length > 0) {
                 setSelectedGroup(targetGroup[0]);
             } else {
                 setSelectedGroup({
-                    dateCreated: "",
-                    groupId: 0,
-                    groupMember: [],
-                    groupName: "",
-                    messages: [],
-                    owner: "",
+                    dateCreated: "", groupId: 0, groupMember: [], groupName: "", messages: [], owner: "",
                 });
             }
             const onConnected = () => {
-                setMessageDTO({ ...messageDTO, connected: true });
+                setMessageDTO({...messageDTO, connected: true});
                 for (let i = 0; i < res.data.length; i++) {
                     if (res.data[i].groupId === parseInt(groupId)) {
-                        const privateSubscription = stompClient.subscribe(
-                            "/user/" + res.data[i].groupId + "/private",
-                            onPrivateMessage
-                        );
+                        const privateSubscription = stompClient.subscribe("/user/" + res.data[i].groupId + "/private", onPrivateMessage);
                     }
                 }
             };
@@ -110,7 +91,7 @@ const Chat = () => {
             if (prevGroup.groupId === payloadData.groupId) {
                 // Update the messages array of the selected group with the new message
                 const updatedMessages = [...prevGroup.messages, payloadData];
-                return { ...prevGroup, messages: updatedMessages };
+                return {...prevGroup, messages: updatedMessages};
             }
             return prevGroup;
         });
@@ -121,8 +102,8 @@ const Chat = () => {
     };
 
     const handleMessage = (event) => {
-        const { value } = event.target;
-        setMessageDTO({ ...messageDTO, textContent: value });
+        const {value} = event.target;
+        setMessageDTO({...messageDTO, textContent: value});
     };
 
     const sendPrivateValue = () => {
@@ -130,72 +111,84 @@ const Chat = () => {
             const chatMessage = {
                 textContent: messageDTO.textContent,
                 userId: user.userId,
-                username: user.fullName,
+                fullName: user.fullName,
                 groupId: selectedGroup.groupId,
             };
-
             stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
-            setMessageDTO({ ...messageDTO, textContent: "" });
+            setMessageDTO({...messageDTO, textContent: ""});
         }
     };
 
     return (
         <div className="groups-manage">
             <div className="groups-list">
-                <div> Nhóm </div>
-                <ul>
-                    {userGroupMessageList.map((group, index) => (
-                        <Link to={`/groups/chat/${group.groupId}`} key={index}>
-                            <li onClick={() => {
-                                setSelectedGroup(group);
-                                cleanupWebSocketConnections();
-                            }
-                            }>
-                                <button>{group.groupName}</button>
-                            </li>
-                        </Link>
-                    ))}
-                </ul>
-            </div>
-            <div className="chat-content">
-                <div className={"chat-box"}>
-                    <div>{selectedGroup.groupName}</div>
-                    <ul className="chat-messages">
-                        {selectedGroup.messages.map((message, index) => {
-                            // console.log(selectedGroup)
-                            return (
-                            <li key={index}>{message.textContent}</li>
-                        )})}
-                    </ul>
-                    {/*<ul className="chat-messages">*/}
-                    {/*    {webSocketMessages*/}
-                    {/*        .filter((message) => message.groupId === selectedGroup.groupId)*/}
-                    {/*        .map((message, index) => {*/}
-                    {/*            console.log(webSocketMessages)*/}
-                    {/*            return (*/}
-                    {/*            <li key={index}>{message.textContent}</li>*/}
-                    {/*        )})}*/}
-                    {/*</ul>*/}
+                <div className={"groups-list-header"}>
+                    <h1>Nhóm</h1>
+                    <input className={"group-list-search"} placeholder={"tìm kiếm"}/>
+                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                 </div>
-                <div className="send-message">
-                    <input
-                        type="text"
-                        className="input-message"
-                        placeholder="enter the message"
-                        value={messageDTO.textContent}
-                        onChange={handleMessage}
-                    />
-                    <button
-                        type="button"
-                        className="send-button"
-                        onClick={sendPrivateValue}
-                    >
-                        send message
-                    </button>
+                <div className={"groups-list-list"}>
+                    {userGroupMessageList.map((group, index) =>
+                        (
+
+                            <div>
+
+                                <button onClick={() => {
+                                    setSelectedGroup(group);
+                                    cleanupWebSocketConnections();
+                                }}><Link to={`/groups/chat/${group.groupId}`} key={index}>{group.groupName}</Link>
+                                </button>
+
+                                <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                            </div>
+
+                        )
+                    )}
                 </div>
             </div>
-        </div>
-    );
+            {groupId == 0 ? <div className="chat-content"
+                                 style={{display: "flex", justifyContent: "center", alignContent: "center"}}>
+                    <h3 style={{textAlign: "center", fontWeight: "bold"}}> Hãy chọn một nhóm hoặc tạo một nhóm mới </h3>
+                </div>
+                :
+                <div className="chat-content">
+                    <div className={"chat-content-header"}>{selectedGroup.groupName}</div>
+                    <div className={"chat-box"}>
+                        <div className="chat-messages">
+                            {selectedGroup.messages.map((message, index) => {
+                                // console.log(selectedGroup.messages)
+                                console.log(message)
+                                return (
+                                    <div key={index}
+                                        className={user.userId == (typeof message.user != "undefined" ? message.user.userId : message.userId) ? "sender-self" : "sender-other"}>
+                                        <div>
+                                            <p style={{textAlign:"right"}}>  {((typeof message.user != "undefined") && (typeof message.user.fullName != "undefined") ? message.user.fullName : message.fullName)}</p>
+                                            <p style={{textAlign:"left"}}>{message.textContent}</p>
+                                        </div>
+                                    </div>)
+                            })}
+                        </div>
+                    </div>
+                    <div className="send-message">
+                        <input
+                            type="text"
+                            className="input-message"
+                            placeholder="Nhắn tin..."
+                            value={messageDTO.textContent}
+                            onChange={handleMessage}
+                        />
+                        <button
+                            type="button"
+                            className="send-button"
+                            onClick={sendPrivateValue}
+                        >
+                            Gửi
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>)
+        ;
 };
 
 export default Chat;

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-
-export default function AddGroup() {
+import "./GroupManager.css";
+export default function GroupManager() {
     const [user, setUser] = useState(
         () => {
             let loggedInUser = localStorage.getItem("user");
@@ -26,8 +26,10 @@ export default function AddGroup() {
     const [friendList, setFriendList] = useState([]);
     const [friendListDisplay, setFriendListDisplay] = useState([]);
 
+    const [selectedGroup,setSelectedGroup] = useState([]);
+
     useEffect(() => {
-        axios.get("http://localhost:8080/user" + user.userId).then((res) => {
+        axios.get("http://localhost:8080/groups/user/" + user.userId).then((res) => {
             setGroupList(res.data);
             setGroupListDisplay(res.data);
         }).then(axios.get("http://localhost:8080/user-friends/users/" + user.userId).then((response) => {
@@ -35,21 +37,49 @@ export default function AddGroup() {
                 setFriendListDisplay(response.data);
             })
         )
-    }, [user])
+    }, [])
+
+    const checkMember = () => {
+
+    }
+    const addMember = () => {
+
+    }
+
+    const removeMember = () => {
+
+    }
+
+    const changeName = () => {
+
+    }
+
+    const removeGroup = () => {
+
+    }
 
     return (
         <div>
+            <div>
+            <h1> Danh sách các nhóm của bạn</h1>
+            <div>
+                <input placeholder={"Tìm nhóm"}/>
+            </div>
             {groupListDisplay.map(group => {
                 return (
                     <div>
                         <div> {group.groupName}</div>
-                        <div></div>
+                        <button> Xem thành viên</button>
+                        <button> Thêm thành viên </button>
+                        <button> Xóa thành viên</button>
+                        <button> Đổi tên nhóm</button>
+                        <button> Rời khỏi nhóm</button>
+                        <button> Xóa nhóm</button>
                     </div>
                 )
             })}
-            <div>
-                <input/>
             </div>
+            <div className={"group-manager-display-content"}> </div>
         </div>
     )
 }

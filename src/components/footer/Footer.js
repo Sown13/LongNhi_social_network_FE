@@ -1,11 +1,12 @@
+import "./Footer.css"
 export default function Footer(){
     return (
         <div className={"footer"}>
-            <h4>Powered by Long Nhi</h4>
-            <h4>Quyền riêng tư</h4>
-            <h4>Điều khoản</h4>
-            <h4>Liên hệ cộng tác</h4>
-            <h4>Quyền sở hữu - 2023</h4>
+            <p>Cung cấp bởi Long Nhi</p>
+            <p>Quyền riêng tư</p>
+            <p>Điều khoản</p>
+            <p>Liên hệ cộng tác</p>
+            <p>Quyền sở hữu - 2023</p>
         </div>
     )
 }

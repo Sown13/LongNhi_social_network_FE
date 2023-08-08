@@ -1,8 +1,11 @@
 .mainPageContainer {
     display: flex;
     /*width: 100vw;*/
-    padding-top: 56px;
+    padding-top: 76px;
     background-color: #f0f2f5; /* Set a warm tone background color */
     position: relative;
+    background-image: url("https://ss-images.saostar.vn/wwebp700/pc/1605689209904/7.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 

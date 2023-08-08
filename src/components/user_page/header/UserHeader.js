@@ -4,8 +4,13 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import data from "bootstrap/js/src/dom/data";
 import UserAction from "./UserAction";
+import {Modal} from "antd";
+import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {ModalTitle} from "react-bootstrap";
+import UpdateForm from "../../../pages/user/user_page/about/UpdateForm";
 
 export default function UserHeader() {
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
     const {userId} = useParams();
     const [user, setUser] = useState(
         () => {
@@ -226,10 +231,18 @@ export default function UserHeader() {
         }
     }
 
+
+    const handleOpenUpdateForm = () => {
+        setShowUpdateForm(true);
+    };
+
+    const [showPictureModalIndex, setShowPictureModalIndex] = useState(-1); // -1 means no modal is shown
+
+
     return (
         <div className={"user-header"}>
             <div className={"user-background-img"}>
-                <img src={targetUser.avatar} alt={"back ground"}/>
+                <img src={targetUser.background} alt={"back ground"}/>
             </div>
             <div className={"user-info"}>
                 <div className={"user-avatar"}>
@@ -244,7 +257,7 @@ export default function UserHeader() {
                     {relationship.sourceUser.userId === 0 ?
                         user.userId == userId ?
                             <div>
-                                <button> Chỉnh sửa trang cá nhân</button>
+                                <button onClick={() => handleOpenUpdateForm()}> Chỉnh sửa trang cá nhân</button>
                                 <button> Nhắn tin</button>
                             </div>
                             : <div>
@@ -279,6 +292,16 @@ export default function UserHeader() {
                 <Link to={`/users/${userId}/videos`}>Video</Link>
                 <Link to={`/users/${userId}/checkin`}>Check-in</Link>
             </div>
+
+            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+                <ModalHeader closeButton>
+                    <ModalTitle>Thông tin cá nhân</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <UpdateForm></UpdateForm>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+            </Modal>
         </div>
     )
 }

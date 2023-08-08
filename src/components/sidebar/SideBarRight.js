@@ -1,8 +1,7 @@
 import "./SideBarRight.css"
-import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-
+import MessageModal from './Message';
 export default function SideBarRight() {
 
     const [user, setUser] = useState(
@@ -41,7 +40,15 @@ export default function SideBarRight() {
             }
             setFriendList(friendListResult);
         })
-    },[])
+    },[user.userId])
+
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [selectedFriend, setSelectedFriend] = useState(null);
+
+    const handleFriendClick = (friend) => {
+        setSelectedFriend(friend);
+        setShowMessageModal(true);
+    };
 
 
     return (
@@ -49,17 +56,24 @@ export default function SideBarRight() {
             <div className="sideBarRight-content">
                 <h1> Bạn bè </h1>
                 {friendList.map((friend, index) => (
-                    <div className={"friend-list"}>
-                        <div className={"friend-avatar"}>
-                            <img src={friend.avatar} alt={"icon"}/>
+                    <div key={index} className="friend-list" onClick={() => handleFriendClick(friend)}>
+                        <div className="friend-avatar">
+                            <img src={friend.avatar} alt="icon" />
                         </div>
-                        <div className={"friend-details"}>
-                            <Link to={`/users/${friend.userId}`}><h3> {friend.fullName} </h3></Link>
+                        <div className="friend-details">
+                            <h3>{friend.fullName}</h3>
                         </div>
-                        <div className={"friend-status-online"}> on</div>
+                        <div className="friend-status-online"> on</div>
                     </div>
                 ))}
             </div>
+            {showMessageModal && selectedFriend && (
+                <MessageModal
+                    friendId={selectedFriend.userId}
+                    friendFullName={selectedFriend.fullName}
+                    onClose={() => setShowMessageModal(false)}
+                />
+            )}
         </div>
     )
 }

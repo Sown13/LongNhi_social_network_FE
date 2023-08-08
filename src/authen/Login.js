@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import Swal from "sweetalert2";
 
 
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import {CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer} from 'cdbreact';
@@ -33,9 +32,9 @@ export default function Login(props) {
     )
     const [error, setError] = useState(null); // State to store error messages
 
-    const handleLogin = (values, { setSubmitting }) => {
+    const handleLogin = (values, {setSubmitting}) => {
         validationSchema
-            .validate(values, { abortEarly: false })
+            .validate(values, {abortEarly: false})
             .then(() => {
                 axios.post("http://localhost:8080/login", values)
                     .then((response) => {
@@ -51,8 +50,8 @@ export default function Login(props) {
                         props.setUser(response.data);
                         props.setLoggedIn(true);
 
-                        localStorage.setItem("loggedIn",true);
-                        localStorage.setItem("user",JSON.stringify(response.data));
+                        localStorage.setItem("loggedIn", true);
+                        localStorage.setItem("user", JSON.stringify(response.data));
                         console.log(localStorage.getItem("user"));
                     })
                     .catch((error) => {
@@ -98,10 +97,16 @@ export default function Login(props) {
                         width: "100%",
                     }}>
                         <CDBContainer id={"container"}>
+
                             <CDBCard>
+                                <Link to="/guest" style={{position: "absolute", top: "-46px"}}>
+                                    <button>Trang chủ</button>
+                                </Link>
+
                                 <CDBCardBody className="mx-4" style={{
                                     height: "281px",
-                                    width: "600px"
+                                    width: "600px",
+                                    position: "relative"
                                 }}>
                                     <div className="text-center mt-4 mb-2">
                                         <p className="h4">Đăng nhập </p>
@@ -152,14 +157,14 @@ export default function Login(props) {
                                         Đăng nhập
                                     </CDBBtn>
                                     <Link to={"/register"}>
-                                    <CDBBtn
-                                        color="dark"
-                                        type={"button"}
-                                        className="btn-block my-3 mx-0"
-                                        style={{backgroundColor: "#12af00"}}
-                                    >
-                                        Đăng Ký
-                                    </CDBBtn>
+                                        <CDBBtn
+                                            color="dark"
+                                            type={"button"}
+                                            className="btn-block my-3 mx-0"
+                                            style={{backgroundColor: "#12af00"}}
+                                        >
+                                            Đăng Ký
+                                        </CDBBtn>
                                     </Link>
                                 </CDBCardBody>
                                 <div>

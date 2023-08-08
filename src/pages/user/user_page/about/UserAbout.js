@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './UserAbout.css';
 import axios from 'axios';
 import {Button, Modal} from 'antd';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {
     MDBCol,
     MDBContainer,
@@ -18,6 +18,7 @@ import {MDBIcon} from "mdbreact";
 import {ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {ModalTitle} from "react-bootstrap";
 import PasswordUserUpdate from "./UserPassUpdate";
+import Swal from "sweetalert2";
 
 
 export default function UserAbout() {
@@ -43,6 +44,8 @@ export default function UserAbout() {
     // Rename the state variable to match the other component
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showUpdatePass, setShowUpdatePass] = useState(false);
+
+    const navigate = useNavigate();
 
     // Add the trigger to open the modal
     const handleOpenUpdateForm = () => {
@@ -107,14 +110,64 @@ export default function UserAbout() {
                                 </MDBCard>
 
                             ) : (
-                                <MDBCard>
-                                    <MDBCard>
-                                        <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
-                                    </MDBCard>
-                                    <MDBCard>
-                                        <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
-                                    </MDBCard>
+                                <MDBCard className="mb-4 mb-lg-0">
+                                    <MDBCardBody className="p-0">
+                                        <MDBListGroup flush className="rounded-3">
+                                            <MDBListGroupItem
+                                                className="d-flex justify-content-between align-items-center p-3">
+                                                <Button
+                                                    onClick={handleOpenUpdateForm}
+                                                    style={{
+                                                        marginLeft: "30px",
+                                                        backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
+                                                        border: "1px solid white",
+                                                    }}
+                                                >
+                                                    Chỉnh sửa thông tin cá nhân
+                                                </Button>
+
+                                                {/*<i className="fas fa-pencil"></i>*/}
+                                            </MDBListGroupItem>
+                                            <MDBListGroupItem
+                                                className="d-flex justify-content-between align-items-center p-3">
+                                                <Button
+                                                    onClick={handleOpenUpdatePassForm}
+                                                    style={{
+                                                        marginLeft: "61px",
+                                                        backgroundColor: "rgba(255, 255, 255, 0.5)", // White with 50% opacity
+                                                        border: "1px solid white",
+                                                    }}
+                                                >
+                                                    Thay đổi mật khẩu
+                                                </Button>
+
+                                            </MDBListGroupItem>
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>*/}
+                                            {/*    <MDBCardText>@mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>*/}
+                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                            {/*<MDBListGroupItem*/}
+                                            {/*    className="d-flex justify-content-between align-items-center p-3">*/}
+                                            {/*    <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>*/}
+                                            {/*    <MDBCardText>mdbootstrap</MDBCardText>*/}
+                                            {/*</MDBListGroupItem>*/}
+                                        </MDBListGroup>
+                                    </MDBCardBody>
                                 </MDBCard>
+                                // <MDBCard>
+                                //     <MDBCard>
+                                //         <Button onClick={handleOpenUpdateForm}>Chỉnh sửa thông tin cá nhân</Button>
+                                //     </MDBCard>
+                                //     <MDBCard>
+                                //         <Button onClick={handleOpenUpdatePassForm}>Thay đổi mật khẩu</Button>
+                                //     </MDBCard>
+                                // </MDBCard>
                             )
                         }
 
@@ -208,7 +261,11 @@ export default function UserAbout() {
             </MDBContainer>
 
 
-            <Modal visible={showUpdateForm} onCancel={() => setShowUpdateForm(false)} footer={null} centered>
+            <Modal visible={showUpdateForm} onCancel={() =>
+            {
+                setShowUpdateForm(false);
+                    navigate(`/users/${userId}`)
+            }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Thông tin cá nhân</ModalTitle>
                 </ModalHeader>
@@ -218,7 +275,9 @@ export default function UserAbout() {
                 <ModalFooter></ModalFooter>
             </Modal>
 
-            <Modal visible={showUpdatePass} onCancel={() => setShowUpdatePass(false)} footer={null} centered>
+            <Modal visible={showUpdatePass} onCancel={() => {
+                setShowUpdatePass(false)
+            }} footer={null} centered>
                 <ModalHeader closeButton>
                     <ModalTitle>Đổi mật khẩu</ModalTitle>
                 </ModalHeader>

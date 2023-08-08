@@ -1,0 +1,154 @@
+
+.overall{
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.content{
+    height: 400px;
+    width: 340px;
+    margin-top: 90px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    position: fixed;
+    top: 60%;
+    left: 60%; /* Đặt giá trị right để di chuyển modal sang góc phải */
+    transform: translate(0, -50%);
+    /* Để giữ modal ở giữa theo chiều dọc */
+
+
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+textarea {
+    padding-left: 10px;
+    padding-block: 5px;
+    width: 200px;
+    height: 35px;
+    resize: none;
+    background-color: #6c757d1f;
+    margin-left: 3px;
+    margin-right: 5px;
+    border-radius: 10px;
+    border: none;
+
+}
+
+button {
+    padding: 8px 7px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+
+
+}
+
+button:hover {
+    background-color: #ff8c00;
+}
+
+.sent-message {
+    background-color: #ff8c00; /* Màu xám */
+    border-radius: 8px; /* Để làm cho góc nhọn hơn */
+    padding: 8px; /* Thêm padding để tạo khoảng cách giữa các chữ nhắn */
+    margin-bottom: 5px; /* Khoảng cách giữa các chữ nhắn */
+    list-style-type: none; /* Loại bỏ dấu chấm của mục danh sách */
+
+}
+
+.send-container {
+    display: flex;
+    align-items: center;
+    position: absolute; /* Position .send-container absolutely within .modal-content */
+    bottom: 0; /* Stick .send-container to the bottom of .modal-content */
+
+}
+
+.send-container button {
+    margin-bottom: 10px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.icon-container {
+    margin-right: 5px;
+    border-radius: 50%; /* Đặt giá trị border-radius là 50% để biến div thành hình tròn */
+    background-color: #ff8c00; /* Đặt màu nền cho hình tròn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px; /* Đặt kích thước của hình tròn */
+    height: 25px; /* Đặt kích thước của hình tròn */
+
+
+}
+
+.icon-container button {
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.fas-fa-thumbs-up button {
+    width: 30px; /* Đặt kích thước của hình tròn */
+    height: 35px;
+    margin: auto;
+
+
+}
+
+.fas-fa-thumbs-up {
+    margin-right: 5px;
+}
+
+.fas-fa-paperclip button {
+    width: 34px; /* Đặt kích thước của hình tròn */
+    height: 35px;
+    margin: auto;
+}
+
+.message {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    align-items: center;
+    padding: 5px;
+
+}
+
+
+.avatar-message {
+    width: 40px; /* Set the appropriate width for your avatar */
+    height: 40px; /* Set the appropriate height for your avatar */
+    border-radius: 50%;
+
+}
+
+
+
+
+

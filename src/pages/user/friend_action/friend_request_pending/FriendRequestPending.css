@@ -27,10 +27,7 @@
 
 .friendRequestList div {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #ddd;
     width: 100%;
 }
 
@@ -51,4 +48,21 @@
 
 .friendRequestList button:hover {
     background-color: #0e62c7;
+}
+
+.friendRequestList-content {
+    justify-content: space-between;
+    border: 1px solid #ddd;
+}
+
+.friendRequestList-status{
+    justify-content: center;
+}
+.friendRequestList-date p {
+    justify-content: center;
+}
+
+.friendRequestList a{
+    width: 100%;
+    font-size: 20px;
 }

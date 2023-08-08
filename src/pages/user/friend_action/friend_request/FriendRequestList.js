@@ -1,6 +1,7 @@
 import "./FriendRequestList.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default function FriendRequestList() {
 
@@ -83,23 +84,26 @@ export default function FriendRequestList() {
 
     return (
         <div className={"friendRequestList"}>
-            <h1> Lời mời kết bạn bạn đã nhận </h1>
+
             {displayFriendRequestList.length !== 0 ? displayFriendRequestList.map((request, index) => {
+                <h1> Lời mời kết bạn bạn đã nhận </h1>
                 return (
                     <div>
-                        <div>
-                            {request.sourceUser.fullName}
-                        </div>
+                        <Link to={`/users/${request.sourceUser.userId}`}>
+                            <div>
+                                {request.sourceUser.fullName}
+                            </div>
+                        </Link>
                         <div>
                             <p> Ngày nhận: {new Date(request.dateRequested).toLocaleDateString("vn-VN")}</p>
                         </div>
-                        <div>
+                        <div className={"friendRequestList-action"}>
                             <button onClick={() => acceptRequest(request)}>Đồng ý</button>
                             <button onClick={() => rejectRequest(request)}>Từ chối</button>
                         </div>
                     </div>
                 )
-            }) : <h2> Không có lời mời nào </h2>}
+            }) : <h4> Hiện không có lời mời nào </h4>}
         </div>
     )
 }

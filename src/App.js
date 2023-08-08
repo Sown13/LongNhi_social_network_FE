@@ -31,6 +31,10 @@ import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 
 
 
+
+
+
+
 function App() {
     const [loggedIn, setLoggedIn] = useState(
         () => {
@@ -89,7 +93,7 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={!loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
 

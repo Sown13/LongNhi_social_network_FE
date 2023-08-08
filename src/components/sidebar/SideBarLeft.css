@@ -37,7 +37,7 @@
 .sideBarLeft {
     flex: 1;
     max-width: 20vw;
-    top: 56px;
+    top: 76px;
     position: sticky;
     align-self: flex-start;
     max-height: 100vw;
@@ -53,6 +53,7 @@
     border-radius: 4px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /*min-height: 10vw;*/
 }
 
 .sideBarLeft-content {

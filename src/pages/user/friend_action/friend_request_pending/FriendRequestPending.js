@@ -29,8 +29,8 @@ export default function FriendRequestPending() {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/user-friends/user/${user.userId}/v2/friend-request-sent`).then((response) => {
-            setFriendRequestList(response.data);
-            setDisplayFriendRequestList(response.data);
+            setFriendRequestList(response.data.filter(friendRequeset => friendRequeset.accepted!=true));
+            setDisplayFriendRequestList(response.data.filter(friendRequeset => friendRequeset.accepted!=true));
         }).catch()
     }, [])
 

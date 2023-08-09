@@ -35,6 +35,9 @@ export default function Wall() {
 
     const [postList, setPostList] = useState([]);
 
+    const [loadedPosts, setLoadedPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [postListDisplay, setPostListDisplay] = useState([]);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -57,6 +60,46 @@ export default function Wall() {
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [upLoadSuccess, setUpLoadSuccess] = useState(false);
     const [idEditPost, setIdEditPost] = useState(null);
+
+    useEffect(() => {
+        // Load initial posts
+        const initialPosts = postListDisplay.slice(0, 1);
+        setLoadedPosts(initialPosts);
+    }, [postListDisplay]);
+
+
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
+                loadMorePosts();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isLoading]);
+
+    useEffect(() => {
+        // Load initial posts
+        loadMorePosts();
+    }, []);
+
+    const loadMorePosts = () => {
+        setIsLoading(true);
+
+        // Simulate an API call to fetch more posts
+        setTimeout(() => {
+            const remainingPosts = postListDisplay.slice(loadedPosts.length);
+            const nextPosts = remainingPosts.slice(0, 1);
+            setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
+            setIsLoading(false);
+        }, 1000);
+    };
+
 
 
     const [user, setUser] = useState(() => {
@@ -108,7 +151,6 @@ export default function Wall() {
 
     const handleAddImageNewPost = (e) => {
         const files = e.target.files;
-
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -204,7 +246,8 @@ export default function Wall() {
                             showConfirmButton: false,
                             closeOnClickOutside: false,
                             timer: 2000
-                        })
+                        }).then(window.location.reload())
+
                     })
                 }
             ).then(() => {
@@ -275,7 +318,10 @@ export default function Wall() {
                         setPostList(postList.filter((s) => s.id !== postId));
                         Swal.fire({
                             icon: 'success',
-                            timer: 1000
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            closeOnClickOutside: false,
+                            timer: 2000
                         })
                     }
                 })
@@ -330,7 +376,6 @@ export default function Wall() {
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
                 // Sắp xếp danh sách bài viết theo thời gian giảm dần
                 const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-
                 setPostList(sortedPosts);
                 setPostListDisplay(sortedPosts);
                 // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
@@ -690,7 +735,7 @@ export default function Wall() {
                 </div>
                 <br/>
                 <hr/>
-                {postListDisplay.length > 0 && postListDisplay
+                {loadedPosts.length > 0 && loadedPosts
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
                     .map((item, index) => {
                         const images = item.postImageList || []
@@ -845,7 +890,7 @@ export default function Wall() {
                             </div>
                         )
                     })}
-
+                {isLoading && <div>Loading more posts...</div>}
             </div>
         </div>
 

@@ -30,6 +30,11 @@ import EditComment from "./pages/user/user_page/wall/EditComment";
 import EditPost from "./pages/user/user_page/wall/update_post/EditPost";
 import ChatDemo from "./pages/user/groups/chat/ChatDemo";
 import Chat from "./pages/user/groups/chat/Chat";
+import GuestWelcome from "./pages/guest/GuestWelcome";
+import UserView from "./pages/guest/user_view/UserView";
+import UserViewAbout from "./pages/guest/user_view/about/UserViewAbout";
+import UserViewFriend from "./pages/guest/user_view/friend/UserViewFriend";
+import UserViewWall from "./pages/guest/user_view/wall/UserViewWall";
 
 
 
@@ -94,7 +99,12 @@ function App() {
                 <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
-
+                        <Route path={""} element={<Guest></Guest>}></Route>
+                        <Route path={"users/:userId"} element={<UserView></UserView>}>
+                            <Route path={""} element={<UserViewWall/>}></Route>
+                            <Route path={"aboutHeader"} element={<UserViewAbout></UserViewAbout>}></Route>
+                            <Route path={"friend"} element={<UserViewFriend></UserViewFriend>}></Route>
+                        </Route>
                 </Route>
                 {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}
                 <Route path="/admin" element={<PrivateRoute element={<Admin/>} role="ADMIN" loggedIn={loggedIn}

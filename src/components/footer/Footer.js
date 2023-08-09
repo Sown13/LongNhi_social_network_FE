@@ -1,7 +1,7 @@
 import "./Footer.css"
 export default function Footer(){
     return (
-        <div className={"footer"}>
+        <div className={"footer"} style={{fontWeight:"bold"}}>
             <p>Cung cấp bởi Long Nhi</p>
             <p>Quyền riêng tư</p>
             <p>Điều khoản</p>

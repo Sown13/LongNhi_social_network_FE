@@ -497,7 +497,7 @@ export default function NewFeed(props) {
                     </div>
 
 
-                    <div className="feedCard">
+                    <div className="feedCard" style={{backgroundColor:"#FFB6C1",borderRadius:"20px"}}>
                         <div className={"feedCarAvatarContainer-top"}>
                             <div className="feedCardAvatar-head">
                                 <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
@@ -521,8 +521,8 @@ export default function NewFeed(props) {
                                             <Field
                                                 name="textContent"
                                                 as="textarea"
-                                                placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
-                                                style={{width: "80%", cursor: "pointer"}}
+                                                placeholder={` ${user.fullName} ơi, hãy chia sẻ cảm xúc của mình với mọi người nhé`}
+                                                style={{width: "100%", cursor: "pointer",marginRight:"40px",borderRadius:"20px"}}
                                                 onClick={handleOpenPostForm}
                                             />
                                             <div className={"input-action-wall"}>

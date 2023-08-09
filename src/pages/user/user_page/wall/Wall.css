@@ -119,6 +119,7 @@
     resize: none;
     font-size: 1rem;
     line-height: 1.5;
+    width: 100%;
 }
 
 .input-action-wall {

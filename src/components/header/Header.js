@@ -12,7 +12,7 @@ export default function Header(props) {
     const [notification, setNotification] = useState([
         {
             type: "",
-            content: "",
+            content: "Chào mừng tới với Long Nhi",
             dateCreated: "",
             userId: "",
             status: "",
@@ -80,8 +80,9 @@ export default function Header(props) {
 
     return (
         <header className="header">
-            <div>
+            <div >
                 <Modal
+                    style={{backgroundColor:"#FFB6C1"}}
                     visible={!!notification}
                     title="Notification"
                     onCancel={closeModal}

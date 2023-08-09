@@ -483,6 +483,7 @@ feedCardCommentActions{
 
 .feedCarAvatarContainer-top{
     display: flex;
+    margin-left: 20px;
 }
 .feedCarAvatarContainer-bot{
     display: flex;
@@ -492,20 +493,20 @@ feedCardCommentActions{
 }
 
 .feedCardAvatar-head {
-    width: 200px;
+    width: 150px;
     display: flex;
     justify-self: center;
     align-self: start;
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     margin-top: 20px;
     margin-bottom: 20px;
+    padding: 0;
 }
 
 .avatar-head {
-    width: 180px;
-    height: 180px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-
 }
 
 .input-head {

@@ -456,7 +456,7 @@ export default function FormPostModal() {
                         <Field
                             name="textContent"
                             as="textarea"
-                            placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
+                            placeholder={` ${user.fullName} ơi, hãy chia sẻ cảm xúc của mình với mọi người nhé`}
                             style={{width: "80%"}}
                             onClick={handleOpenPostForm}
 

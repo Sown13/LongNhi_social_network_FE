@@ -96,15 +96,16 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                <Route path="/guest" element={<PrivateRoute element={<GuestWelcome/>} role="GUEST" loggedIn={loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
-                        <Route path={""} element={<Guest></Guest>}></Route>
-                        <Route path={"users/:userId"} element={<UserView></UserView>}>
-                            <Route path={""} element={<UserViewWall/>}></Route>
-                            <Route path={"aboutHeader"} element={<UserViewAbout></UserViewAbout>}></Route>
-                            <Route path={"friend"} element={<UserViewFriend></UserViewFriend>}></Route>
-                        </Route>
+                    <Route path={""} element={<Guest></Guest>}></Route>
+                    <Route path={"users/:userId"} element={<UserView></UserView>}>
+                        <Route path={""} element={<UserViewWall></UserViewWall>}></Route>
+                        <Route path={"aboutHeader"} element={<UserViewAbout></UserViewAbout>}></Route>
+                        <Route path={"friend"} element={<UserViewFriend></UserViewFriend>}></Route>
+                    </Route>
+
                 </Route>
                 {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}
                 <Route path="/admin" element={<PrivateRoute element={<Admin/>} role="ADMIN" loggedIn={loggedIn}

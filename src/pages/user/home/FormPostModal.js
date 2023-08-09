@@ -343,8 +343,11 @@ export default function FormPostModal() {
                         Swal.fire({
                             title: "Đăng bài viết mới thành công",
                             icon: 'success',
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            closeOnClickOutside: false,
                             timer: 2000
-                        })
+                        });
                     })
                 }
             ).then(() => {

@@ -107,7 +107,7 @@ export default function Community() {
                     </div>
                 )
             })}
-            {isLoading && <div style={{fontWeight:"bold"}}>Đang tải thêm ảnh</div>}
+            {isLoading && <div style={{fontWeight:"bold"}}>Đang hiển thị thêm người dùng</div>}
 
         </div>
     )

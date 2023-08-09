@@ -541,6 +541,9 @@ export default function NewFeed(props) {
                                 <div className="feedCardBody">
                                     <div style={{paddingLeft: "15px", paddingRight: "15px"}}>
                                         <p>{item.textContent}</p>
+
+
+
                                     </div>
                                     <div className={"feedCardImage"}>
                                         {/*{console.log("list ảnh" + JSON.stringify(item))}*/}

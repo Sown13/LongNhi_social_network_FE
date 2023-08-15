@@ -78,6 +78,16 @@ export default function Header(props) {
         setNotification(null);
     };
 
+    useEffect(() => {
+        return () => {
+            // Perform cleanup or execute code before the component is unmounted
+            if (stompClient) {
+                stompClient.disconnect(null, {});
+                stompClient = null;
+            }
+        };
+    }, []);
+
     return (
         <header className="header">
             <div >

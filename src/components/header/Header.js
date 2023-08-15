@@ -81,22 +81,22 @@ export default function Header(props) {
     return (
         <header className="header">
             <div >
-                <Modal
-                    style={{backgroundColor:"#FFB6C1"}}
-                    visible={!!notification}
-                    title="Notification"
-                    onCancel={closeModal}
-                    footer={[
-                        <button key="close" onClick={closeModal}>
-                            Close
-                        </button>
-                    ]}
-                >
-                    {/*<Link to={`/groups/chat/${notification.groupId}`}>{notification?.content}</Link>*/}
-                    <p><Link to={`/groups/chat/0`}>{notification?.content}</Link></p> {/* Access the 'content' property */}
-                    <p>{notification?.dateCreated}</p> {/* Access the 'dateCreated' property */}
-                    {/* Render other properties as needed */}
-                </Modal>
+                {/*<Modal*/}
+                {/*    style={{backgroundColor:"#FFB6C1"}}*/}
+                {/*    visible={!!notification}*/}
+                {/*    title="Notification"*/}
+                {/*    onCancel={closeModal}*/}
+                {/*    footer={[*/}
+                {/*        <button key="close" onClick={closeModal}>*/}
+                {/*            Close*/}
+                {/*        </button>*/}
+                {/*    ]}*/}
+                {/*>*/}
+                {/*    /!*<Link to={`/groups/chat/${notification.groupId}`}>{notification?.content}</Link>*!/*/}
+                {/*    <p><Link to={`/groups/chat/0`}>{notification?.content}</Link></p> /!* Access the 'content' property *!/*/}
+                {/*    <p>{notification?.dateCreated}</p> /!* Access the 'dateCreated' property *!/*/}
+                {/*    /!* Render other properties as needed *!/*/}
+                {/*</Modal>*/}
             </div>
             <div className="header__left">
 

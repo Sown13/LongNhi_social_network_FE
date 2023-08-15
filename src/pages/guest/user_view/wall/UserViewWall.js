@@ -1,10 +1,8 @@
-import "./Wall.css";
+
 import {Link, Outlet, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import Swal from "sweetalert2";
-import {Field, Form, Formik} from "formik";
 import axios from "axios";
-import {Dropdown, Menu} from "antd";
 
 import {storage} from '../../../../firebase';
 import {ref, getDownloadURL, uploadBytes, uploadBytesResumable} from "firebase/storage";
@@ -12,10 +10,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import ImageList from "../../../../components/image/ImageList";
 import Modal from 'react-modal';
-import EditPost from "./update_post/EditPost";
 import CommentList from "../../../../components/comment/CommentList";
+import EditPost from "../../../user/user_page/wall/update_post/EditPost";
 
-export default function Wall() {
+export default function UserViewWall() {
     const [checkIsAccepted, setCheckIsAccepted] = useState(false)
     const navigate = useNavigate();
 
@@ -34,9 +32,6 @@ export default function Wall() {
     const {userId} = useParams();
 
     const [postList, setPostList] = useState([]);
-
-    const [loadedPosts, setLoadedPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     const [postListDisplay, setPostListDisplay] = useState([]);
 
@@ -60,48 +55,6 @@ export default function Wall() {
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [upLoadSuccess, setUpLoadSuccess] = useState(false);
     const [idEditPost, setIdEditPost] = useState(null);
-
-    useEffect(() => {
-        // Load initial posts
-        const initialPosts = postListDisplay.slice(0, 3);
-        setLoadedPosts(initialPosts);
-    }, [postListDisplay]);
-
-
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-            if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
-                loadMorePosts();
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [isLoading]);
-
-    useEffect(() => {
-        // Load initial posts
-        loadMorePosts();
-    }, []);
-
-
-
-    const loadMorePosts = () => {
-        setIsLoading(true);
-
-        // Simulate an API call to fetch more posts
-        setTimeout(() => {
-            const remainingPosts = postListDisplay.slice(loadedPosts.length);
-            const nextPosts = remainingPosts.slice(0, 3);
-            setLoadedPosts(prevPosts => [...prevPosts, ...nextPosts]);
-            setIsLoading(false);
-        }, 1000);
-    };
-
 
 
     const [user, setUser] = useState(() => {
@@ -136,12 +89,9 @@ export default function Wall() {
     const handleComment = async (values, {resetForm, setError}) => {
         try {
             await axios.post('http://localhost:8080/comments', values).then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
-                    const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-                    setPostList(sortedPosts);
-                    setPostListDisplay(sortedPosts);
-                    // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
+                axios.get(`http://localhost:8080/posts/user/${userId}`).then(res => {
+                    setPostList(res.data)
+                    setPostListDisplay(res.data)
                 })
             });
 
@@ -156,6 +106,7 @@ export default function Wall() {
 
     const handleAddImageNewPost = (e) => {
         const files = e.target.files;
+
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -251,8 +202,7 @@ export default function Wall() {
                             showConfirmButton: false,
                             closeOnClickOutside: false,
                             timer: 2000
-                        }).then(window.location.reload())
-
+                        })
                     })
                 }
             ).then(() => {
@@ -323,10 +273,7 @@ export default function Wall() {
                         setPostList(postList.filter((s) => s.id !== postId));
                         Swal.fire({
                             icon: 'success',
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                            closeOnClickOutside: false,
-                            timer: 2000
+                            timer: 1000
                         })
                     }
                 })
@@ -338,12 +285,10 @@ export default function Wall() {
     const deleteComment = (commentId) => {
         axios.delete(`http://localhost:8080/comments/${commentId}`)
             .then(() => {
-                axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
-                    const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-                    setPostList(sortedPosts);
-                    setPostListDisplay(sortedPosts);
-                    // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
+                axios.get("http://localhost:8080/posts/user/" + userId).then(res => {
+                    setPostList(res.data);
+                    setPostListDisplay(res.data);
+                    console.log("test dang bai ---------------- " + res.data)
                 })
             })
             .catch(error => {
@@ -383,6 +328,7 @@ export default function Wall() {
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
                 // Sắp xếp danh sách bài viết theo thời gian giảm dần
                 const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
                 setPostList(sortedPosts);
                 setPostListDisplay(sortedPosts);
                 // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
@@ -421,6 +367,7 @@ export default function Wall() {
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
                 // Sắp xếp danh sách bài viết theo thời gian giảm dần
                 const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
                 setPostList(sortedPosts);
                 setPostListDisplay(sortedPosts);
                 // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
@@ -464,6 +411,7 @@ export default function Wall() {
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
                 // Sắp xếp danh sách bài viết theo thời gian giảm dần
                 const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
                 setPostList(sortedPosts);
                 setPostListDisplay(sortedPosts);
                 // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
@@ -492,10 +440,12 @@ export default function Wall() {
             axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
                 // Sắp xếp danh sách bài viết theo thời gian giảm dần
                 const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+
                 setPostList(sortedPosts);
                 setPostListDisplay(sortedPosts);
                 // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
             })
+
             if (likedComment.includes(commentId)) {
                 setLikedComment(likedPosts.filter((id) => id !== commentId));
                 localStorage.setItem("likedComment", JSON.stringify(likedComment.filter((id) => id !== commentId)));
@@ -604,18 +554,12 @@ export default function Wall() {
         })
             .then(() => {
                 axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
-                    // Sắp xếp danh sách bài viết theo thời gian giảm dần
-                    const sortedPosts = response.data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
-                    setPostList(sortedPosts);
-                    setPostListDisplay(sortedPosts);
-                    // console.log("Dữ liệu từ server", JSON.stringify(sortedPosts))
+                    setPostList(response.data);
+                    setPostListDisplay(response.data);
                 })
                 Swal.fire({
                     title: 'Cập nhật bình luận thành công',
                     icon: 'success',
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                    closeOnClickOutside: false,
                     timer: 1000
                 })
             })
@@ -623,6 +567,7 @@ export default function Wall() {
                 console.log(error);
             });
     };
+
 
     useEffect(() => {
         axios.get("http://localhost:8080/posts/user/" + userId).then((response) => {
@@ -634,115 +579,14 @@ export default function Wall() {
         })
     }, [showModalUpdate]);
 
+
     return (
         <div className="newFeed">
-            <div>
-                <Modal isOpen={showModalUpdate} onRequestClose={() => setShowModalUpdate(false)}>
-                    <EditPost id={idEditPost} onClose={
-                        () => {
-
-                            Swal.fire({
-                                title: 'Ảnh đang đang được tải lên, xin hãy chờ trong giây lát..',
-                                showCancelButton: false,
-                                showConfirmButton: false,
-                                closeOnClickOutside: false,
-                                timer: 2000
-                            }).then(() => {
-                                setShowModalUpdate(false);
-                                setUpLoadSuccess(!upLoadSuccess)
-                            }).then(() => {
-                                Swal.fire({
-                                    title: 'Cập nhật bài viết thành công',
-                                    icon: "success",
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    closeOnClickOutside: false,
-                                    timer: 1000
-                                })
-                            })
-                        }
-                    }></EditPost>
-                    <button onClick={() => setShowModalUpdate(false)}>Close Modal</button>
-                </Modal>
-            </div>
             <div className="newFeedContainer">
-                <br/>
-                <div className="feedCarAvatarContainer">
-                    <div className={"feedCarAvatarContainer-top"}>
-                        <div className="feedCardAvatar-head">
-                            <img className={"avatar-head"} src={user.avatar} alt="Avatar"/>
-                        </div>
-                        <div className="input-wall">
-                            <Formik
-                                initialValues={{
-                                    textContent: "",
-                                    authorizedView: "PUBLIC",
-                                }}
-                                onSubmit={(values, {resetForm}) => {
-                                    handleSubmitNewPost({
-                                        textContent: values.textContent,
-                                        price: values.authorizedView,
-                                    });
-                                    resetForm();
-                                }}
-                            >
-                                {({submitForm, isSubmitting}) => (
-                                    <Form className="feedCardTextarea-wall">
-                                        <Field
-                                            name="textContent"
-                                            as="textarea"
-                                            placeholder={userId == user.userId ? `     ${user.fullName} ơi, bạn đang nghĩ gì thế?` : `   ${user.fullName} ơi, bạn có muốn viết gì cho người bạn này không?`}
-                                            style={{width: "80%"}}
-                                        />
-                                        <div className={"input-action-wall"}>
-                                            <div className="image-list">
-                                                {imagesNewPost.map((image) => (
-                                                    <div key={image.id} className="image-item">
-                                                        <img src={image.imgUrl} alt=""/>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleDeleteImageNewPost(image)}
-                                                        >
-                                                            Xóa
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        {/* Removed the submit button from here */}
-                                        <div className={"feedCarAvatarContainer-bot"}>
-                                            <label className="file-input-container">
-                                                <span>Thêm ảnh</span>
-                                                <input
-                                                    type="file"
-                                                    name="file"
-                                                    onChange={(e) => {
-                                                        handleAddImageNewPost(e);
-                                                        const files = e.currentTarget.files;
-                                                        setImagesAddNewPost([...imagesAddNewPost, ...files]);
-                                                    }}
-                                                    multiple
-                                                />
-                                            </label>
-                                            {/* Added onClick handler to submit the form */}
-                                            <button
-                                                className={"input-file-button-submit-wall"}
-                                                type="button"
-                                                onClick={() => submitForm()}
-                                                disabled={isSubmitting}
-                                            >
-                                                Đăng
-                                            </button>
-                                        </div>
-                                    </Form>
-                                )}
-                            </Formik>
-                        </div>
-                    </div>
-                </div>
+
                 <br/>
                 <hr/>
-                {loadedPosts.length > 0 && loadedPosts
+                {postListDisplay.length > 0 && postListDisplay
                     .filter(post => post.user.userId == user.userId || post.authorizedView === "public" || (relation === true && post.authorizedView === "friend"))
                     .map((item, index) => {
                         const images = item.postImageList || []
@@ -761,65 +605,6 @@ export default function Wall() {
                                                     to={`/users/${userInformationWall.userId}`}><span> {userInformationWall.fullName} </span></Link>
                                             </div>
                                             {/*Nút thay đổi quyền hiển thị*/}
-                                            <div className={"feedCardHeaderAction-button"}>
-                                                {/*<div className={"change-view-button"}>*/}
-                                                {/*    <button style={{borderRadius: "50%", padding: "1px"}}*/}
-                                                {/*            onClick={() => handleShowAlert(item.postId)} >*/}
-                                                {/*        {selectedOption === 'public' &&*/}
-                                                {/*            <i className="fas fa-globe"></i>}*/}
-                                                {/*        {selectedOption === 'friend' &&*/}
-                                                {/*            <i className="fas fa-user-friends"></i>}*/}
-                                                {/*        {selectedOption === 'private' &&*/}
-                                                {/*            <i className="fas fa-user"></i>}*/}
-                                                {/*    </button>*/}
-                                                {/*</div>*/}
-                                                <div className={"delete-post-button"}>
-                                                    {
-                                                        Number(user.userId) !== Number(userId) ? (
-                                                            <Dropdown
-                                                                overlay={
-                                                                    <Menu>
-                                                                        <Menu.Item key="1">
-                                                                            Ẩn bài viết
-                                                                        </Menu.Item>
-                                                                    </Menu>
-                                                                }
-                                                                trigger={["click"]}
-                                                            >
-                                                                <span></span>
-                                                            </Dropdown>
-                                                        ) : (
-                                                            <Dropdown
-                                                                overlay={
-                                                                    <Menu>
-                                                                        <Menu.Item key="1"
-                                                                                   onClick={() => handleDeletePost(item.postId)}>
-                                                                            Xoá bài viết
-                                                                        </Menu.Item>
-                                                                        <Menu.Item key="2"
-                                                                            // onClick={() => navigate(`/post/${item.postId}`) }
-                                                                                   onClick={() => {
-                                                                                       setShowModalUpdate(true);
-                                                                                       setIdEditPost(item.postId);
-                                                                                   }
-                                                                                   }
-                                                                        >
-                                                                            Sửa bài viết
-                                                                        </Menu.Item>
-                                                                        <Menu.Item key="3"
-                                                                                   onClick={() => handleShowAlert(item.postId)}>
-                                                                            Hiển thị
-                                                                        </Menu.Item>
-                                                                    </Menu>
-                                                                }
-                                                                trigger={["click"]}
-                                                            >
-                                                                <span>•••</span>
-                                                            </Dropdown>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <div
@@ -838,8 +623,6 @@ export default function Wall() {
                                     <div className={"div-like"}>
                                         <span>{item.postReactionList.length}</span>
                                         <button
-                                            className={likedPosts.includes(item.postId) ? "like-button like" : "unLike-button"}
-                                            onClick={() => handleToggleLike(item.postId)}
                                         >
                                             <FontAwesomeIcon icon={faThumbsUp} size={"2x"}/>
                                         </button>
@@ -855,49 +638,10 @@ export default function Wall() {
                                     </div>
                                 </div>
 
-                                <ul style={{marginTop: "16px"}}>
-                                    {checkIsAccepted ? (
-                                        <li style={{minWidth: "90%"}}>
-                                            <div className={"comment-container"}>
-                                                <div>
-                                                    <div className={"comment-container-avatar"}>
-                                                        <img src={user.avatar} alt={"avt"}/>
-                                                        <h2> {user.fullName} </h2>
-                                                    </div>
-                                                    <div className={"comment-input"}>
-                                                        <Formik initialValues={{
-                                                            post: {
-                                                                postId: item.postId
-                                                            },
-                                                            user: {
-                                                                userId: user.userId
-                                                            },
-                                                            textContent: ""
-                                                        }} onSubmit={handleComment}>
-                                                            <Form>
-                                                                <Field as={"textarea"} name={"textContent"}
-                                                                       placeholder={"Viết bình luận.."}
-                                                                       id={`comment-textarea-${index}`}
-                                                                />
-                                                                <button>Bình Luận</button>
-                                                            </Form>
-                                                        </Formik>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ) : (
-                                        <div>Bạn cần kết bạn với người này để có thể tương tác</div>
-                                    )}
-                                    <CommentList item={item} likedComment={likedComment}
-                                                 handleToggleLikeComment={handleToggleLikeComment} user={user}
-                                                 deleteComment={deleteComment}
-                                                 handleUpdateComment={handleUpdateComment}/>
-                                </ul>
                             </div>
                         )
                     })}
-                {isLoading && <div style={{fontWeight: "bold", textAlign: "center", fontSize: "26px"}}>Đang tải thêm bài viết...</div>}
+
             </div>
         </div>
 

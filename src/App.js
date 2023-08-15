@@ -33,6 +33,11 @@ import Chat from "./pages/user/groups/chat/Chat";
 import Developing from "./pages/user/developing/Developing";
 import ChatWelcome from "./pages/user/groups/chat_welcome/ChatWelcome";
 import GroupManager from "./pages/user/groups/group_manager/GroupManager";
+import GuestWelcome from "./pages/guest/GuestWelcome";
+import UserView from "./pages/guest/user_view/UserView";
+import UserViewAbout from "./pages/guest/user_view/about/UserViewAbout";
+import UserViewFriend from "./pages/guest/user_view/friend/UserViewFriend";
+import UserViewWall from "./pages/guest/user_view/wall/UserViewWall";
 
 
 
@@ -94,9 +99,15 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path="/guest" element={<PrivateRoute element={<Guest/>} role="GUEST" loggedIn={loggedIn}
+                <Route path="/guest" element={<PrivateRoute element={<GuestWelcome/>} role="GUEST" loggedIn={loggedIn}
                                                             user={user} setLoggedIn={setLoggedIn}
                                                             setUser={setUser}></PrivateRoute>}>
+                    <Route path={""} element={<Guest></Guest>}></Route>
+                    <Route path={"users/:userId"} element={<UserView></UserView>}>
+                        <Route path={""} element={<UserViewWall></UserViewWall>}></Route>
+                        <Route path={"aboutHeader"} element={<UserViewAbout></UserViewAbout>}></Route>
+                        <Route path={"friend"} element={<UserViewFriend></UserViewFriend>}></Route>
+                    </Route>
 
                 </Route>
                 {/*<Route path={"/guest"} element={<Guest></Guest>}></Route>*/}
